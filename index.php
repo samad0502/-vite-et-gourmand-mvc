@@ -15,7 +15,7 @@ switch ($page){
 
         case 'orders' :
             require_once 'app/controllers/OrederController.php';
-            $controller = new OrederController();
+            $controller = new OrderController();
             $controller->list();
             break;
 
