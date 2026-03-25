@@ -2,6 +2,7 @@
 session_start();
 
 require_once 'config/database.php';
+require_once 'app/controllers/HomeController.php';
 
 
 // definition de la page (par defaut "accueil")

@@ -1,6 +1,7 @@
 <?php 
-//require_once 'includes/header.php'; 
-//require_once 'includes/navbar.php'; ?>
+require_once '../../includes/header.php'; 
+require_once '../../includes/navbar.php'; 
+?>
 
 
 <header class=" py-5 ">
@@ -145,4 +146,4 @@
     </div>
 </section>
 
-<?php require 'includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

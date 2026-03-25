@@ -1,5 +1,6 @@
 <?php
 require_once 'app/models/review.php';
+require_once 'app/models/OpeningHours.php';
 
 class HomeController {
     public function index(){
@@ -8,7 +9,7 @@ class HomeController {
 
         // recup des avis via le modèle
         $reviewModel = new Review($db);
-        $reviews = $reviewModel->getLatestReviews();
+        $reviews = $reviewModel->getLatestPublished();
 
         // recup des horaires pour le footer
         $hourModel = new OpeningHours($db);

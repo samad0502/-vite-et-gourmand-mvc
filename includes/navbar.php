@@ -1,6 +1,5 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-    ...
 
     <div class="container">
         <a class="navbar-brand" href="#">
@@ -95,4 +94,4 @@
         </div>
     </div>
 </nav>
-<div class="col row align-item-end "><img src="/assets/img/imgAcc/barreVG.jpg" alt="barreVG"></div>
+<div class="col row align-item-end "><img src="/public/assets/img/imgAcc/barreVG.jpg" alt="barreVG"></div>
