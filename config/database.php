@@ -1,10 +1,10 @@
 <?php 
 
 class Database {
-    private $host = 'db_host';
-    private $db_name = 'db_name';
-    private $username = 'db_username';
-    private $password = 'db_password';
+    private $host = "127.0.0.1";
+    private $db_name = 'vite_gourmand';
+    private $username = 'root';
+    private $password = '';
     public $conn;
 
     public function getConnection() {
@@ -12,8 +12,9 @@ class Database {
         try {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
             $this->conn->exec("set names utf8");
-            } catch(PDOException $e) {
-                echo "Erreur de connexion : " . $e->getMessage();
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch(PDOException $exeption) {
+                echo "Erreur de connexion : " . $exeption->getMessage();
             }
             return $this->conn;
     }

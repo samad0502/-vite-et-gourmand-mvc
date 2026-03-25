@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
 
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="index.php?page=home">
             <img src="/public/assets/img/imgAcc/logo.ico" alt="logo" width="100">
         </a>
 
@@ -16,7 +16,7 @@
                     <a class="nav-link" href="index.php?page=home"><i class="bi bi-house-fill text-light"></i> Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/menus.php"><i class="bi bi-fork-knife text-light"></i> Menus</a>
+                    <a class="nav-link" href="index.php?page=menus><i class="bi bi-fork-knife text-light"></i> Menus</a>
                 </li>
                 <?php if (isset($_SESSION['user'])) : ?>
 

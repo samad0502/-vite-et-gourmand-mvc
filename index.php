@@ -1,8 +1,8 @@
 <?php
 session_start();
+define('ROOT', __DIR__ . DIRECTORY_SEPARATOR);
+require_once ROOT . 'config/database.php';
 
-require_once 'config/database.php';
-require_once 'app/controllers/HomeController.php';
 
 
 // definition de la page (par defaut "accueil")
@@ -10,13 +10,13 @@ $page = $_GET['page'] ?? 'home';
 
 switch ($page){
     case 'home' :
-        require_once 'app/controllers/HomeController.php';
+        require_once ROOT . 'app/controllers/HomeController.php';
         $controller = new HomeController();
         $controller->index();
         break;
 
         case 'orders' :
-            require_once 'app/controllers/OrederController.php';
+            require_once ROOT . 'app/controllers/OrederController.php';
             $controller = new OrderController();
             $controller->list();
             break;

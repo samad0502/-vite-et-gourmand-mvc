@@ -1,6 +1,6 @@
 <?php 
-require_once '../../includes/header.php'; 
-require_once '../../includes/navbar.php'; 
+require_once ROOT . 'includes/header.php'; 
+require_once ROOT . 'includes/navbar.php'; 
 ?>
 
 
@@ -11,7 +11,7 @@ require_once '../../includes/navbar.php';
             <p class="lead">Traiteur événementiel à Bordeaux depuis 25 ans</p>
         </div>
         <img class="rounded mx-auto d-block pt-2" src="/public/assets/img/imgAcc/imageAcc1.jpg" alt="imageAcc1" width="100%" height="338px">
-        <a href="/menus.php" class="btn btn-primary btn-lg mt-5">Decouvrez nos menus</a>
+        <a href="index.php?page=menus" class="btn btn-primary btn-lg mt-5">Decouvrez nos menus</a>
     </div>
 </header>
 
@@ -146,4 +146,4 @@ require_once '../../includes/navbar.php';
     </div>
 </section>
 
-<?php require_once '../../includes/footer.php'; ?>
+<?php require_once ROOT . 'includes/footer.php'; ?>
