@@ -3,6 +3,7 @@ session_start();
 
 require_once 'config/database.php';
 
+
 // definition de la page (par defaut "accueil")
 $page = $_GET['page'] ?? 'home';
 
