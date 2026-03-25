@@ -10,6 +10,10 @@ class HomeController {
         $reviewModel = new Review($db);
         $reviews = $reviewModel->getLatestReviews();
 
+        // recup des horaires pour le footer
+        $hourModel = new OpeningHours($db);
+        $opening_hours = $hourModel->getAll();
+
 require_once 'app/views/home.php';
     }
 }
