@@ -13,4 +13,44 @@ class Menu {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getFiltred() {
+        $sql = "SELECT * FROM menus WHERE 1=1";
+        $params = [];
+
+        
+        // Filtre prix minimum
+        if (!empty($filters['priceMin'])) {
+            $sql .= " AND price >= ?";
+            $params[] = $filters['priceMin'];
+        }
+
+        // Filtre prix maximum
+        if (!empty($filters['priceMax'])) {
+            $sql .= " AND price <= ?";
+            $params[] = $filters['priceMax'];
+        }
+
+        // Filtre nombre minimum de personnes
+        if (!empty($filters['minPeople'])) {
+            $sql .= " AND min_people >= ?";
+            $params[] = $filters['minPeople'];
+        }
+
+        // Filtre thème
+        if (!empty($filters['theme'])) {
+            $sql .= " AND theme_id = ?";
+            $params[] = $filters['theme'];
+        }
+
+        // Filtre régime
+        if (!empty($filters['diet'])) {
+            $sql .= " AND diet_id = ?";
+            $params[] = $filters['diet'];
+        }
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
