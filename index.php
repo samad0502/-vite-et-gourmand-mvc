@@ -1,5 +1,11 @@
 <?php
 session_start();
+require_once __DIR__ . '/vendor/autoload.php';
+
+// chargement des variables d'environnement
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 define('ROOT', __DIR__ . DIRECTORY_SEPARATOR);
 require_once ROOT . 'config/database.php';
 
