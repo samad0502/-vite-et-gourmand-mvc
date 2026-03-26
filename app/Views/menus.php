@@ -70,10 +70,10 @@ require_once ROOT . 'includes/navbar.php';
 </div>
 
 <!-- JS -->
-<script src="assets/js/api.js"></script>
-<script src="assets/js/menus.js"></script>
-<script src="assets/js/filters.js"></script>
-<script src="assets/js/main.js"></script>
+
+<script src="public/assets/js/menus.js"></script>
+<script src="public/assets/js/filters.js"></script>
+
 
 
 </body>

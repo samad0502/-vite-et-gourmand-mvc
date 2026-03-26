@@ -55,7 +55,7 @@ class Menu {
         $sql = "SELECT m.*, t.name as theme_name, d.name as diet_name
         FROM menus m
         LEFT JOIN themes t ON m.theme_id = t.id
-        LEFT JOIN diets d ON d. diet_id = d.id
+        LEFT JOIN diets d ON m.diet_id = d.id
         WHERE 1=1 ";
         $params = [];
 

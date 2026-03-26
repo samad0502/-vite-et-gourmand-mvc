@@ -16,11 +16,11 @@ class ApiController {
             'diet' => $_GET['diet'] ?? null
         ];
 
-        $menus = $menuModel->getFiltredMenus($filters);
+        $result = $menuModel->getFiltredMenus($filters);
 
         //reponse en json
         header('Content-type: application/json');
-        echo json_encode($menus);
+        echo json_encode($result);
         exit;
 
     }
