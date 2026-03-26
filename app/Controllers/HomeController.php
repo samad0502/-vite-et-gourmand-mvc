@@ -1,6 +1,6 @@
 <?php
-require_once ROOT . 'app/models/review.php';
-require_once ROOT . 'app/models/OpeningHours.php';
+require_once ROOT . 'app/Models/Review.php';
+require_once ROOT . 'app/Models/OpeningHours.php';
 
 class HomeController {
     public function index(){
@@ -15,6 +15,6 @@ class HomeController {
         $hourModel = new OpeningHours($db);
         $opening_hours = $hourModel->getAll();
 
-require_once ROOT . 'app/views/home.php';
+require_once ROOT . 'app/Views/home.php';
     }
 }
