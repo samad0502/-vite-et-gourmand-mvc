@@ -21,11 +21,17 @@ switch ($page){
         $controller->index();
         break;
 
+        case 'menus' :
+            require_once ROOT . 'app/Controllers/MenuController.php';
+            $controller = new MenuController();
+            $controller->index();
+            break;
+/*
         case 'orders' :
             require_once ROOT . 'app/Controllers/OrderController.php';
             $controller = new OrderController();
             $controller->list();
-            break;
+            break;*/
 
         default:
         header("HTTP/1.0 404 Not Found");

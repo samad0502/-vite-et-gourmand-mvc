@@ -16,7 +16,7 @@
                     <a class="nav-link" href="index.php?page=home"><i class="bi bi-house-fill text-light"></i> Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=menus><i class="bi bi-fork-knife text-light"></i> Menus</a>
+                    <a class="nav-link" href="index.php?page=menus"><i class="bi bi-fork-knife text-light"></i> Menus</a>
                 </li>
                 <?php if (isset($_SESSION['user'])) : ?>
 
