@@ -26,6 +26,12 @@ switch ($page){
             $controller = new MenuController();
             $controller->index();
             break;
+
+        case 'api_menus' :
+            require_once ROOT . 'app/Controllers/ApiController.php';
+            $api = new ApiController();
+            $api->getFiltredMenus();
+            break;    
 /*
         case 'orders' :
             require_once ROOT . 'app/Controllers/OrderController.php';
