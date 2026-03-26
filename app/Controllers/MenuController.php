@@ -5,8 +5,8 @@ class MenuController {
     public function index(){
         $database = new Database();
         $db = $database->getConnection();    
-        $menuModel = new Menu($db);
-        $menus = $menuModel->getAll();
+        $menuModel = new Menu();
+        $menus = $menuModel->getAllMenus();
         $themes = $menuModel->getUniqueValues('theme');
         $diets = $menuModel->getUniqueValues('diet');
 
