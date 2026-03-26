@@ -7,6 +7,8 @@ class MenuController {
         $db = $database->getConnection();    
         $menuModel = new Menu($db);
         $menus = $menuModel->getAll();
+        $themes = $menuModel->getUniqueValues('theme');
+        $diets = $menuModel->getUniqueValues('diet');
 
         require_once ROOT . 'app/Views/menus.php';
         }

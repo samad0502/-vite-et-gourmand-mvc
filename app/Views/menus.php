@@ -38,17 +38,23 @@ require_once ROOT . 'includes/navbar.php';
 
         <!-- Thème -->
         <div class="col-md-2">
-            <select id="theme" class="form-control">
-                <option value="">Tous les thèmes</option>
-            </select>
-        </div>
+    <select id="theme" class="form-control">
+        <option value="">Tous les thèmes</option>
+        <?php foreach($themes as $t): ?>
+            <option value="<?= htmlspecialchars($t) ?>"><?= ucfirst(htmlspecialchars($t)) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
         <!-- Régime -->
         <div class="col-md-2">
-            <select id="diet" class="form-control">
-                <option value="">Tous les régimes</option>
-            </select>
-        </div>
+    <select id="diet" class="form-control">
+        <option value="">Tous les régimes</option>
+        <?php foreach($diets as $d): ?>
+            <option value="<?= htmlspecialchars($d) ?>"><?= ucfirst(htmlspecialchars($d)) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
         <!-- Bouton -->
         <div class="col-md-1">
