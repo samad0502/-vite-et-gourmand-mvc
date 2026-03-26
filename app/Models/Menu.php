@@ -53,4 +53,12 @@ class Menu {
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getUniqueValues($column) {
+        // recup uniquement les valeurs distinctes qui ne sont pas nulles
+        $query = "SELECT DISTINCT" . $column . "FROM menus WHERE" . $column . "IS NOT NULL AND" . $column . " != ''";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
 }
