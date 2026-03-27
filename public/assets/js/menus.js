@@ -20,7 +20,7 @@ function renderMenus(menus) {
         const html = `
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="assets/img/${menu.main_image}" class="card-img-top" alt="${menu.title}">
+                    <img src="/public/assets/img/menus/${menu.main_image}" class="card-img-top" alt="${menu.title}">
                     <div class="card-body">
                         <h5>${menu.title}</h5>
                         <p>${menu.price} €</p>

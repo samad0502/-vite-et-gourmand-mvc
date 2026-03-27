@@ -38,7 +38,7 @@ class Menu {
         $sql = "SELECT m.*, t.name as theme_name, d.name as diet_name 
         FROM menus m
         LEFT JOIN themes t ON m.theme_id = t.id
-        LEFT JOIN diets d ON m.diet_id = t.id
+        LEFT JOIN diets d ON m.diet_id = d.id
         ORDER BY m.created_at DESC ";
         $stmt = $this->pdo->query($sql);
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -74,7 +74,7 @@ class Menu {
 
         // Filtre nombre minimum de personnes
         if (!empty($filters['minPeople'])) {
-            $sql .= " AND min_people >= ?";
+            $sql .= " AND m.min_people >= ?";
             $params[] = $filters['minPeople'];
         }
 
