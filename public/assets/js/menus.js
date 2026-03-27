@@ -1,33 +1,49 @@
-/* Affiche les menus dans le conteneur html
-*@param {Array} menus - liste des menus recuperes via l'API
-*/
-
-
+/**
+ * Génère et affiche les cartes de menus dans le conteneur HTML
+ * @param {Array} menus - Liste des menus récupérés via l'API
+ */
 function renderMenus(menus) {
-
     const container = document.getElementById('menusContainer');
-    if (!container) {
-        console.error("ERREUR : Le conteneur #menusContainer est introuvable !");
+    if (!container) return;
+
+    // On vide le conteneur avant d'afficher les nouveaux résultats
+    container.innerHTML = '';
+
+    if (!menus || menus.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <p class="alert alert-info shadow-sm">Aucun menu ne correspond à vos critères.</p>
+            </div>`;
         return;
     }
 
-    // on vide le conteneur pour effacer les anciens resultats
-    container.innerHTML = '';
-    
-    // on boucle sur chaque menu pour creer le html(cards menus)
-         menus.forEach(menu => {
-        
-        const html = `
+    menus.forEach(menu => {
+        // Construction de la card menus
+        container.innerHTML += `
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="/public/assets/img/menus/${menu.main_image}" class="card-img-top" alt="${menu.title}">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="/public/assets/img/menus/${menu.main_image}" 
+                         class="card-img-top" 
+                         alt="${menu.title}">
+                    
                     <div class="card-body">
-                        <h5>${menu.title}</h5>
-                        <p>${menu.price} €</p>
+                        <h5 class="card-title text-dark">${menu.title}</h5>
+                        <p class="fw-bold text-primary fs-5">${menu.price} €</p>
+                        
+                        <div class="text-muted small mb-3">
+                            <div><i class="bi bi-people"></i> Minimum ${menu.min_people} personnes</div>
+                            <div><i class="bi bi-box-seam"></i> Quantité restante : ${menu.remaining_quantity}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-white border-top-0 pb-3">
+                        <a href="index.php?page=menu_detail&id=${menu.id}" class="btn btn-info w-100 text-white">
+                            Voir le détail
+                        </a>
                     </div>
                 </div>
-            </div>`;
-        container.innerHTML += html;
+            </div>
+        `;
     });
 }
 

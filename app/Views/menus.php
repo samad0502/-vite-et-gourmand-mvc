@@ -9,7 +9,7 @@ require_once ROOT . 'includes/navbar.php';
 <div class="container my-5">
 
     <h1 class="mb-4"><i class="bi bi-fork-knife"></i> Nos menus</h1>
-    <img class="rounded mx-auto d-block pt-2" src="/public/assets/img/imgMenu.jpg" alt="imgMenu" width="100%" height="500px" style="object-fit: cover;">
+    <img class="rounded mx-auto d-block pt-2" src="/public/assets/img/imgMenu.jpg" alt="imgMenu" width="100%" height="500px" >
     <!-- ZONE DES FILTRES -->
 
     <!-- Filtres des menus -->
