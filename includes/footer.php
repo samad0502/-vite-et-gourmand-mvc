@@ -16,8 +16,8 @@
             <?php endforeach; ?>
         </div>
     </div>
-
-    <?php if (!isset($_COOKIE['cookie_consent'])): ?>
+<!--
+    <?php //if (!isset($_COOKIE['cookie_consent'])): ?>
         <div id="cookie-banner" class="fixed-bottom bg-dark text-white p-4 shadow-lg border-top border-primary" style="z-index: 9999;">
             <div class="container">
                 <div class="row align-items-center">
@@ -34,8 +34,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    <?php endif; ?>
+        </div>  --> 
+    <?php // endif; ?> 
 
 
     <div class="container py-4">

@@ -102,6 +102,25 @@ class Menu {
     }
 
     
-        
+  public function getMenuById(int $id): ?array
+  {
+    $sql = "SELECT m.*, t.name as theme_name, d.name as diet_name
+    FROM menus m
+    LEFT JOIN themes t ON m.theme_id = t.id
+    LEFT JOIN diets d ON m.diet_id = d.id
+    WHERE m.id = ?"; 
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([$id]);
+    $menu = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($menu){
+// preparation des images pour le carousel
+    $$menu['all_images'] = explode(',', $menu['image'] ?? '');
+        $menu['main_image'] = trim($menu['all_images'][0]);
+    }
+
+    return $menu ?: null;
+  }      
       
 }
