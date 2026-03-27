@@ -10,7 +10,7 @@ require_once ROOT . 'includes/navbar.php';
                 <div class="carousel-inner rounded">
                     <?php foreach ($menu['all_images'] as $index => $img): ?>
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                            <img src="assets/img/<?= trim($img) ?>" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Image menu">
+                            <img src="/public/assets/img/menus/<?= trim($img) ?>" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Image menu">
                         </div>
                     <?php endforeach; ?>
                 </div>

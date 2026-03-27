@@ -116,8 +116,8 @@ class Menu {
 
     if($menu){
 // preparation des images pour le carousel
-    $$menu['all_images'] = explode(',', $menu['image'] ?? '');
-        $menu['main_image'] = trim($menu['all_images'][0]);
+    $menu['all_images'] = !empty($menu['image']) ? explode(',', $menu['image']) : [];
+      
     }
 
     return $menu ?: null;
