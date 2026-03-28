@@ -2,6 +2,8 @@
 
 
 session_start();
+// SIMULATION DE CONNEXION 
+$_SESSION['user'] = ['id' => 1, 'firstname' => 'Testeur'];
 require_once __DIR__ . '/vendor/autoload.php';
 
 // chargement des variables d'environnement
