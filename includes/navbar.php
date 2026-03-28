@@ -81,7 +81,7 @@
                 ?>
 
                 <li class="nav-item">
-                    <a class="nav-link position-relative" href="index.php?page=panier">
+                    <a class="nav-link position-relative" href="index.php?page=cart">
                         <i class="bi bi-cart3 text-light"></i> Panier
                         <?php if ($cartCount > 0): ?>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

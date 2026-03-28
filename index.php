@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 
 // SIMULATION DE CONNEXION 
@@ -49,7 +50,7 @@ switch ($page){
             $controller->add();
             break; 
 
-        case 'panier' :
+        case 'cart' :
             require_once ROOT . 'app/Controllers/CartController.php';
             $controller = new CartController();
             $controller->index();

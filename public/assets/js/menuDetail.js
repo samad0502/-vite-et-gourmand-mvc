@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (result.success) {
                     msgBox.innerHTML = `<div class="alert alert-success mt-3 shadow-sm">
                         <i class="bi bi-check-circle-fill"></i> ${result.message} 
-                        <br><a href="index.php?page=panier" class="fw-bold text-decoration-none">→ Voir mon panier</a>
+                        <br><a href="index.php?page=cart" class="fw-bold text-decoration-none">→ Voir mon panier</a>
                     </div>`;
                     orderBtn.disabled = true;
                     orderBtn.innerText = "Produit ajouté";
