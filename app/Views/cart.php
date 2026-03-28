@@ -1,4 +1,7 @@
-<?php require_once ROOT . 'app/Views/includes/header.php'; ?>
+<?php 
+require_once ROOT . 'includes/header.php'; 
+require_once ROOT . 'includes/navbar.php'; 
+?>
 
 <div class="container py-5">
     <h2 class="mb-4"><i class="bi bi-cart3"></i> Votre Panier</h2>
@@ -66,4 +69,4 @@
     <?php endif; ?>
 </div>
 
-<?php require_once ROOT . 'app/Views/includes/footer.php'; ?>
+<?php require_once ROOT . 'includes/footer.php'; ?>

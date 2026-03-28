@@ -62,7 +62,7 @@ public function index(){
 
     //calcul du sous total avec la promo si +5 convives   
     $subtotal = $price * $quantity;
-    $isPromo = ($quantity >= ($menu['min_peaople'] + 5));
+    $isPromo = ($quantity >= ($menu['min_people'] + 5));
     
     if($isPromo){
         $subtotal *= 0.9;
@@ -82,7 +82,9 @@ public function index(){
         }
        
     }
+    
 require_once ROOT . 'app/Views/cart.php';
+
 }
 
 }
