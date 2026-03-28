@@ -54,6 +54,14 @@ require_once ROOT . 'includes/navbar.php';
                            data-stock="<?= $menu['remaining_quantity'] ?>">
                     <div id="promo-message" class="mt-2 small p-2 rounded d-none"></div>
                 </div>
+            <div class="mb-3">
+                    <label class="form-label fw-bold">Matériel de service</label>
+                    <select id="equipment_ready" class="form-select">
+                    <option value="0">Livraison seule</option>
+                 <option value="1">Avec prêt de matériel</option>
+             </select>
+           </div>
+
                 <div id="orderMessage"></div>
                 <button type="submit" class="btn btn-success btn-lg w-100" id="orderBtn" 
                         data-logged="<?= $isLogged ? '1' : '0' ?>">

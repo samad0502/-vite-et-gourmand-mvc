@@ -5,7 +5,7 @@ class CartController {
 //ajoute un menu au panier via fetch
 
 public function add() {
-    header('content-type: application/json');
+    header('Content-Type: application/json');
 
     //verification de la connexion
     if(!isset($_SESSION['user'])){
@@ -17,7 +17,7 @@ public function add() {
     $quantity = (int)($_POST['number_people'] ?? 0);
     $equipment = (int)($_POST['equipment_ready'] ?? 0);
 
-    if(!$menu_id || $quantity <=0) {
+    if(!$menu_id || $quantity <= 0) {
         echo json_encode(['success' => false, 'message' => 'Données invalides.']);
         exit;
     }

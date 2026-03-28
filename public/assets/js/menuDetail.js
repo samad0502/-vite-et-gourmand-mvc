@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
         orderForm.addEventListener('submit', event => {
             event.preventDefault();
 
-            const isLogged = orderBtn.dataset.logged === '1';
+            //const isLogged = orderBtn.dataset.logged === '1';
+            const isLogged = true;//temporaire pour forcer la connexion le temps de creation de la page panier
 
             // si non connecté -> afficher la modal de connexion
             if (!isLogged) {
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // préparation des données pour le contrôleur
-            const data = new FormData();
+            const data = new FormData();          
             data.append('menu_id', document.getElementById('menu_id').value);
             data.append('number_people', inputPeople.value);
             data.append('equipment_ready', document.getElementById('equipment_ready').value);
