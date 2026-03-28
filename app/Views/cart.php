@@ -3,70 +3,91 @@ require_once ROOT . 'includes/header.php';
 require_once ROOT . 'includes/navbar.php'; 
 ?>
 
-<div class="container py-5">
-    <h2 class="mb-4"><i class="bi bi-cart3"></i> Votre Panier</h2>
-
+<div class="container my-5">
+    <h2><i class="bi bi-cart3"></i> Votre Panier</h2>
     <?php if (empty($cartItems)): ?>
-        <div class="alert alert-info">
-            Votre panier est vide. <a href="index.php?page=menus" class="alert-link">Découvrez nos menus !</a>
-        </div>
+        <p>Votre panier est vide.</p>
     <?php else: ?>
         <div class="row">
             <div class="col-lg-8">
-                <div class="card shadow-sm mb-4">
-                    <div class="table-responsive">
-                        <table class="table align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Menu</th>
-                                    <th>Convives</th>
-                                    <th>Matériel</th>
-                                    <th class="text-end">Prix</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($cartItems as $item): ?>
-                                    <tr>
-                                        <td>
-                                            <span class="fw-bold"><?= htmlspecialchars($item['title']) ?></span>
-                                            <?php if ($item['isPromo']): ?>
-                                                <br><span class="badge bg-success small">Promo -10% appliquée</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td><?= $item['quantity'] ?></td>
-                                        <td><?= $item['equipment'] ? 'Oui' : 'Non' ?></td>
-                                        <td class="text-end fw-bold"><?= number_format($item['subtotal'], 2) ?> €</td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Menu</th>
+                            <th>Convives</th>
+                            <th>Prix</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($cartItems as $item): ?>
+                        <tr>
+                            <td>
+                                <strong><?= htmlspecialchars($item['menu']['title']) ?></strong><br>
+                                <small class="text-muted"><?= $item['equipment'] ? 'Avec matériel' : 'Livraison seule' ?></small>
+                            </td>
+                            <td>
+                                <form action="index.php?page=update_cart" method="POST">
+                                    <input type="hidden" name="index" value="<?= $item['index'] ?>">
+                                    <input type="number" name="quantity" class="form-control" 
+                                           value="<?= $item['quantity'] ?>" 
+                                           min="<?= $item['menu']['min_people'] ?>" 
+                                           style="width: 80px;" onchange="this.form.submit()">
+                                </form>
+                            </td>
+                            <td>
+                                <span class="<?= $item['isPromo'] ? 'text-success fw-bold' : '' ?>">
+                                    <?= number_format($item['subtotal'], 2) ?> €
+                                </span>
+                            </td>
+                            <td>
+                                <a href="index.php?page=remove_from_cart&index=<?= $item['index'] ?>" class="text-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
-
+            
             <div class="col-lg-4">
-                <div class="card shadow-sm border-primary">
-                    <div class="card-body">
-                        <h5 class="card-title mb-3">Résumé</h5>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Sous-total</span>
-                            <span><?= number_format($grandTotal, 2) ?> €</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Frais de livraison</span>
-                            <span class="text-success">Offert</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="h5">Total</span>
-                            <span class="h5 text-primary"><?= number_format($grandTotal, 2) ?> €</span>
-                        </div>
-                        <button class="btn btn-primary w-100 btn-lg">Procéder au paiement</button>
+                <div class="card p-3 bg-light border-0">
+                    <h5>Récapitulatif</h5>
+                    <div class="d-flex justify-content-between">
+                        <span>Sous-total</span>
+                        <span><span id="display_subtotal_visible"><?= number_format($totalGeneral, 2) ?></span> €</span>
+                        <span id="display_subtotal" class="d-none"><?= $totalGeneral ?></span>
                     </div>
+                    
+                    <div class="mt-3">
+                        <label>Ville de livraison</label>
+                        <select id="delivery_city" class="form-select">
+                            <option value="inside">Ma Ville (Gratuit)</option>
+                            <option value="outside">Hors zone (+ frais)</option>
+                        </select>
+                    </div>
+
+                    <div id="distance_container" class="mt-2 d-none">
+                        <label>Distance (km)</label>
+                        <input type="number" id="distance_km" class="form-control" placeholder="10">
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <span>Livraison</span>
+                        <span>+ <span id="display_delivery">0.00</span> €</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total</strong>
+                        <strong class="text-primary"><span id="display_total"><?= number_format($totalGeneral, 2) ?></span> €</strong>
+                    </div>
+                    <button class="btn btn-success w-100 mt-3">Commander</button>
                 </div>
             </div>
         </div>
     <?php endif; ?>
 </div>
 
+<script src="assets/js/panier.js"></script>
 <?php require_once ROOT . 'includes/footer.php'; ?>

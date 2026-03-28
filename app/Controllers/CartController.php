@@ -28,10 +28,10 @@ public function add() {
     }
 
     // ajout ou maj du produit
-    $_SESSION['cart'][$menu_id] = [
-        'quantity' => $quantity,
-        'equipment' => $equipment,
-        'added_at' => date('Y-m-d H:i:s')
+    $_SESSION['cart'][] = [
+        'menu_id' => (int)$_POST['menu_id'],
+        'number_people' => (int)$_POST['number_people'],
+        'equipment_ready' => (int)$_POST['equipment_ready']
     ];
 
     echo json_encode([
@@ -42,41 +42,41 @@ public function add() {
     exit;
 }
 
-   public function index(){
+ public function index() {
     //recup du panier en session
-        $cart = $_SESSION['cart'] ?? [];
-        $cartItems = [];
-        $totalGeneral = 0;
+    $cart = $_SESSION['cart'] ?? [];
+    $cartItems = [];
+    $totalGeneral = 0;
+    $menuModel = new Menu();
 
-        //si le panier n'est pas vide, recup des infos en bdd 
-                $menuModel = new Menu();
-
-        foreach($cart as $index => $item){
-            $menu = $menuModel->getMenuById($item['menu_id']);
+    foreach ($cart as $index => $item) {
+        // Vérification de sécurité : l'item doit être un tableau et contenir 'menu_id'
+        if (is_array($item) && isset($item['menu_id'])) {
+            $menu = $menuModel->getMenuById((int)$item['menu_id']);
+            
             if ($menu) {
                 $nbPers = (int)$item['number_people'];
                 $price = (float)$menu['price'];
                 $subtotal = $price * $nbPers;
 
-                //calcul du sous total avec la promo si +5 convives
+         //calcul du sous total avec la promo si +5 convives
                 $isPromo = ($nbPers >= ($menu['min_people'] + 5));
-                if ($isPromo) {
-                    $subtotal *= 0.9;
-                }
+                if ($isPromo) $subtotal *= 0.9;
 
                 $totalGeneral += $subtotal;
                 $cartItems[] = [
                     'index' => $index,
                     'menu' => $menu,
                     'quantity' => $nbPers,
-                    'equipment' => $item['equipment_ready'],
+                    'equipment' => $item['equipment_ready'] ?? 0,
                     'subtotal' => $subtotal,
                     'isPromo' => $isPromo
                 ];
             }
-        }
-        require_once ROOT . 'app/Views/cart.php';
+        } 
     }
+    require_once ROOT . 'app/Views/cart.php';
+}
 
     // Modifier la quantité (via l'index du tableau)
     public function update() {
