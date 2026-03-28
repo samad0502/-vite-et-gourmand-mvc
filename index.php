@@ -35,10 +35,16 @@ switch ($page){
             $api->getFiltredMenus();
             break;    
 
-            case 'menu_detail' :
+        case 'menu_detail' :
             require_once ROOT . 'app/Controllers/MenuController.php';
             $controller = new MenuController();
             $controller->detail();
+            break; 
+
+        case 'add_to_cart' :
+            require_once ROOT . 'app/Controllers/CartController.php';
+            $controller = new CartController();
+            $controller->add();
             break; 
 /*
         case 'orders' :
