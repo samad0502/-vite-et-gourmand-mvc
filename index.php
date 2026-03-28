@@ -46,6 +46,12 @@ switch ($page){
             $controller = new CartController();
             $controller->add();
             break; 
+
+        case 'panier' :
+            require_once ROOT . 'app/Controllers/CartController.php';
+            $controller = new CartController();
+            $controller->index();
+            break;
 /*
         case 'orders' :
             require_once ROOT . 'app/Controllers/OrderController.php';

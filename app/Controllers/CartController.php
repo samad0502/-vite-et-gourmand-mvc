@@ -42,4 +42,47 @@ public function add() {
     exit;
 }
 
+public function index(){
+    //recup du panier en session
+    $cart = $_SESSION['cart'] ?? [];
+    $cartItems = [];
+    $grandTotal = 0;
+
+    //si le panier n'est pas vide, recup des infos en bdd 
+    if(!empty($cart)) {
+        $menuModel = new Menu();
+
+        foreach($cart as $id => $details){
+            $menu = $menuModel->getMenuById($id);
+
+            if($menu) {
+                $quantity = (int)$details['quantity'];
+                $price = (float)$menu['price'];
+
+
+    //calcul du sous total avec la promo si +5 convives   
+    $subtotal = $price * $quantity;
+    $isPromo = ($quantity >= ($menu['min_peaople'] + 5));
+    
+    if($isPromo){
+        $subtotal *= 0.9;
+    }
+
+    $cartItems[] =[
+        'id' => $id,
+        'title' =>$menu['title'],
+        'price' => $price,
+        'quantity' => $quantity,
+        'equipment' => $details['equipment'],
+        'subtotal' => $subtotal,
+        'isPromo' => $isPromo
+    ];
+    $grandTotal += $subtotal;
+            }
+        }
+       
+    }
+require_once ROOT . 'app/Views/cart.php';
+}
+
 }
