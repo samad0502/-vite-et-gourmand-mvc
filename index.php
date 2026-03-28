@@ -55,6 +55,18 @@ switch ($page){
             $controller = new CartController();
             $controller->index();
             break;
+
+        case 'update_cart' :
+            require_once ROOT . 'app/Controllers/CartController.php';
+            $controller = new CartController();
+            $controller->update();
+            break;
+
+        case 'remove_from_cart' :
+            require_once ROOT . 'app/Controllers/CartController.php';
+            $controller = new CartController();
+            $controller->remove();
+            break;
 /*
         case 'orders' :
             require_once ROOT . 'app/Controllers/OrderController.php';
