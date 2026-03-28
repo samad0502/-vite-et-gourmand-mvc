@@ -42,49 +42,64 @@ public function add() {
     exit;
 }
 
-public function index(){
+   public function index(){
     //recup du panier en session
-    $cart = $_SESSION['cart'] ?? [];
-    $cartItems = [];
-    $grandTotal = 0;
+        $cart = $_SESSION['cart'] ?? [];
+        $cartItems = [];
+        $totalGeneral = 0;
 
-    //si le panier n'est pas vide, recup des infos en bdd 
-    if(!empty($cart)) {
-        $menuModel = new Menu();
+        //si le panier n'est pas vide, recup des infos en bdd 
+                $menuModel = new Menu();
 
-        foreach($cart as $id => $details){
-            $menu = $menuModel->getMenuById($id);
-
-            if($menu) {
-                $quantity = (int)$details['quantity'];
+        foreach($cart as $index => $item){
+            $menu = $menuModel->getMenuById($item['menu_id']);
+            if ($menu) {
+                $nbPers = (int)$item['number_people'];
                 $price = (float)$menu['price'];
+                $subtotal = $price * $nbPers;
 
+                //calcul du sous total avec la promo si +5 convives
+                $isPromo = ($nbPers >= ($menu['min_people'] + 5));
+                if ($isPromo) {
+                    $subtotal *= 0.9;
+                }
 
-    //calcul du sous total avec la promo si +5 convives   
-    $subtotal = $price * $quantity;
-    $isPromo = ($quantity >= ($menu['min_people'] + 5));
-    
-    if($isPromo){
-        $subtotal *= 0.9;
-    }
-
-    $cartItems[] =[
-        'id' => $id,
-        'title' =>$menu['title'],
-        'price' => $price,
-        'quantity' => $quantity,
-        'equipment' => $details['equipment'],
-        'subtotal' => $subtotal,
-        'isPromo' => $isPromo
-    ];
-    $grandTotal += $subtotal;
+                $totalGeneral += $subtotal;
+                $cartItems[] = [
+                    'index' => $index,
+                    'menu' => $menu,
+                    'quantity' => $nbPers,
+                    'equipment' => $item['equipment_ready'],
+                    'subtotal' => $subtotal,
+                    'isPromo' => $isPromo
+                ];
             }
         }
-       
+        require_once ROOT . 'app/Views/cart.php';
     }
-    
-require_once ROOT . 'app/Views/cart.php';
 
+    // Modifier la quantité (via l'index du tableau)
+    public function update() {
+        if (isset($_POST['index']) && isset($_POST['quantity'])) {
+            $index = (int)$_POST['index'];
+            $qty = (int)$_POST['quantity'];
+            if ($qty > 0 && isset($_SESSION['cart'][$index])) {
+                $_SESSION['cart'][$index]['number_people'] = $qty;
+            }
+        }
+        header('Location: index.php?page=cart');
+        exit;
+    }
+
+    // Supprimer un article
+    public function remove() {
+        if (isset($_GET['index'])) {
+            $index = (int)$_GET['index'];
+            unset($_SESSION['cart'][$index]);
+            $_SESSION['cart'] = array_values($_SESSION['cart']); // Réindexation importante
+        }
+        header('Location: index.php?page=cart');
+        exit;
+    }
 }
 
-}
