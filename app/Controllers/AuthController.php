@@ -32,4 +32,12 @@ public function login() {
         require_once ROOT . 'app/Views/auth/login.php';
     }
 }
+
+public function logout() {
+    session_start();
+    $_SESSION = array();
+    session_destroy();
+    header("Location: index.php?page=login");
+    exit();
+}
 }
