@@ -84,6 +84,19 @@ switch ($page){
            require_once ROOT . 'app/Controllers/AuthController.php';
            $controller = new AuthController();
            $controller->logout();
+           break;   
+
+        case 'register':
+           require_once ROOT . 'app/Controllers/AuthController.php';
+           $controller = new AuthController();
+           $controller->showRegister();
+           break;
+
+
+       case 'auth_register':
+           require_once ROOT . 'app/Controllers/AuthController.php';
+           $controller = new AuthController();
+           $controller->register();
            break;    
 /*
         case 'orders' :
