@@ -40,4 +40,38 @@ public function logout() {
     header("Location: index.php?page=login");
     exit();
 }
+
+public function register() {
+   if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $error = [];
+    $data = $_POST;
+
+    // validation regex mot de passe
+    $password = $_POST['password'];
+    if(strlen($password) < 10 ||
+    !preg_match("/[A-Z/]", $password) ||
+    !preg_match("/[a-z/]", $password) ||
+    !preg_match("/[0-9/]", $password) ||
+    !preg_match("/[!@#$%^&*(),.?\":{}|<>]/", $password)) {
+        $error[] = "Le mot de passe ne respecte pas les critères de sécurité.";
+    }
+
+    if($password !== $_POST['password_confirm']) {
+        $error[] = "Les mots de passe ne correspondent pas.";
+    }
+
+    if(empty($error)) {
+        $userModel = new User();
+        if($userModel->register($data)){
+            header('Location: index.php?page=login&msg=success_register');
+            exit;
+        } else {
+            $error[] = "Erreur lors de l'enregistrement en base de données.";
+        }
+    }
+    
+    require_once ROOT . 'app/Views/auth/register.php';
+
+   } 
+}
 }
