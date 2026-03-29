@@ -41,6 +41,10 @@ public function logout() {
     exit();
 }
 
+public function showRegister() {
+    require_once ROOT . 'app/Views/auth/register.php';
+}
+
 public function register() {
    if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $error = [];
