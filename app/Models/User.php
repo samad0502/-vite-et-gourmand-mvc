@@ -23,4 +23,21 @@ class User {
             $data['email'], $passwordHash, $data['role_id'] ?? 3, 1
         ]);
     }
+
+    public function login($email, $password){
+        $sql = "SELECT u.*, r.name as role_name
+        FROM users u
+        JOIN roles r ON u.role_id = r.id
+        WHERE u.email = :email AND u.is_active = 1 ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($user && password_verify($password, $user['password'])){
+            return $user;
+        }
+        return false;
+
+    }
 }
