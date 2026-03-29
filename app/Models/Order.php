@@ -30,5 +30,18 @@ class Order {
 
             ]);
     }
+
+
+    //recuperer les commandes d'un utilisateur
+    public function getByUser($userId) {
+        $sql = "SELECT o.*, m.title as menu_title
+                FROM orders o
+                JOIN menus m ON o.menu_id = m.id
+                WHERE o.user_id = ?
+                ORDER BY o.order_date DESC ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);        
+    }
 }
 
