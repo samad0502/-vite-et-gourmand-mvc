@@ -67,6 +67,24 @@ switch ($page){
             $controller = new CartController();
             $controller->remove();
             break;
+
+        case 'login':
+           require_once ROOT . 'app/Controllers/AuthController.php';
+           $controller = new AuthController();
+           $controller->showLogin();
+           break;    
+        
+        case 'auth_login':
+           require_once ROOT . 'app/Controllers/AuthController.php';
+           $controller = new AuthController();
+           $controller->login();
+           break;
+    
+        case 'logout':
+           require_once ROOT . 'app/Controllers/AuthController.php';
+           $controller = new AuthController();
+           $controller->logout();
+           break;    
 /*
         case 'orders' :
             require_once ROOT . 'app/Controllers/OrderController.php';
