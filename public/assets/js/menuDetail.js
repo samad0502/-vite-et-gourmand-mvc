@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
         orderForm.addEventListener('submit', event => {
             event.preventDefault();
 
-            //const isLogged = orderBtn.dataset.logged === '1';
-            const isLogged = true;//temporaire pour forcer la connexion le temps de creation de la page panier
+            const isLogged = orderBtn.dataset.logged === '1';
+            
 
             // si non connecté -> afficher la modal de connexion
             if (!isLogged) {
