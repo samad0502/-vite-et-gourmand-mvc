@@ -1,4 +1,7 @@
-<?php require_once ROOT . 'includes/header.php'; ?>
+<?php 
+require_once ROOT . 'includes/header.php'; 
+require_once ROOT . 'includes/navbar.php'; 
+?>
 
 <div class="container my-5">
     <div class="row justify-content-center">

@@ -62,7 +62,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/auth/logout.php"><i class="bi bi-power text-light"></i> Déconnexion</a>
+                        <a class="nav-link" href="index.php?page=logout"><i class="bi bi-power text-light"></i> Déconnexion</a>
                     </li>
 
                     <li class="nav-item">
@@ -72,7 +72,7 @@
                     </li>
                 <?php else : ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="/auth/login.php"><i class="bi bi-person-fill text-light"></i> Connexion</a>
+                        <a class="nav-link" href="index.php?page=login"><i class="bi bi-person-fill text-light"></i> Connexion</a>
                     </li>
                 <?php endif; ?>
 

@@ -1,4 +1,7 @@
-<?php require_once ROOT . 'includes/header.php'; ?>
+<?php
+ require_once ROOT . 'includes/header.php';
+ require_once ROOT . 'includes/navbar.php';
+  ?>
 
 <div class="container my-5">
     <div class="row justify-content-center">
@@ -62,7 +65,7 @@
                             <input type="password" name="password" class="form-control" required>
                             <div class="form-text small">
                                 <i class="bi bi-info-circle me-1"></i> 
-                                10 caractères min. (Majuscule, minuscule, chiffre, spécial).
+                                10 caractères min. (1 Majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial).
                             </div>
                         </div>
 

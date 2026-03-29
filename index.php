@@ -11,6 +11,7 @@ $dotenv->load();
 define('ROOT', __DIR__ . DIRECTORY_SEPARATOR);
 require_once ROOT . 'Config/Database.php';
 require_once ROOT . 'app/Models/Menu.php';
+require_once ROOT . 'app/Models/User.php';
 
 
 
