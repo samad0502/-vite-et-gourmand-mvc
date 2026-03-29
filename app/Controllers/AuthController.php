@@ -18,13 +18,17 @@ public function login() {
             $_SESSION['user'] =[
                 'id' => $user['id'],
                 'firstname' => $user['firstname'],
-                'role' => $user['role_name']
+                'lastname'  => $user['lastname'],
+                'email'     => $user['email'],
+                'role'      => $user['role_name']
             ];
             // redirection selon le role
             if($user['role-name'] === 'admin') {
                 header('Location: index.php?page=admin_dashboard');
+            } elseif ($user['role_name'] === 'employee') {
+                header('Location: index.php?page=employee_dashboard');
             } else {
-                header('Location: index.php?page=cart');
+                header('Location: index.php?page=menus');
             }
             exit;
         }
