@@ -45,29 +45,31 @@ require_once ROOT . 'includes/navbar.php';
                 </div>
             </div>
 
-            <form id="orderForm" class="card p-4 shadow-sm border-0">
-                <input type="hidden" id="menu_id" value="<?= $menu['id'] ?>">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Convives (Min: <span id="minPeople"><?= $menu['min_people'] ?></span>)</label>
-                    <input type="number" id="number_people" class="form-control" 
-                           value="<?= $menu['min_people'] ?>" min="<?= $menu['min_people'] ?>" 
-                           data-stock="<?= $menu['remaining_quantity'] ?>">
-                    <div id="promo-message" class="mt-2 small p-2 rounded d-none"></div>
+            <form action="index.php?page=add_to_cart" method="POST" id="orderForm" class="card p-4 shadow-sm border-0">
+    <input type="hidden" name="menu_id" id="menu_id" value="<?= $menu['id'] ?>">
+    
+    <div class="mb-3">
+        <label class="form-label fw-bold">Convives</label>
+        <input type="number" name="number_people" id="number_people" class="form-control" 
+               value="<?= $menu['min_people'] ?>" min="<?= $menu['min_people'] ?>" 
+               data-stock="<?= $menu['remaining_quantity'] ?>">
+               <div id="promo-message" class="mt-2 small p-2 rounded d-none"></div>
                 </div>
-            <div class="mb-3">
-                    <label class="form-label fw-bold">Matériel de service</label>
-                    <select id="equipment_ready" class="form-select">
-                    <option value="0">Livraison seule</option>
-                 <option value="1">Avec prêt de matériel</option>
-             </select>
-           </div>
 
-                <div id="orderMessage"></div>
-                <button type="submit" class="btn btn-success btn-lg w-100" id="orderBtn" 
-                        data-logged="<?= $isLogged ? '1' : '0' ?>">
-                    Ajouter au panier
-                </button>
-            </form>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Matériel de service</label>
+        <select name="equipment_ready" id="equipment_ready" class="form-select">
+            <option value="0">Livraison seule</option>
+            <option value="1">Avec prêt de matériel</option>
+        </select>
+    </div>
+
+    <div id="orderMessage"></div>
+    <button type="button" class="btn btn-success btn-lg w-100" id="orderBtn" 
+            data-logged="<?= isset($_SESSION['user']) ? '1' : '0' ?>">
+        Ajouter au panier
+    </button>
+</form>
         </div>
     </div>
 </div>

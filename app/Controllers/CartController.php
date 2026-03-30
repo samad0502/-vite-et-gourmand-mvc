@@ -5,40 +5,46 @@ class CartController {
 //ajoute un menu au panier via fetch
 
 public function add() {
-    header('Content-Type: application/json');
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $menuId = $_POST['menu_id'] ?? null;
+        $nbPers = (int)($_POST['number_people'] ?? 0);
+        $equipment = (int)($_POST['equipment_ready'] ?? 0);
 
-    //verification de la connexion
-    if(!isset($_SESSION['user'])){
-        echo json_encode(['success' => false, 'message' => 'veuillez vous connecter pour commander.']);
-        exit;
+        if ($menuId && $nbPers > 0) {
+            if (!isset($_SESSION['cart'])) {
+                $_SESSION['cart'] = [];
+            }
+
+            // On récupère les infos du menu pour vérifier le seuil de promo
+            $menuModel = new Menu();
+            $menu = $menuModel->getMenuById((int)$menuId);
+
+            if ($menu) {
+                // Initialisation ou cumul de la quantité
+                if (isset($_SESSION['cart'][$menuId])) {
+                    $totalQty = $_SESSION['cart'][$menuId]['number_people'] + $nbPers;
+                } else {
+                    $totalQty = $nbPers;
+                }
+
+               
+                // Promo si convives >= (minimum + 5)
+                $isPromo = ($totalQty >= ($menu['min_people'] + 5));
+
+                // Stockage en session
+                $_SESSION['cart'][$menuId] = [
+                    'menu_id' => $menuId,
+                    'number_people' => $totalQty,
+                    'equipment_ready' => $equipment,
+                    'is_promo' => $isPromo 
+                ];
+            }
+
+            header('Location: index.php?page=cart');
+            exit;
+        }
     }
-
-    $menu_id = $_POST['menu_id'] ?? null;
-    $quantity = (int)($_POST['number_people'] ?? 0);
-    $equipment = (int)($_POST['equipment_ready'] ?? 0);
-
-    if(!$menu_id || $quantity <= 0) {
-        echo json_encode(['success' => false, 'message' => 'Données invalides.']);
-        exit;
-    }
-
-    //initialisation du panier en session si inexistant
-    if(!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = [];
-    }
-
-    // ajout ou maj du produit
-    $_SESSION['cart'][] = [
-        'menu_id' => (int)$_POST['menu_id'],
-        'number_people' => (int)$_POST['number_people'],
-        'equipment_ready' => (int)$_POST['equipment_ready']
-    ];
-
-    echo json_encode([
-       'success' => true,
-       'message' => 'Menu ajouté au panier !',
-       'cart_count' => count($_SESSION['cart']) 
-    ]);
+    header('Location: index.php?page=menus');
     exit;
 }
 
