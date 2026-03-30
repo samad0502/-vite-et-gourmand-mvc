@@ -1,5 +1,9 @@
 <?php
 
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class AuthController {
 
 public function showLogin() {
@@ -69,17 +73,51 @@ public function register() {
         }
 
     if (empty($errors)) {
+        try {
         if ($userModel->register($_POST)) {
+
+        // ENVOI DU MAIL 
+                    $this->sendWelcomeEmail($_POST['email'], $_POST['firstname']);
                     
             header('Location: index.php?page=login&msg=success_register');
             exit;
-        } else{
+        } 
+    } catch (Exception $e){
             $error[] = "Erreur lors de l'enregistrement en base de données.";
         } 
     }
         
         require_once ROOT . 'app/Views/auth/register.php';
    
+    }
+}
+
+
+private function sendWelcomeEmail($email, $firstname) {
+    $mail = new PHPMailer(true);
+
+    try {
+                
+        $mail->isSMTP();
+        $mail->Host       = $_ENV['MAIL_HOST'];
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $_ENV['MAIL_USER'];
+        $mail->Password   = $_ENV['MAIL_PASS'];
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+        $mail->Port       = $_ENV['MAIL_PORT'];
+        $mail->CharSet    = 'UTF-8';
+
+        $mail->setFrom($_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
+        $mail->addAddress($email, $firstname);
+
+        $mail->isHTML(true);
+        $mail->Subject = "Bienvenue chez Vite & Gourmand !";
+        $mail->Body    = "<h1>Bonjour $firstname !</h1><p>Compte créé avec succès.</p>";
+
+        $mail->send();
+    } catch (Exception $e) {
+       
+        die("Erreur Mailer : " . $mail->ErrorInfo);
     }
 }
 }
