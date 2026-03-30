@@ -39,6 +39,7 @@ public function process() {
             ];
 
             $orderModel->createOrder($orderData);
+            $orderModel->updateStock($item['menu_id']);
 
             //mise a jour du stock
             $db->prepare("UPDATE menus SET remaining_quantity = remaining_quantity - 1 WHERE id = ?")
