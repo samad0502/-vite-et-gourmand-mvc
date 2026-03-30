@@ -40,4 +40,16 @@ class User {
         return false;
 
     }
+
+
+    public function findById($id) {
+
+    $sql = "SELECT id, firstname, lastname, email, phone, address, zip_code, city
+    FROM users
+    WHERE id = :id ";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(['id => $id']);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
