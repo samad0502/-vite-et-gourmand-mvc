@@ -18,6 +18,8 @@ public function checkout() {
 
 //traitement final de la commande
 public function process() {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+    
     $db = (new Database())->getConnection();
     try {
         $db->beginTransaction();
@@ -48,7 +50,7 @@ public function process() {
 
         $db->commit();
         unset($_SESSION['cart']);
-        header('Location: index.php?page=order_success$ref=' . $groupOrderNumber);
+        header('Location: index.php?page=order_success&ref=' . $groupOrderNumber);
 
     } catch(Exception $e){
         $db->rollBack();

@@ -82,7 +82,7 @@ require_once ROOT . 'includes/navbar.php';
                         <strong>Total</strong>
                         <strong class="text-primary"><span id="display_total"><?= number_format($totalGeneral, 2) ?></span> €</strong>
                     </div>
-                    <button class="btn btn-success w-100 mt-3">Commander</button>
+                    <a href="index.php?page=checkout" class="btn btn-success w-100 mt-3">Commander</a>
                 </div>
             </div>
         </div>

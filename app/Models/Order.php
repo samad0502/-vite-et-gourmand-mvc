@@ -32,7 +32,7 @@ class Order {
     }
 //gestion du stock
     public function updateStock($menuId){
-        $sql = "UPDATE menus SET remaining_quantity = remaining_quatity - 1 WHERE id = ?";
+        $sql = "UPDATE menus SET remaining_quantity = remaining_quantity - 1 WHERE id = ?";
         return $this->db->prepare($sql)->execute($menuId);
     }
 

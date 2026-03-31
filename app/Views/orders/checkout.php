@@ -62,7 +62,7 @@ require_once ROOT . 'includes/navbar.php';
                             <input type="checkbox" id="cgv" name="cgv" required>
                             <label for="cgv">J'ai lu et j'accepte les <a href="cgv.php" target="_blank">Conditions Générales de Vente</a></label>
                         </p>
-
+                        <input type="hidden" name="final_total_price" id="final_total_price_input">
                         <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
                             Valider et payer
                         </button>
