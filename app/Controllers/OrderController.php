@@ -104,6 +104,10 @@ public function list() {
     $orderModel = new Order();
     $userModel = $orderModel->getByUser($_SESSION['user']['id']);
 
+    //recuperation des commandes via le modele order
+    $orderModel = new Order();
+    $userOrders = $orderModel->getByUser($_SESSION['user']['id']);
+    
     require_once ROOT . 'app/Views/orders/list.php';
 }
 

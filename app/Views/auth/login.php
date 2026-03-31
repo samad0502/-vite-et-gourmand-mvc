@@ -6,8 +6,7 @@ require_once ROOT . 'includes/navbar.php';
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-4">
+            <div class="card-body p-4">
                     <h1 class="h3 mb-4 fw-bold">Connexion</h1>
 
                     <?php if (isset($error)) : ?>

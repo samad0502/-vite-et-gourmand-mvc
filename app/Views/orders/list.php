@@ -2,7 +2,10 @@
 <?php require_once ROOT . 'includes/navbar.php'; ?>
 
 <div class="container my-5">
-    <h2 class="mb-4"><i class="bi bi-bag-check"></i> Mes Commandes</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-box-seam me-2"></i>Mes Commandes</h2>
+        <a href="index.php?page=menus" class="btn btn-outline-primary btn-sm">Nouvelle commande</a>
+    </div>
 
     <?php if (empty($userOrders)): ?>
         <div class="alert alert-info">Vous n'avez pas encore passé de commande.</div>
