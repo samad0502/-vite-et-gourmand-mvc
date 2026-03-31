@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loginData.append('email', email);
             loginData.append('password', password);
 
-            // Envoi vers ton script de traitement de connexion
-            fetch('auth/login_process.php', { 
+            // Envoi vers script de traitement de connexion
+            fetch('index.php?page=auth_login&ajax=1', { 
                 method: 'POST',
                 body: loginData
             })
