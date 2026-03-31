@@ -41,7 +41,9 @@ require_once ROOT . 'includes/navbar.php';
                                 </span>
                             </td>
                             <td>
-                                <a href="index.php?page=remove_from_cart&index=<?= $item['index'] ?>" class="text-danger">
+                                <a href="index.php?page=remove_from_cart&index=<?= $index ?>" 
+                                   class="btn btn-outline-danger btn-sm" 
+                                   onclick="return confirm('Supprimer ce menu du panier ?')">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
