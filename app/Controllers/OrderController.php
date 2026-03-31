@@ -13,6 +13,30 @@ public function checkout() {
     $userModel = new User();
     $u = $userModel->findById($_SESSION['user']['id']);
 
+    //preparation des données du panier pour la vue
+    $menuModel = new Menu();
+    $cartDetails= [];
+    $totalMenus = 0;
+
+    foreach($_SESSION['cart'] as $item) {
+        $menuInfo = $menuModel->getMenuById($item['menu_id']);
+
+        //calcul de la promo 
+        $isPromo = ($item['number_people'] >= ($menuInfo['min_people'] + 5));
+        $prixLigne = $menuInfo['price'] * $item['number_people'];
+        if($isPromo) $prixLigne *= 0.9;
+
+        $totalMenus += $prixLigne;
+
+        $cartDetails[] = [
+           'title' => $menuInfo['title'],
+            'price_unit' => $menuInfo['price'],
+            'total_line' => $prixLigne,
+            'nb_pers' => $item['number_people'],
+            'is_promo' => $isPromo 
+        ];
+    }
+
  require_once ROOT . 'app/Views/orders/checkout.php';   
 }
 

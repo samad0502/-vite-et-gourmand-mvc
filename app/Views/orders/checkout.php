@@ -77,34 +77,22 @@ require_once ROOT . 'includes/navbar.php';
                     <h5 class="mb-0 text-center">Résumé de la commande</h5>
                 </div>
                 <div class="card-body">
-                    <?php
-                    foreach ($_SESSION['cart'] as $item):
-                        $stmt = $pdo->prepare("SELECT title, price, min_people FROM menus WHERE id = ?");
-                        $stmt->execute([$item['menu_id']]);
-                        $m = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                        $nbPers = (int)$item['number_people'];
-                        $prixBase = (float)$m['price'] * $nbPers;
-
-                        //  Règle de remise de 10%
-                        $remise = 0;
-                        if ($nbPers >= ($m['min_people'] + 5)) {
-                            $remise = $prixBase * 0.10;
-                        }
-                        $prixFinalLigne = $prixBase - $remise;
-                        $totalMenus += $prixFinalLigne;
-                    ?>
-                        <div class="mb-3 border-bottom pb-2">
-                            <div class="d-flex justify-content-between">
-                                <span class="fw-bold"><?= htmlspecialchars($m['title']) ?></span>
-                                <span><?= number_format($prixFinalLigne, 2) ?> €</span>
-                            </div>
-                            <small class="text-muted"><?= $nbPers ?> convives x <?= number_format($m['price'], 2) ?> €</small>
-                            <?php if ($remise > 0): ?>
-                                <div class="text-success small fw-bold">-10% Remise (Volume atteint)</div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
+                    <?php foreach ($cartDetails as $detail): ?>
+                       <div class="mb-3 border-bottom pb-2">
+                           <div class="d-flex justify-content-between">
+                               <span class="fw-bold"><?= htmlspecialchars($detail['title']) ?></span>
+                               <span><?= number_format($detail['total_line'], 2) ?> €</span>
+                           </div>
+                           <small class="text-muted"><?= $detail['nb_pers'] ?> convives x <?= number_format($detail['price_unit'], 2) ?> €</small>
+                           <?php if ($detail['is_promo']): ?>
+                               <div class="text-success small fw-bold">-10% Remise (Volume atteint)</div>
+                           <?php endif; ?>
+                       </div>
+                   <?php endforeach; ?>
+                   <span class="h3 text-primary fw-bold" id="finalTotal" data-base="<?= $totalMenus ?>">
+                       <?= number_format($totalMenus, 2) ?> €
+                   </span>
 
                     <div class="d-flex justify-content-between mt-3">
                         <span>Frais de livraison</span>
