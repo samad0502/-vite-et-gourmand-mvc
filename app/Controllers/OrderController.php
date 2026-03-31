@@ -97,4 +97,18 @@ public function remove() {
 }
 
 
+public function list() {
+    if(!isset($_SESSION['user'])){
+        header('Location: index.php?page=login');
+        exit;
+    }
+
+    // appel au modele Order
+    $orderModel = new Order();
+    $userModel = $orderModel->getByUser($_SESSION['user']['id']);
+
+    require_once ROOT . 'app/Views/orders/list.php';
+}
+
+
 }
