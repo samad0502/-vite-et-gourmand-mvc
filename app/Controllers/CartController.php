@@ -40,11 +40,13 @@ public function add() {
                 ];
             }
 
-            header('Location: index.php?page=cart');
-            exit;
+           header('Content-Type: application/json');
+                echo json_encode(['success' => true]);
+                exit;
         }
     }
-    header('Location: index.php?page=menus');
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'ajout']);
     exit;
 }
 
