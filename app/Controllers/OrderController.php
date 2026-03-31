@@ -51,6 +51,7 @@ public function process() {
         $groupOrderNumber = 'ORD-' . strtoupper(uniqid());
 
         foreach($_SESSION['cart'] as $item){
+            $price = !empty($_POST['final_total_price']) ? $_POST['final_total_price'] : 0;
 //Logique de calcul prix/promo/livraison
             $orderData = [
                 'order_number' => $groupOrderNumber,
@@ -61,21 +62,17 @@ public function process() {
                 'address' => $_POST['address'],
                 'delivery_date' => $_POST['delivery_date'],
                 'delivery_time' => $_POST['delivery_time'],
-                'total_price' => $_POST['final_total_price']
+                'total_price' => $price
             ];
 
             $orderModel->createOrder($orderData);
             $orderModel->updateStock($item['menu_id']);
-
-            //mise a jour du stock
-            $db->prepare("UPDATE menus SET remaining_quantity = remaining_quantity - 1 WHERE id = ?")
-            ->execute([$item['menu_id']]);
         }
 
         $db->commit();
         unset($_SESSION['cart']);
-        header('Location: index.php?page=order_success&ref=' . $groupOrderNumber);
-
+        header('Location: index.php?page=order_success&order_ref=' . $groupOrderNumber);
+        exit;
     } catch(Exception $e){
         $db->rollBack();
         die("Erreur : " . $e->getMessage());

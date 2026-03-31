@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 // chargement des variables d'environnement
@@ -12,6 +11,7 @@ define('ROOT', __DIR__ . DIRECTORY_SEPARATOR);
 require_once ROOT . 'Config/Database.php';
 require_once ROOT . 'app/Models/Menu.php';
 require_once ROOT . 'app/Models/User.php';
+require_once ROOT . 'app/Models/Order.php';
 
 
 
@@ -109,6 +109,10 @@ switch ($page){
            $controller = new OrderController();
            $controller->process();
            break;   
+
+        case 'order_success':
+        require_once ROOT . 'app/Views/orders/order_success.php';
+        break;   
 
         case 'orders' :
             require_once ROOT . 'app/Controllers/OrderController.php';
