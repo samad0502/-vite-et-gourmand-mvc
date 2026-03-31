@@ -1,5 +1,8 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class OrderController {
 
 //affichage de  la page de confirmation avant paiement
@@ -107,9 +110,49 @@ public function list() {
     //recuperation des commandes via le modele order
     $orderModel = new Order();
     $userOrders = $orderModel->getByUser($_SESSION['user']['id']);
-    
+
     require_once ROOT . 'app/Views/orders/list.php';
 }
 
+
+
+
+
+private function sendConfirmationEmail($userEmail, $orderRef, $total) {
+    $mail = new PHPMailer(true);
+
+    try {
+        // Configuration SMTP Mailtrap
+        $mail->isSMTP();
+        $mail->Host       = $_ENV['MAIL_HOST'];
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $_ENV['MAIL_USER'];
+        $mail->Password   = $_ENV['MAIL_PASS'];
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+        $mail->Port       = $_ENV['MAIL_PORT'];
+        $mail->CharSet    = 'UTF-8';
+        // Destinataires
+        $mail->setFrom('no-reply@vitegourmand.fr', 'ViteGourmand');
+        $mail->addAddress($userEmail);
+
+        // Contenu du mail
+        $mail->isHTML(true);
+        $mail->Subject = "Confirmation de votre commande $orderRef";
+        $mail->Body    = "
+            <h1>Merci pour votre commande !</h1>
+            <p>Nous avons bien reçu votre demande de prestation.</p>
+            <ul>
+                <li><strong>Référence :</strong> $orderRef</li>
+                <li><strong>Montant total :</strong> " . number_format($total, 2) . " €</li>
+            </ul>
+            <p>Vous pouvez suivre l'avancement dans votre espace 'Mes Commandes'.</p>
+        ";
+
+        $mail->send();
+    } catch (Exception $e) {
+      
+        error_log("Erreur mail : " . $mail->ErrorInfo);
+    }
+}
 
 }
