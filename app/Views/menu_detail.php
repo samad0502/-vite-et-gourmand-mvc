@@ -49,7 +49,7 @@ require_once ROOT . 'includes/navbar.php';
     <input type="hidden" name="menu_id" id="menu_id" value="<?= $menu['id'] ?>">
     
     <div class="mb-3">
-        <label class="form-label fw-bold">Convives</label>
+        <label class="form-label fw-bold">Convives(Min: <span id="minPeople"><?= $menu['min_people'] ?></span>)</label>
         <input type="number" name="number_people" id="number_people" class="form-control" 
                value="<?= $menu['min_people'] ?>" min="<?= $menu['min_people'] ?>" 
                data-stock="<?= $menu['remaining_quantity'] ?>">
@@ -65,11 +65,45 @@ require_once ROOT . 'includes/navbar.php';
     </div>
 
     <div id="orderMessage"></div>
-    <button type="button" class="btn btn-success btn-lg w-100" id="orderBtn" 
+    <button type="submit" class="btn btn-success btn-lg w-100" id="orderBtn" 
             data-logged="<?= isset($_SESSION['user']) ? '1' : '0' ?>">
         Ajouter au panier
     </button>
 </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Connectez-vous pour commander</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div id="loginError" class="alert alert-danger d-none"></div>
+
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="exemple@mail.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mot de passe</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 py-2">Se connecter</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="small text-muted mb-0">Pas encore de compte ?</p>
+                    <a href="index.php?page=register" class="text-success fw-bold">Créer un compte ici</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

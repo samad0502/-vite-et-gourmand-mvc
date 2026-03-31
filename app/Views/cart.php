@@ -89,5 +89,5 @@ require_once ROOT . 'includes/navbar.php';
     <?php endif; ?>
 </div>
 
-<script src="assets/js/panier.js"></script>
+<script src="public/assets/js/cart.js"></script>
 <?php require_once ROOT . 'includes/footer.php'; ?>
