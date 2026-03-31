@@ -26,6 +26,14 @@ public function login() {
                 'email'     => $user['email'],
                 'role'      => $user['role_name']
             ];
+
+// ajout pour ajax (Si c'est la modale qui appelle)
+            if (isset($_GET['ajax'])) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true]);
+                exit;
+            }
+
             // redirection selon le role
             if($user['role-name'] === 'admin') {
                 header('Location: index.php?page=admin_dashboard');
@@ -36,6 +44,14 @@ public function login() {
             }
             exit;
         }
+
+// gestion d'erreur pour ajax
+        if (isset($_GET['ajax'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Identifiants incorrects']);
+            exit;
+        }
+
         $error = "Identifiants incorrects";
         require_once ROOT . 'app/Views/auth/login.php';
     }
