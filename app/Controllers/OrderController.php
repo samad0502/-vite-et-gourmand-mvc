@@ -46,12 +46,12 @@ public function checkout() {
 //traitement final de la commande
 public function process() {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
-
+ $groupOrderNumber = 'ORD-' . strtoupper(uniqid());
     $db = (new Database())->getConnection();
     try {
         $db->beginTransaction();
         $orderModel = new Order();
-        $groupOrderNumber = 'ORD-' . strtoupper(uniqid());
+       
 
         foreach($_SESSION['cart'] as $item){
             $price = !empty($_POST['final_total_price']) ? $_POST['final_total_price'] : 0;
@@ -73,9 +73,17 @@ public function process() {
         }
 
         $db->commit();
+
+        $userEmail = $_SESSION['user']['email'];
+        $this->sendConfirmationEmail($userEmail, $groupOrderNumber, $_POST['final_total_price']);
+
         unset($_SESSION['cart']);
         header('Location: index.php?page=order_success&order_ref=' . $groupOrderNumber);
         exit;
+
+        
+    
+
     } catch(Exception $e){
         $db->rollBack();
         die("Erreur : " . $e->getMessage());
@@ -143,7 +151,7 @@ private function sendConfirmationEmail($userEmail, $orderRef, $total) {
             <p>Nous avons bien reçu votre demande de prestation.</p>
             <ul>
                 <li><strong>Référence :</strong> $orderRef</li>
-                <li><strong>Montant total :</strong> " . number_format($total, 2) . " €</li>
+                <p>Montant total : <strong>" . number_format((float)$total, 2, ',', ' ') . " €</strong></p>
             </ul>
             <p>Vous pouvez suivre l'avancement dans votre espace 'Mes Commandes'.</p>
         ";
@@ -152,6 +160,7 @@ private function sendConfirmationEmail($userEmail, $orderRef, $total) {
     } catch (Exception $e) {
       
         error_log("Erreur mail : " . $mail->ErrorInfo);
+        return false;
     }
 }
 
