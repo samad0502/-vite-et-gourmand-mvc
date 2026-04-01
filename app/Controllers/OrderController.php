@@ -8,7 +8,7 @@ class OrderController {
 //affichage de  la page de confirmation avant paiement
 public function checkout() {
     if(!isset($_SESSION['user']) || empty($_SESSION['cart'])){
-        header('Location: index.php?page=cart');
+        header('Location: index.php?page=login');
         exit;
     }
 

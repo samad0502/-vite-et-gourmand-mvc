@@ -49,7 +49,7 @@ class User {
     WHERE id = ?";
 
     $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id => $id']);
+    $stmt->execute([$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
