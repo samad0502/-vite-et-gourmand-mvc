@@ -39,7 +39,7 @@ require_once ROOT . 'includes/navbar.php';
                                 </div>
                                 <div class="col-md-4">
                                     <input type="number" name="distance" id="distanceInput" class="form-control" placeholder="KM de Bordeaux" value="0">
-                                    <small class="text-muted">Si hors Bordeaux</small>
+                                    <small class="text-muted">KM (Auto-calculé)</small>
                                 </div>
                             </div>
                         </div>
