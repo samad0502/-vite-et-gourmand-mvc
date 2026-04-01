@@ -1,38 +1,47 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const citySelect = document.getElementById('delivery_city');
-    const distanceInput = document.getElementById('distance_km');
-    const distanceContainer = document.getElementById('distance_container');
-    
-    const displayDelivery = document.getElementById('display_delivery');
-    const displayTotal = document.getElementById('display_total');
-    const finalTotalInput = document.getElementById('final_total_price');
-    
-    // On récupère le prix du menu calculé par PHP 
-    const baseMenuPrice = parseFloat(document.getElementById('display_subtotal').innerText);
+    const cityInput = document.getElementById('cityInput');
+    const distanceInput = document.getElementById('distanceInput');
+    const finalTotalElement = document.getElementById('finalTotal');
+    const hiddenInput = document.getElementById('final_total_price_input');
+    const deliveryDisplay = document.getElementById('deliveryDisplay');
+    const deliveryNote = document.getElementById('deliveryNote');
 
-    function updatePrice() {
-        let deliveryFees = 0;
+    
+    if (!cityInput || !finalTotalElement) return;
 
-        if (citySelect.value === 'outside') {
-            distanceContainer.classList.remove('d-none');
-            const km = parseFloat(distanceInput.value) || 0;
-            // Règle : 5€ fixe + 0.59€ par km
-            deliveryFees = 5 + (km * 0.59);
+    // Récupération du prix de base stocké en bdd
+    const baseTotal = parseFloat(finalTotalElement.dataset.base);
+
+    function calculateFees() {
+        const city = cityInput.value.trim().toLowerCase();
+        const distance = parseFloat(distanceInput.value) || 0;
+        let fees = 0;
+
+        if (city !== 'bordeaux' && city !== '') {
+            fees = 5 + (0.59 * distance);
+            if (deliveryNote) deliveryNote.innerText = "Forfait 5€ + 0.59€/km (Hors Bordeaux)";
         } else {
-            distanceContainer.classList.add('d-none');
-            deliveryFees = 0;
+            if (deliveryNote) deliveryNote.innerText = "Gratuit (Secteur Bordeaux)";
         }
 
-        const finalTotal = baseMenuPrice + deliveryFees;
+        const totalCalculated = baseTotal + fees;
 
-        // Mise à jour de l'affichage
-        displayDelivery.innerText = deliveryFees.toFixed(2);
-        displayTotal.innerText = finalTotal.toFixed(2);
-        
-        // Mise à jour du champ caché pour la soumission SQL
-        finalTotalInput.value = finalTotal.toFixed(2);
+        //  Mise à jour de l'affichage des frais
+        if (deliveryDisplay) deliveryDisplay.innerText = fees.toFixed(2) + " €";
+
+        // Mise à jour de l'affichage du total TTC
+        finalTotalElement.innerText = totalCalculated.toFixed(2) + " €";
+
+        // Mise à jour de l'input caché pour l'envoi vers PHP (BDD)
+        if (hiddenInput) {
+            hiddenInput.value = totalCalculated.toFixed(2);
+        }
     }
 
-    citySelect.addEventListener('change', updatePrice);
-    distanceInput.addEventListener('input', updatePrice);
+    // Écouteurs d'événements
+    cityInput.addEventListener('input', calculateFees);
+    distanceInput.addEventListener('input', calculateFees);
+    
+   
+    calculateFees();
 });

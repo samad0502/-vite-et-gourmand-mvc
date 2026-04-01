@@ -23,10 +23,11 @@ class Order {
             $data['equipment_ready'],
             $data['user_id'],
             $data['menu_id'],
-            $data['address'],
+            $data['delivery_address'],
             $data['delivery_date'],
             $data['delivery_time'],
             $data['total_price']
+            
 
             ]);
     }

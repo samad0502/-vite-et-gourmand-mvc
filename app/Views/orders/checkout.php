@@ -1,9 +1,6 @@
 <?php
-
-
 require_once ROOT . 'includes/header.php';
 require_once ROOT . 'includes/navbar.php';
-
 ?>
 
 <div class="container my-5">
@@ -41,7 +38,7 @@ require_once ROOT . 'includes/navbar.php';
                                     <input type="text" id="cityInput" name="city" class="form-control" placeholder="Ville" value="<?= htmlspecialchars($u['city']) ?>" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" name="distance" id="distanceInput" class="form-control" placeholder="KM de Bordeaux">
+                                    <input type="number" name="distance" id="distanceInput" class="form-control" placeholder="KM de Bordeaux" value="0">
                                     <small class="text-muted">Si hors Bordeaux</small>
                                 </div>
                             </div>
@@ -62,7 +59,9 @@ require_once ROOT . 'includes/navbar.php';
                             <input type="checkbox" id="cgv" name="cgv" required>
                             <label for="cgv">J'ai lu et j'accepte les <a href="cgv.php" target="_blank">Conditions Générales de Vente</a></label>
                         </p>
-                        <input type="hidden" name="final_total_price" id="final_total_price_input">
+
+                        <input type="hidden" name="final_total_price" id="final_total_price_input" value="<?= $totalMenus ?>">
+
                         <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
                             Valider et payer
                         </button>
@@ -77,22 +76,18 @@ require_once ROOT . 'includes/navbar.php';
                     <h5 class="mb-0 text-center">Résumé de la commande</h5>
                 </div>
                 <div class="card-body">
-
                     <?php foreach ($cartDetails as $detail): ?>
-                       <div class="mb-3 border-bottom pb-2">
-                           <div class="d-flex justify-content-between">
-                               <span class="fw-bold"><?= htmlspecialchars($detail['title']) ?></span>
-                               <span><?= number_format($detail['total_line'], 2) ?> €</span>
-                           </div>
-                           <small class="text-muted"><?= $detail['nb_pers'] ?> convives x <?= number_format($detail['price_unit'], 2) ?> €</small>
-                           <?php if ($detail['is_promo']): ?>
-                               <div class="text-success small fw-bold">-10% Remise (Volume atteint)</div>
-                           <?php endif; ?>
-                       </div>
-                   <?php endforeach; ?>
-                   <span class="h3 text-primary fw-bold" id="finalTotal" data-base="<?= $totalMenus ?>">
-                       <?= number_format($totalMenus, 2) ?> €
-                   </span>
+                        <div class="mb-3 border-bottom pb-2">
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bold"><?= htmlspecialchars($detail['title']) ?></span>
+                                <span><?= number_format($detail['total_line'], 2) ?> €</span>
+                            </div>
+                            <small class="text-muted"><?= $detail['nb_pers'] ?> convives x <?= number_format($detail['price_unit'], 2) ?> €</small>
+                            <?php if ($detail['is_promo']): ?>
+                                <div class="text-success small fw-bold">-10% Remise (Volume atteint)</div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
 
                     <div class="d-flex justify-content-between mt-3">
                         <span>Frais de livraison</span>
@@ -104,7 +99,7 @@ require_once ROOT . 'includes/navbar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="h4">Total TTC</span>
                         <span class="h3 text-primary fw-bold" id="finalTotal" data-base="<?= $totalMenus ?>">
-                            <?= number_format($totalMenus, 2) ?> €
+                            <?= number_format($totalMenus, 2, '.', '') ?> €
                         </span>
                     </div>
                 </div>
@@ -113,5 +108,6 @@ require_once ROOT . 'includes/navbar.php';
     </div>
 </div>
 
+<script src="public/assets/js/cart.js"></script>
 
 <?php require_once ROOT . 'includes/footer.php'; ?>

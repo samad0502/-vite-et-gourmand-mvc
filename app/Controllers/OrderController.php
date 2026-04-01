@@ -54,7 +54,7 @@ public function process() {
        
 
         foreach($_SESSION['cart'] as $item){
-            $price = !empty($_POST['final_total_price']) ? $_POST['final_total_price'] : 0;
+           $price = !empty($_POST['final_total_price']) ? (float)$_POST['final_total_price'] : 0.00;
 //Logique de calcul prix/promo/livraison
             $orderData = [
                 'order_number' => $groupOrderNumber,
@@ -62,7 +62,7 @@ public function process() {
                 'menu_id' => $item['menu_id'],
                 'number_people' => $item['number_people'],
                 'equipment_ready' => $item['equipment_ready'],
-                'address' => $_POST['address'],
+                'delivery_address' => $_POST['address'],
                 'delivery_date' => $_POST['delivery_date'],
                 'delivery_time' => $_POST['delivery_time'],
                 'total_price' => $price
@@ -75,7 +75,7 @@ public function process() {
         $db->commit();
 
         $userEmail = $_SESSION['user']['email'];
-        $this->sendConfirmationEmail($userEmail, $groupOrderNumber, $_POST['final_total_price']);
+        $this->sendConfirmationEmail($userEmail, $groupOrderNumber, $price);
 
         unset($_SESSION['cart']);
         header('Location: index.php?page=order_success&order_ref=' . $groupOrderNumber);
