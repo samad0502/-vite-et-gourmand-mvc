@@ -38,4 +38,30 @@ class MenuController {
      }
 
 
+//la soumission du formulaire
+     public function store() {
+        $this->checkAccess();
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $imageName = $this->handleUpload();
+
+            $data = [
+                'title'       => $_POST['title'],
+                'price'       => $_POST['price'],
+                'min_people'  => $_POST['min_people'],
+                'description' => $_POST['description'],
+                'image'       => $imageName
+            ];
+
+            $menuModel = new Menu();
+            if($menuModel->create($data)){
+                header('Location: index.php?page=employee_dashboard&success=menu_added#menus-pane');
+            } else {
+                header('Location: index.php?page=add_menu&error=save_failed');
+            }
+            exit;
+        }
+     }
+
+
      }
