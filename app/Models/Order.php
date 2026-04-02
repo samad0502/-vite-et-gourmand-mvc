@@ -65,7 +65,7 @@ class Order {
 
         $params = [];
         if($statusFilter){
-            $query .= "AND o.order_status = ?";
+            $query .= " AND o.order_status = ?";
             $params[] = $statusFilter;
         }
         if($searchClient){

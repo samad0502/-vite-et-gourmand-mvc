@@ -129,7 +129,7 @@ switch ($page){
         case 'update_order_status':
            require_once ROOT . 'app/Controllers/EmployeeController.php';
            $controller = new EmployeeController();
-           $controller->updateStatus();
+           $controller->updateOrderStatus();
            break;    
 
         default:

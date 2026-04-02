@@ -130,5 +130,18 @@ class Menu {
         $data['title'], $data['price'], $data['description'], $data['image'], $data['min_people']
     ]);
   }
+
+
+  public function findAll() {
+    $stmt = $this->pdo->query("SELECT * FROM menus ORDER BY title ASC");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+
+    public function findById($id) {
+    $stmt = $this->pdo->prepare("SELECT * FROM menus WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
       
 }
