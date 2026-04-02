@@ -49,5 +49,11 @@ class Order {
         $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);        
     }
+
+
+    public function updateStatus($orderId, $newStatus) {
+        $sql = "UPDATE orders SET order_status = ? WHERE id = ?";
+        return $this->db->prepare($sql)->execute([$newStatus, $orderId]);
+    }
 }
 
