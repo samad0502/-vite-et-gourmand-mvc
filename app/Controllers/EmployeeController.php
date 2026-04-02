@@ -1,6 +1,6 @@
 <?php
 
-class EmplyeeController {
+class EmployeeController {
 
 public function dashboard() {
     if($_SESSION['user']['role'] !== 'employee'&& $_SESSION['user']['role'] !== 'admin'){
