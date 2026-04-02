@@ -124,13 +124,6 @@ class Menu {
   } 
   
   
-  public function create($data) {
-    $sql = "INSERT INTO menus (title,price,description, image, min_people) VALUES (?, ?, ?, ?, ?)";
-    return $this->pdo->prepare($sql)->execute([
-        $data['title'], $data['price'], $data['description'], $data['image'], $data['min_people']
-    ]);
-  }
-
 
   public function findAll() {
     $stmt = $this->pdo->query("SELECT * FROM menus ORDER BY title ASC");
@@ -144,4 +137,25 @@ class Menu {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
       
+
+   public function create($data) {
+    $sql = "INSERT INTO menus (title,price,description, image, min_people) VALUES (?, ?, ?, ?, ?)";
+    return $this->pdo->prepare($sql)->execute([
+        $data['title'], $data['price'], $data['description'], $data['image'], $data['min_people']
+    ]);
+  }
+
+
+  public function update($id, $data) {
+    $sql = "UPDATE menus SET title = ?, price = ?, description = ?, image = ?, min_people = ?
+            WHERE id = ?";
+    return $this->pdo->prepare($sql)->execute([
+        $data['title'], $data['price'], $data['description'], $data['image'], $data['min_people'], $id
+    ]);        
+  }
+
+  public function delete($id) {
+        return $this->pdo->prepare("DELETE FROM menus WHERE id = ?")->execute([$id]);
+    }
+
 }
