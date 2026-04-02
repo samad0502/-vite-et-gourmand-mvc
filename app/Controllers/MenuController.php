@@ -68,12 +68,19 @@ class MenuController {
         if(isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
             $name = time() . '_' . $_FILES['image']['name'];
             $target = ROOT . 'public/assets/img/menus/' . $name;
-            if(move_uploded_file($_FILES['image']['tmp_name'], $target)){
+            if(move_uploaded_file($_FILES['image']['tmp_name'], $target)){
                 return $name;
             }
         }
         return null;
      }
 
+
+    private function checkAccess(){
+        if(!isset($_SESSION['user']) || ($_SESSION['user']['role'] !== 'employee' && $_SESSION['user']['role'] !== 'admin')){
+            header('Location: index.php?page=login');
+            exit;
+        }
+    }
 
      }
