@@ -121,6 +121,14 @@ class Menu {
     }
 
     return $menu ?: null;
-  }      
+  } 
+  
+  
+  public function create($data) {
+    $sql = "INSERT INTO menus (title,price,description, image, min_people) VALUES (?, ?, ?, ?, ?)";
+    return $this->pdo->prepare($sql)->execute([
+        $data['title'], $data['price'], $data['description'], $data['image'], $data['min_people']
+    ]);
+  }
       
 }
