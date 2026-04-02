@@ -132,6 +132,24 @@ switch ($page){
            $controller->updateOrderStatus();
            break;    
 
+        case 'add_menu':
+           require_once ROOT . 'app/Controllers/MenuController.php';
+           $controller = new MenuController();
+           $controller->add();
+           break;
+
+        case 'save_menu':
+           require_once ROOT . 'app/Controllers/MenuController.php';
+           $controller = new MenuController();
+           $controller->store();
+           break;
+
+        case 'edit_menu':
+           require_once ROOT . 'app/Controllers/MenuController.php';
+           $controller = new MenuController();
+           $controller->edit($_GET['id']);
+           break;   
+
         default:
         header("HTTP/1.0 404 Not Found");
         echo "Page non trouvée";
