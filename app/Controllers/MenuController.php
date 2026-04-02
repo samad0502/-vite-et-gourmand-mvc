@@ -31,5 +31,11 @@ class MenuController {
 
      }
 
+     //affiche le formulaire d'ajout
+     public function add() {
+        $this->checkAccess();
+        require_once ROOT . 'app/Views/employee/add_menu.php';
+     }
+
 
      }
