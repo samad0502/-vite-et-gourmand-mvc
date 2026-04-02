@@ -55,5 +55,31 @@ class Order {
         $sql = "UPDATE orders SET order_status = ? WHERE id = ?";
         return $this->db->prepare($sql)->execute([$newStatus, $orderId]);
     }
+
+
+    public function getOrdersForEmployee($statusFilter = '', $searchClient = ''){
+        $query = "SELECT o.*, u.firstname, u.lastname, u.phone, m.title
+        FROM orders o
+        JOIN users u ON o.user_id = u.id  
+        JOIN menus m ON o.menu_id = m.id WHERE 1=1 ";
+
+        $params = [];
+        if($statusFilter){
+            $query .= "AND o.order_status = ?";
+            $params[] = $statusFilter;
+        }
+        if($searchClient){
+            $query .= "AND (u.lastname LIKE ? OR u.firstname LIKE ? OR o.order_number LIKE ? ";
+            $searchParam = "%$searchClient%";
+            $params[] = $searchParam;
+            $params[] = $searchParam;
+            $params[] = $searchParam;
+        }
+        $query .= "ORDER BY o.order_date DESC";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
