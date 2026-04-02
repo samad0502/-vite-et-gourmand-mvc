@@ -111,14 +111,26 @@ switch ($page){
            break;   
 
         case 'order_success':
-        require_once ROOT . 'app/Views/orders/order_success.php';
-        break;   
+           require_once ROOT . 'app/Views/orders/order_success.php';
+           break;   
 
         case 'orders' :
-            require_once ROOT . 'app/Controllers/OrderController.php';
-            $controller = new OrderController();
-            $controller->list();
-            break;
+           require_once ROOT . 'app/Controllers/OrderController.php';
+           $controller = new OrderController();
+           $controller->list();
+           break;
+
+        case 'employee_dashboard':
+           require_once ROOT . 'app/Controllers/EmployeeController.php';
+           $controller = new EmployeeController();
+           $controller->dashboard();
+           break;
+
+        case 'update_order_status':
+           require_once ROOT . 'app/Controllers/EmployeeController.php';
+           $controller = new EmployeeController();
+           $controller->updateStatus();
+           break;    
 
         default:
         header("HTTP/1.0 404 Not Found");
