@@ -64,4 +64,16 @@ class MenuController {
      }
 
 
+     private function handleUpload() {
+        if(isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+            $name = time() . '_' . $_FILES['image']['name'];
+            $target = ROOT . 'public/assets/img/menus/' . $name;
+            if(move_uploded_file($_FILES['image']['tmp_name'], $target)){
+                return $name;
+            }
+        }
+        return null;
+     }
+
+
      }
