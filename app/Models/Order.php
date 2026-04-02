@@ -59,9 +59,9 @@ class Order {
 
     public function getOrdersForEmployee($statusFilter = '', $searchClient = ''){
         $query = "SELECT o.*, u.firstname, u.lastname, u.phone, m.title
-        FROM orders o
-        JOIN users u ON o.user_id = u.id  
-        JOIN menus m ON o.menu_id = m.id WHERE 1=1 ";
+                  FROM orders o
+                  JOIN users u ON o.user_id = u.id  
+                  JOIN menus m ON o.menu_id = m.id WHERE 1=1 ";
 
         $params = [];
         if($statusFilter){
@@ -69,7 +69,7 @@ class Order {
             $params[] = $statusFilter;
         }
         if($searchClient){
-            $query .= "AND (u.lastname LIKE ? OR u.firstname LIKE ? OR o.order_number LIKE ? ";
+            $query .= "AND (u.lastname LIKE ? OR u.firstname LIKE ? OR o.order_number LIKE ?)";
             $searchParam = "%$searchClient%";
             $params[] = $searchParam;
             $params[] = $searchParam;
