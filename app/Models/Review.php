@@ -26,6 +26,16 @@ $stmt->execute();
 
 return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+}
 
+//recupere les avis en attente
+public function getPendingReviews() {
+    $query = "SELECT r.*, u.firstname
+              FROM reviews r
+              JOIN users u ON r.user_id = u.id
+              WHERE r.ispublished = 0
+              ORDER BY r.created_at DESC";
+              return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+}
 
-}}
+}
