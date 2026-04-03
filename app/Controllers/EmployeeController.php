@@ -50,4 +50,24 @@ public function updateOrderStatus() {
         exit;
     }
 }
+
+
+public function moderateReview() {
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $reviewId = (int)$_POST['review_id'];
+        $action = $_POST['action'];
+
+        //onutilise la connexion existante pour le modele
+        $database = (new Database())->getConnection();
+        $reviewModel = new Review($database);
+
+        if($reviewModel->updateStatus($reviewId, $action)) {
+            header('Location: index.php?page=employee_dashboard&succes=review_updated#reviews-pane');
+
+        } else {
+            header('Location: index.php?page=employee_dashboard&error=review_failed#reviews-pane');
+        }
+        exit;
+    }
+}
 }

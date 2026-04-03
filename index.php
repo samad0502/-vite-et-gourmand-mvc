@@ -156,6 +156,12 @@ switch ($page){
            $controller->update();
            break;   
 
+        case 'moderate_review':
+           require_once ROOT . 'app/Controllers/EmployeeController.php';
+           $controller = new EmployeeController();
+           $controller->moderateReview();
+           break;   
+
         default:
         header("HTTP/1.0 404 Not Found");
         echo "Page non trouvée";
