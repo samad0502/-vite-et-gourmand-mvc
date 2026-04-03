@@ -38,4 +38,17 @@ public function getPendingReviews() {
               return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
+//valider ou supprimer un avis
+public function updateStatus($reviewId, $action) {
+    if($action === 'validate'){
+        $stmt = $this->db->prepare("UPDATE reviews SET is_published = 1 WHERE id = ?");
+        return $stmt->execute([$reviewId]);
+    } elseif($action === 'refuse') {
+        $stmt = $this->db->prepare("DELETE FROM reviews WHERE id = ?");
+        return $stmt->execute([$reviewId]); 
+    }
+    return false;
+}
+
 }
