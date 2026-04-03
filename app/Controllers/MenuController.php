@@ -83,4 +83,19 @@ class MenuController {
         }
     }
 
+
+    public function edit($id) {
+        $this->checkAccess();
+        
+        $menuModel = new Menu();
+        $menu = $menuModel->findById($id);
+
+        if(!$menu) {
+            header('Location: index.php?page=employee_dashboard&error=not_found');
+            exit;
+        }
+
+        require_once ROOT . 'app/Views/employee/edit_menu.php';
+    }
+
      }
