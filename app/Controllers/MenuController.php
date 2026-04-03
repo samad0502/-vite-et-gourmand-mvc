@@ -98,4 +98,35 @@ class MenuController {
         require_once ROOT . 'app/Views/employee/edit_menu.php';
     }
 
+
+    public function update() {
+        $this->checkAccess();
+        
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = (int)$_POST['menu_id'];
+            $menuModel = new Menu();
+            $oldMenu = $menuModel->findById($id);
+
+            // gestion de l'image , si elle est chargée on l'utilise sinon on garde l'ancienne
+            $imageName = $oldMenu['image'];
+            if(isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+                $imageName = $this->handleUpload();
+            }
+
+            $data = [
+              'title'       => $_POST['title'],
+            'price'       => $_POST['price'],
+            'min_people'  => $_POST['min_people'] ?? $oldMenu['min_people'],
+            'description' => $_POST['description'],
+            'image'       => $imageName  
+            ];
+
+            if($menuModel->update($id, $data)) {
+                header('Location: index.php?page=employee_dashboard&#menus-pane');
+            } else {
+                header('Location: index.php?page=edit_menu&id=$id&error=update_failed');
+            }
+        }
+    }
+
      }
