@@ -150,6 +150,12 @@ switch ($page){
            $controller->edit($_GET['id']);
            break;   
 
+        case 'update_menu':
+           require_once ROOT . 'app/Controllers/MenuController.php';
+           $controller = new MenuController();
+           $controller->update();
+           break;   
+
         default:
         header("HTTP/1.0 404 Not Found");
         echo "Page non trouvée";
