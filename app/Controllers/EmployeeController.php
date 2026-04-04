@@ -70,4 +70,28 @@ public function moderateReview() {
         exit;
     }
 }
+
+
+public function updateHours() {
+    if(!isset($_SESSION['user']) || ($_SESSION['user']['role_name'] !== 'employee' && $_SESSION['user']['role_name'] !== 'admin')) {
+        header('Location: index.php?page=login');
+        exit;
+    }
+
+   if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $db = (new Database())->getConnection();
+    $hoursModel = new OpeningHours($db);
+
+    foreach($_POST['open'] as $id => $openTime) {
+        $closeTime = $_POST['close'][$id];
+        $isClosed = isset($_POST['closed'][$id]) ? 1 : 0;
+
+        $hoursModel->update($id, $openTime, $closeTime, $isClosed);
+    }
+header('Location: index.php?page=employee_dashboard&succes=hours_updated#hours-pane');
+exit;
+
+   }
+
+}
 }
