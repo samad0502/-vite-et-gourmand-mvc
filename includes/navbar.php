@@ -35,7 +35,7 @@
 
                     <?php if ($userRole === 'employee') : ?>
                         <li class="nav-item">
-                            <a class="nav-link text-info fw-bold" href="/employee/employee_dashboard.php">
+                            <a class="nav-link text-info fw-bold" href="index.php?page=employee_dashboard">
                                 <i class="bi bi-clipboard-check-fill"></i> Suivi Commandes
                             </a>
                         </li>
