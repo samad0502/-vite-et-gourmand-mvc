@@ -123,6 +123,50 @@ public function list() {
 }
 
 
+public function edit($id) {
+    if(!isset($_SESSION['user'])){
+        header('Location: index.php?page=login');
+        exit;
+    }
+
+    $orderModel = new Order();
+    $order = $orderModel->findByIdAndUser($id, $_SESSION['user']['id']);
+
+    if(!$order || $order['order_status'] !== 'pending') {
+        header('Location: index.php?page=my_orders&error=not_modifiable');
+        exit;
+    }
+
+    require_once ROOT . 'app/Views/client/edit_order.php';
+}
+
+public function update() {
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $orderId = (int)$_POST['order_id'];
+        $orderModel = new Order();
+
+        //on recalcule le prix total coté serveur par securite(menu*nb_personnes)
+        $orderInfo = $orderModel->findByIdAndUser($orderId, $_SESSION['user']['id']);
+        $totalPrice = $orderInfo['price'] * (int)$_POST['number_people'];
+
+    $data = [
+                'number_people'    => (int)$_POST['number_people'],
+                'delivery_address' => $_POST['delivery_address'],
+                'delivery_date'    => $_POST['delivery_date'],
+                'delivery_time'    => $_POST['delivery_time'],
+                'total_price'      => $totalPrice
+            ];   
+            
+            if($orderModel->updateOrder($orderId, $data)) {
+                header('Location: index.php?page=myorders&success=order_updated');
+            } else {
+                header('Loaction: index.php?page=edit_order&id=$orderId&error=update_failed');
+            }
+            exit;
+    }
+}
+
+
 
 
 
