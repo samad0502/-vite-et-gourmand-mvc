@@ -20,5 +20,20 @@ public function add($orderId) {
     require_once ROOT . 'app/Views/client/add_review.php';
 }
 
+public function store() {
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $reviewModel = new Review();
+        $orderId = $_POST['order_id'];
+        $rating = $_POST['rating'];
+        $comment = $_POST['comment'];
+        $userId = $_SESSION['user']['id'];
 
+        if($reviewModel->createReview($orderId, $userId, $rating, $comment)){
+            header('Location: index.php?page=orders&success=review_sent');
+        } else {
+            header('Location: index.php?page=add_review&id=$orderId&error=failed');
+        }
+        exit;
+    }
+}
 }
