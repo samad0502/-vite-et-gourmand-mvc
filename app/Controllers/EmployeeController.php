@@ -73,25 +73,31 @@ public function moderateReview() {
 
 
 public function updateHours() {
-    if(!isset($_SESSION['user']) || ($_SESSION['user']['role_name'] !== 'employee' && $_SESSION['user']['role_name'] !== 'admin')) {
+
+$userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role'] ?? '';
+
+    if(!isset($_SESSION['user']) || ($userRole !== 'employee' && $userRole !== 'admin')) {
         header('Location: index.php?page=login');
         exit;
     }
 
    if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = (new Database())->getConnection();
-    $hoursModel = new OpeningHours($db);
+    
 
     foreach($_POST['open'] as $id => $openTime) {
         $closeTime = $_POST['close'][$id];
         $isClosed = isset($_POST['closed'][$id]) ? 1 : 0;
 
-        $hoursModel->update($id, $openTime, $closeTime, $isClosed);
+        $stmt = $db->prepare("UPDATE opening_hours SET open_time = ?, close_time = ?, is_closed = ? WHERE id = ?");
+                $stmt->execute([$openTime, $closeTime, $isClosed, $id]);
     }
-header('Location: index.php?page=employee_dashboard&succes=hours_updated#hours-pane');
-exit;
+
 
    }
+
+   header('Location: index.php?page=employee_dashboard&succes=hours_updated#hours-pane');
+exit;
 
 }
 }

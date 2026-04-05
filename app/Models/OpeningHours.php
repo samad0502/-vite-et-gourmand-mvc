@@ -19,6 +19,6 @@ class OpeningHours {
                 SET open_time = ?, close_time = ?, is_closed = ?
                 WHERE id = ?";
                 $stmt = $this->db->prepare($sql);
-                return $stmt->execute([$open, $close, $isClosed, $id]);
+                return $stmt->execute([$open, $close, $isClosed, (int)$id]);
     }
 }

@@ -15,6 +15,9 @@ require_once ROOT . 'app/Models/Order.php';
 
 
 
+
+
+
 // definition de la page (par defaut "accueil")
 $page = $_GET['page'] ?? 'home';
 
@@ -160,6 +163,12 @@ switch ($page){
            require_once ROOT . 'app/Controllers/EmployeeController.php';
            $controller = new EmployeeController();
            $controller->moderateReview();
+           break;   
+
+        case 'update_hours':
+           require_once ROOT . 'app/Controllers/EmployeeController.php';
+           $controller = new EmployeeController();
+           $controller->updateHours();
            break;   
 
         default:
