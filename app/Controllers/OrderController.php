@@ -167,6 +167,27 @@ public function update() {
 }
 
 
+public function cancel() {
+    if(!isset($_SESSION['user'])) {
+        header('Location: index.php?page=login');
+        exit;
+    }
+
+    if(isset($_GET['id'])) {
+        $orderId = (int)$_GET['id'];
+        $userId = $_SESSION['user']['id'];
+        $orderModel = new Order();
+
+        if($orderModel->deleteOrder($orderId, $userId)){
+            header('Location: index.php?page=orders&success=order_cancelled');
+        } else {
+            header('Location: index.php?page=orders&error=cancel_failed');
+        }
+        exit;
+    }
+}
+
+
 
 
 
