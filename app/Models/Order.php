@@ -81,5 +81,16 @@ class Order {
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
+    public function findByIdAndUser($orderId, $userId) {
+        $sql = "SELECT o.*, m.title, m.price, m.min_people
+                FROM orders o
+                JOIN menus m ON o.menu_id = m.id
+                WHERE o.id = ? AND o.user_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$orderId, $userId]);
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 
