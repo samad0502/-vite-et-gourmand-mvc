@@ -134,6 +134,12 @@ switch ($page){
            $controller->update();
            break;   
 
+        case 'cancel_order':
+           require_once ROOT . 'app/Controllers/OrderController.php';
+           $controller = new OrderController();
+           $controller->cancel();
+           break;   
+
         case 'employee_dashboard':
            require_once ROOT . 'app/Controllers/EmployeeController.php';
            $controller = new EmployeeController();

@@ -40,6 +40,12 @@
                         <a href="index.php?page=edit_order&id=<?= $order['id'] ?>" class="btn btn-sm btn-outline-warning">
                             <i class="bi bi-pencil"></i> Modifier
                         </a>
+
+                        <a href="index.php?page=cancel_order&id=<?= $order['id'] ?>" 
+           class="btn btn-sm btn-outline-danger" 
+           onclick="return confirm('Êtes-vous sûr de vouloir annuler cette commande ?');">
+            <i class="bi bi-trash"></i> Annuler
+        </a>
                     <?php endif; ?>
                 </td>
             </tr>
