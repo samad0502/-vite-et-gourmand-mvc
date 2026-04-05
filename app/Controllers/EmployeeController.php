@@ -100,4 +100,19 @@ $userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role'] ?? '';
 exit;
 
 }
+
+
+public function manageReviews() {
+    $db = (new Database())->getConnection();
+    $reviewModel = new Review($db);
+
+    if(isset($_GET['action']) && isset($_GET['id'])) {
+        $reviewModel->updateStatus($_GET['id'], $_GET['action']);
+        header('Location: index.php?page=manage_reviews');
+        exit;
+    }
+
+    $pendingreviews = $reviewModel->getPendingReviews();
+    require_once ROOT . 'app/Views/employee/reviews.php';
+}
 }
