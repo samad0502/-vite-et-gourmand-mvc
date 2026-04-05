@@ -92,5 +92,26 @@ class Order {
                 $stmt->execute([$orderId, $userId]);
                 return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
+    public function updateOrder($orderId, $data) {
+        $sql = "UPDATE orders SET
+                number_people = ?,
+                delivery_address = ?,
+                delivery_date = ?,
+                delivery_time = ?,
+                total_price = ?,
+                WHERE id = ? AND order_status = 'pending'";
+
+       $stmt = $this->db->prepare($sql);
+       return $stmt->execute([
+        $data['number_people'],
+        $data['delivery_address'],
+        $data['delivery_date'],
+        $data['delivery_time'],
+        $data['total_price'],
+        $orderId
+       ]);         
+    }
 }
 
