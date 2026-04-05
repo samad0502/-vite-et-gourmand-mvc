@@ -199,6 +199,12 @@ switch ($page){
            $controller = new ReviewController();
            $controller->store();
            break;
+
+        case 'manage_reviews':
+           require_once ROOT . 'app/Controllers/EmployeeController.php';
+           $controller = new EmployeeController();
+           $controller->manageReviews();
+           break;   
       
         default:
         header("HTTP/1.0 404 Not Found");
