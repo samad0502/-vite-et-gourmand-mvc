@@ -116,7 +116,7 @@ class Order {
 
 
     public function deleteOrder($orderId, $userId) {
-        $sql = "DELETE FROM orders WHERE id = ? AND user_id =? AND order_status = 'pending";
+        $sql = "DELETE FROM orders WHERE id = ? AND user_id =? AND order_status = 'pending'";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$orderId, $userId]);
     }

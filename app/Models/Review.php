@@ -51,4 +51,12 @@ public function updateStatus($reviewId, $action) {
     return false;
 }
 
+
+public function createReview($orderId, $userId, $rating, $comment) {
+    $sql = "INSERT INTO reviews (order_id, user_id, rating, comment, status, created_at)
+            VALUES(?, ?, ?, ?, 'pending', NOW() )";
+            $stmt = $this->db->preparer($sql);
+            return $stmt->execute([$orderId, $userId, $rating, $comment]);
+}
+
 }
