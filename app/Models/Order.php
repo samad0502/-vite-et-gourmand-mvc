@@ -100,7 +100,7 @@ class Order {
                 delivery_address = ?,
                 delivery_date = ?,
                 delivery_time = ?,
-                total_price = ?,
+                total_price = ?
                 WHERE id = ? AND order_status = 'pending'";
 
        $stmt = $this->db->prepare($sql);

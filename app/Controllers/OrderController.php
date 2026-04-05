@@ -158,9 +158,9 @@ public function update() {
             ];   
             
             if($orderModel->updateOrder($orderId, $data)) {
-                header('Location: index.php?page=myorders&success=order_updated');
+                header('Location: index.php?page=orders&success=order_updated');
             } else {
-                header('Loaction: index.php?page=edit_order&id=$orderId&error=update_failed');
+                header('Location: index.php?page=edit_order&id=$orderId&error=update_failed');
             }
             exit;
     }

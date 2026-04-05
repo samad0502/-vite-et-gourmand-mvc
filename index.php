@@ -123,6 +123,17 @@ switch ($page){
            $controller->list();
            break;
 
+        case 'edit_order':
+           require_once ROOT . 'app/Controllers/OrderController.php';
+           $controller = new OrderController();
+           $controller->edit($_GET['id']);
+           break;
+        case 'update_client_order':
+           require_once ROOT . 'app/Controllers/OrderController.php';
+           $controller = new OrderController();
+           $controller->update();
+           break;   
+
         case 'employee_dashboard':
            require_once ROOT . 'app/Controllers/EmployeeController.php';
            $controller = new EmployeeController();
