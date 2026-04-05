@@ -12,6 +12,7 @@ require_once ROOT . 'Config/Database.php';
 require_once ROOT . 'app/Models/Menu.php';
 require_once ROOT . 'app/Models/User.php';
 require_once ROOT . 'app/Models/Order.php';
+require_once ROOT . 'app/Models/Review.php';
 
 
 
@@ -188,6 +189,17 @@ switch ($page){
            $controller->updateHours();
            break;   
 
+        case 'add_review':
+           require_once ROOT . 'app/Controllers/ReviewController.php';
+           $controller = new ReviewController();
+           $controller->add($_GET['id']);
+           break;
+        case 'store_review':
+           require_once ROOT . 'app/Controllers/ReviewController.php';
+           $controller = new ReviewController();
+           $controller->store();
+           break;
+      
         default:
         header("HTTP/1.0 404 Not Found");
         echo "Page non trouvée";

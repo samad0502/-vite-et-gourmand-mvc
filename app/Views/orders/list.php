@@ -36,6 +36,12 @@
                     </span>
                 </td>
                 <td>
+                    <?php if ($order['order_status'] === 'finished'): ?>
+                       <a href="index.php?page=add_review&id=<?= $order['id'] ?>" class="btn btn-sm btn-info">
+                            Laisser un avis
+                       </a>
+                   <?php endif; ?>
+
                     <?php if ($order['order_status'] === 'pending'): ?>
                         <a href="index.php?page=edit_order&id=<?= $order['id'] ?>" class="btn btn-sm btn-outline-warning">
                             <i class="bi bi-pencil"></i> Modifier
@@ -46,7 +52,9 @@
            onclick="return confirm('Êtes-vous sûr de vouloir annuler cette commande ?');">
             <i class="bi bi-trash"></i> Annuler
         </a>
+        
                     <?php endif; ?>
+                
                 </td>
             </tr>
         <?php endforeach; ?>

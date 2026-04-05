@@ -33,7 +33,7 @@ public function getPendingReviews() {
     $query = "SELECT r.*, u.firstname
               FROM reviews r
               JOIN users u ON r.user_id = u.id
-              WHERE r.ispublished = 0
+              WHERE r.is_published = 0
               ORDER BY r.created_at DESC";
               return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -53,9 +53,9 @@ public function updateStatus($reviewId, $action) {
 
 
 public function createReview($orderId, $userId, $rating, $comment) {
-    $sql = "INSERT INTO reviews (order_id, user_id, rating, comment, status, created_at)
-            VALUES(?, ?, ?, ?, 'pending', NOW() )";
-            $stmt = $this->db->preparer($sql);
+    $sql = "INSERT INTO reviews (order_id, user_id, rating, comment, created_at)
+            VALUES(?, ?, ?, ?, NOW() )";
+            $stmt = $this->db->prepare($sql);
             return $stmt->execute([$orderId, $userId, $rating, $comment]);
 }
 
