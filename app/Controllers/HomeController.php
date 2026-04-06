@@ -9,7 +9,7 @@ class HomeController {
 
         // recup des avis via le modèle
         $reviewModel = new Review($db);
-        $latestReviews = $reviewModel->getLatestPublished(3);
+        $reviews = $reviewModel->getLatestPublished(3);
 
         // recup des horaires pour le footer
         $hourModel = new OpeningHours($db);
