@@ -34,6 +34,13 @@ public function login() {
                 exit;
             }
 
+            if(isset($_SESSION['redirect-url'])){
+                $destination = $_SESSION['redirect_url'];
+                unset($_SESSION['redirect_url']);
+                header("Location: " . $destination);
+                exit;
+            }
+
             // redirection selon le role
             if($user['role-name'] === 'admin') {
                 header('Location: index.php?page=admin_dashboard');

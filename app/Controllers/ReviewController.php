@@ -4,6 +4,7 @@ class ReviewController {
 
 public function add($orderId) {
     if(!isset($_SESSION['user'])) {
+        $_SESSION['redirect_url'] = "index.php?page=add-review&id=" .$orderId;
         header('Location: index.php?page=login');
         exit;
     }
