@@ -19,4 +19,11 @@ class Admin {
          
      return $this->db->query($query)->fetchALL(PDO::FETCH_ASSOC);    
     }
+
+
+    // basculer le status de l'utilisateur
+    public function toggleUserStatus($userId) {
+        $stmt = $this->db->prepare("UPDATE users SET is_active = NOT is_active WHERE id = ?");
+        return $stmt->execute([$userId]);
+    }
 }
