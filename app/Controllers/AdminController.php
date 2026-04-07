@@ -29,4 +29,22 @@ class AdminController {
         require_once ROOT . 'app/Views/admin/dashboard.php';
 
         }
+
+
+        public function createEmployee() {
+            if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $db =(new Database())->getConnection();
+                $email = $_POST['email'];
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+                //insertion role_id(employé ou 2)
+                $stmt = $db->prepare("INSERT INTO users (firstname, lastname, email, password, role_id, is_active) VALUES(?, ?, ?, ?, 2, 1");
+                $stmt->execute([$_POST['firstname'], $_POST['lastname'], $email, $password]);
+
+                //envoi du mail d'inscription employé (sans mdp)
+                $this->sendEmployeeNotification($email, $_POST['firstname']);
+
+                header('location: index.php?page=admin_dashboard&success=created');
+            }
+        }
 }
