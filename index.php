@@ -13,6 +13,7 @@ require_once ROOT . 'app/Models/Menu.php';
 require_once ROOT . 'app/Models/User.php';
 require_once ROOT . 'app/Models/Order.php';
 require_once ROOT . 'app/Models/Review.php';
+require_once ROOT . 'app/Models/Admin.php';
 
 
 
@@ -205,6 +206,12 @@ switch ($page){
            $controller = new EmployeeController();
            $controller->manageReviews();
            break;   
+
+        case 'admin_dashboard':
+           require_once ROOT . 'app/Controllers/AdminController.php';
+           $controller = new AdminController();
+           $controller->dashboard();
+           break;    
       
         default:
         header("HTTP/1.0 404 Not Found");

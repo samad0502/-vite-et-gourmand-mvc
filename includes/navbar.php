@@ -43,7 +43,7 @@
 
                     <?php if ($userRole === 'admin') : ?>
                         <li class="nav-item">
-                            <a class="nav-link text-danger fw-bold" href="/admin/admin_dashboard.php">
+                            <a class="nav-link text-danger fw-bold" href="index.php?page=admin_dashboard">
                                 <i class="bi bi-shield-lock-fill"></i> Accueil Admin
                             </a>
                         </li>
