@@ -219,6 +219,12 @@ switch ($page){
            $controller->createEmployee();
            break;    
       
+        case 'toggle_user':
+           require_once ROOT . 'app/Controllers/AdminController.php';
+           $controller = new AdminController();
+           $controller->toggleUser();
+           break;  
+
         default:
         header("HTTP/1.0 404 Not Found");
         echo "Page non trouvée";
