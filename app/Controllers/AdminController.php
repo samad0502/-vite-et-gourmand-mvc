@@ -56,6 +56,11 @@ class AdminController {
 
                // active ou desactive un compte utilisateur
         public function toggleUser() {
+            if ($_SESSION['user']['role'] !== 'admin') {
+        header('Location: index.php?page=login');
+        exit;
+    }
+
             if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
                 $db = (new Database())->getConnection();
                 $userId = (int)$_POST['user_id'];

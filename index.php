@@ -20,6 +20,7 @@ require_once ROOT . 'app/Models/Admin.php';
 
 
 
+
 // definition de la page (par defaut "accueil")
 $page = $_GET['page'] ?? 'home';
 
