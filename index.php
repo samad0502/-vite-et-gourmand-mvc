@@ -212,6 +212,12 @@ switch ($page){
            $controller = new AdminController();
            $controller->dashboard();
            break;    
+
+        case 'create_employee':
+           require_once ROOT . 'app/Controllers/AdminController.php';
+           $controller = new AdminController();
+           $controller->createEmployee();
+           break;    
       
         default:
         header("HTTP/1.0 404 Not Found");

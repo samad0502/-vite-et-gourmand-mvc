@@ -47,4 +47,18 @@ class AdminController {
                 header('location: index.php?page=admin_dashboard&success=created');
             }
         }
+
+               // active ou desactive un compte utilisateur
+        public function toggleUser() {
+            if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
+                $db = (new Database())->getConnection();
+                $userId = (int)$_POST['user_id'];
+
+                $stmt = $db->prepare("UPDATE users SET is_active = NOT is_active WHERE id = ?");
+                $stmt->execute([$userId]);
+
+                header('Location: index.php?page=admin_dashboard&success=status_updated');
+                exit;
+            }
+        }
 }
