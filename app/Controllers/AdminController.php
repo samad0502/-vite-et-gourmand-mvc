@@ -9,16 +9,11 @@ class AdminController {
         }
 
         $db = (new Database())->getConnection();
-        $stmt = $db->query("SELECT o.*, u.firstname, m.title as menu_name
-                            FROM orders o
-                            JOIN users u ON o.user_id = u.id
-                            JOIN menus m ON o.menu_id = m.id
-                            WHERE o.order_status NOT IN ('finished', 'cancelled')");
-        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);  
-        
-        //recup du nombre d'employés pour la vue
-        $totalEmployees = $db->query("SELECT COUNT(*) FROM users WHERE role_id = 2")->fetchColumn();  
-        
+        $adminModel = new Admin($db);
+
+        $orders = $adminModel->getPendingOrders();
+        $totalEmployees = $adminModel->countEmployees();
+       
         require_once ROOT . 'app/Views/admin/dashboard.php';
     }
 

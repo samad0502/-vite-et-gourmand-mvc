@@ -67,4 +67,23 @@ class Admin {
             $password
          ]);
     }
+
+    // recuperation des commande en cours
+    public function getPendingOrders() {
+        $sql = "SELECT o.*, u.firstname, m.title as menu_name 
+                FROM orders o 
+                JOIN users u ON o.user_id = u.id 
+                JOIN menus m ON o.menu_id = m.id 
+                WHERE o.order_status NOT IN ('finished', 'cancelled')
+                ORDER BY o.created_at DESC";
+
+                return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    //compter les employés
+    public function countEmployees() {
+        return $this->db->query("SELECT COUNT(*) FROM users WHERE role_id = 2")->fetchColumn(); 
+    }
 }
