@@ -50,4 +50,21 @@ class Admin {
         }
         return $collection->find($filter);
     }
+
+
+    public function addEmployee($data) {
+        $password = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        //preparation de la requete avec tous les champs nécessaires pour éviter les érreurs
+        $sql = "INSERT INTO users (firstname, lastname, email, password, role_id, is_active, address, city, phone, zip_code)
+         VALUES (?, ?, ?, ?, 2, 1, '', '', '', '')";
+
+         $stmt = $this->db->prepare($sql);
+         return $stmt->execute([
+            $data['firstname'],
+            $data['lastname'],
+            $data['email'],
+            $password
+         ]);
+    }
 }

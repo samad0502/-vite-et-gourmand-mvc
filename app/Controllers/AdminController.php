@@ -69,19 +69,20 @@ class AdminController {
             public function createEmployee() {
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $db =(new Database())->getConnection();
-                $email = $_POST['email'];
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            
+                $adminModel = new Admin($db);
                 try {
-                //insertion role_id(employé ou 2)
-                 $stmt = $db->prepare("INSERT INTO users (firstname, lastname, email, password, role_id, is_active, address, city, phone, zip_code) VALUES (?, ?, ?, ?, 2, 1, '', '', '', '')");
-                $stmt->execute([$_POST['firstname'], $_POST['lastname'], $email, $password]);
+                
+                //delegation de l'insertion sql au modele
+                $success = $adminModel->addEmployee($_POST);
+              
 
 
                 //envoi du mail d'inscription employé (sans mdp)
-                $this->sendEmployeeNotification($email, $_POST['firstname']);
-
-                header('location: index.php?page=admin_users&success=1');
+                if($success) {
+                $this->sendEmployeeNotification ($_POST['email'], $_POST['firstname']);
+                 header('location: index.php?page=admin_users&success=1');
+                }
+               
             } catch (PDOException $e) {
                 header('Location: index.php?page=admin_users&error=already_exists');
             }
