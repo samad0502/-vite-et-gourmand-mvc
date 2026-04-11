@@ -212,6 +212,18 @@ switch ($page){
            require_once ROOT . 'app/Controllers/AdminController.php';
            $controller = new AdminController();
            $controller->dashboard();
+           break;   
+           
+        case 'admin_users':
+           require_once ROOT . 'app/Controllers/AdminController.php';
+           $controller = new AdminController();
+           $controller->users();
+           break; 
+           
+        case 'admin_stats':
+           require_once ROOT . 'app/Controllers/AdminController.php';
+           $controller = new AdminController();
+           $controller->stats();
            break;    
 
         case 'create_employee':

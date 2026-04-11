@@ -13,8 +13,11 @@ class AdminController {
                             FROM orders o
                             JOIN users u ON o.user_id = u.id
                             JOIN menus m ON o.menu_id = m.id
-                            WHERE o.order_status NOT IN ('finished', 'cancelled'");
-        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);    
+                            WHERE o.order_status NOT IN ('finished', 'cancelled')");
+        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);  
+        
+        //recup du nombre d'employés pour la vue
+        $totalEmployees = $db->query("SELECT COUNT(*) FROM users WHERE role_id = 2")->fetchColumn();  
         
         require_once ROOT . 'app/Views/admin/dashboard.php';
     }
@@ -55,6 +58,9 @@ class AdminController {
             $totalCA += $doc['price'];
         }
 
+        //recupere la liste des menus pour le filtre select
+        $allMenus = ["Menu Éco", "Menu Gourmand", "Menu Signature"];
+
         require_once ROOT . 'app/Views/admin/stats.php';
        
         }
@@ -68,15 +74,16 @@ class AdminController {
             
                 try {
                 //insertion role_id(employé ou 2)
-                $stmt = $db->prepare("INSERT INTO users (firstname, lastname, email, password, role_id, is_active) VALUES(?, ?, ?, ?, 2, 1)");
+                 $stmt = $db->prepare("INSERT INTO users (firstname, lastname, email, password, role_id, is_active, address, city, phone, zip_code) VALUES (?, ?, ?, ?, 2, 1, '', '', '', '')");
                 $stmt->execute([$_POST['firstname'], $_POST['lastname'], $email, $password]);
+
 
                 //envoi du mail d'inscription employé (sans mdp)
                 $this->sendEmployeeNotification($email, $_POST['firstname']);
 
-                header('location: index.php?page=admin_dashboard&success=created');
+                header('location: index.php?page=admin_users&success=1');
             } catch (PDOException $e) {
-                header('Location: index.php?page=admin_dashboard&error=exists');
+                header('Location: index.php?page=admin_users&error=already_exists');
             }
             exit;
         }
@@ -96,7 +103,7 @@ class AdminController {
                 $stmt = $db->prepare("UPDATE users SET is_active = NOT is_active WHERE id = ?");
                 $stmt->execute([$userId]);
 
-                header('Location: index.php?page=admin_dashboard&success=status_updated');
+                header('Location: index.php?page=admin_users&success=status_updated');
                 exit;
             }
         }

@@ -1,147 +1,95 @@
-<?php 
-require_once ROOT . 'includes/header.php'; 
-require_once ROOT . 'includes/navbar.php'; 
+<?php
+
+require_once ROOT . 'includes/header.php';
+require_once ROOT .  'includes/navbar.php';
 ?>
 
-<div class="container mt-4">
-    <h2 class="fw-bold border-bottom pb-2">Espace Administrateur</h2>
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold"><i class="bi bi-shield-lock me-2 text-danger"></i>Espace Administrateur</h2>
+            <p class="text-muted">Bienvenue José. Gérez ici l'équipe et les flux de commandes.</p>
+        </div>
+    </div>
 
-    <ul class="nav nav-tabs my-4" id="adminTabs" role="tablist">
-        <li class="nav-item">
-            <button class="nav-link active" id="employees-tab" data-bs-toggle="tab" data-bs-target="#employees-pane">Gestion Employés</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats-pane">Statistiques & CA</button>
-        </li>
-    </ul>
-
-    <div class="tab-content">
-        
-        <div class="tab-pane fade show active" id="employees-pane">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4>Équipe Vite & Gourmand</h4>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Créer un employé</button>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="display-6 text-primary mb-3"><i class="bi bi-people"></i></div>
+                <h5 class="card-title">Équipe</h5>
+                <p class="small text-muted"><?= $totalEmployees ?> employé(s) actif(s)</p>
+                <a href="index.php?page=admin_users" class="btn btn-primary w-100 mt-auto">Gérer l'équipe</a>
             </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-white bg-dark text-center p-4">
+                <div class="display-6 mb-3"><i class="bi bi-clock-history"></i></div>
+                <h5 class="card-title">Historique</h5>
+                <p class="small opacity-75"><?= $totalOrders ?> commandes totales</p>
+                <a href="index.php?page=employee_dashboard" class="btn btn-outline-light w-100 mt-auto">Voir tout</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm border-start border-success border-4 text-center p-4">
+                <div class="display-6 text-success mb-3"><i class="bi bi-bar-chart-line"></i></div>
+                <h5 class="card-title">Statistiques</h5>
+                <p class="small text-muted">Analyses NoSQL (MongoDB)</p>
+                <a href="index?page=admin_stats" class="btn btn-success w-100 mt-auto">Consulter</a>
+            </div>
+        </div>
+    </div>
 
-            <table class="table table-hover shadow-sm bg-white">
-                <thead class="table-dark">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 border-0">
+            <h4 class="fw-bold mb-0"><i class="bi bi-lightning-charge text-warning me-2"></i>Commandes en attente</h4>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th>Nom</th>
-                        <th>Email</th>
+                        <th>N°</th>
+                        <th>Client</th>
+                        <th>Menu</th>
                         <th>Statut</th>
-                        <th class="text-end">Actions</th>
+                        <th>Changement rapide</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($employees as $emp): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
-                        <td><?= htmlspecialchars($emp['email']) ?></td>
-                        <td>
-                            <span class="badge bg-<?= $emp['is_active'] ? 'success' : 'danger' ?>">
-                                <?= $emp['is_active'] ? 'Actif' : 'Inactif' ?>
-                            </span>
-                        </td>
-                        <td class="text-end">
-                            <form action="index.php?page=toggle_user" method="POST" style="display:inline;">
-                                <input type="hidden" name="user_id" value="<?= $emp['id'] ?>">
-                                <button type="submit" class="btn btn-sm <?= $emp['is_active'] ? 'btn-outline-danger' : 'btn-outline-success' ?>">
-                                    <?= $emp['is_active'] ? 'Désactiver' : 'Activer' ?>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <?php if (empty($orders)): ?>
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">Aucune commande active.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($orders as $o): ?>
+                            <tr>
+                                <td class="fw-bold">#<?= $o['order_number'] ?></td>
+                                <td><?= htmlspecialchars($o['firstname']) ?></td>
+                                <td><?= htmlspecialchars($o['menu_name']) ?></td>
+                                <td>
+                                    <span class="badge bg-<?= getStatusColor($o['order_status']) ?>">
+                                        <?= htmlspecialchars($o['order_status']) ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <form action="inex.php?page=update_order_status" method="POST" class="d-flex gap-2">
+                                        <input type="hidden" name="order_id" value="<?= $o['id'] ?>">
+                                        <select name="new_status" class="form-select form-select-sm">
+                                            <option value="accepted">Accepter</option>
+                                            <option value="preparing">En cuisine</option>
+                                            <option value="shipping">En livraison</option>
+                                            <option value="delivered">Livrée</option>
+                                            <option value="finished">Terminée</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-primary">Valider</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
-
-        <div class="tab-pane fade" id="stats-pane">
-            <form method="GET" action="index.php" class="row g-3 mb-4 bg-light p-3 rounded">
-                <input type="hidden" name="page" value="admin_dashboard">
-                <div class="col-md-3">
-                    <label class="form-label small">Date début</label>
-                    <input type="date" name="start" class="form-control" value="<?= $_GET['start'] ?? '' ?>">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label small">Date fin</label>
-                    <input type="date" name="end" class="form-control" value="<?= $_GET['end'] ?? '' ?>">
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-dark w-100">Filtrer</button>
-                </div>
-            </form>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card bg-success text-white p-4 mb-3 border-0 shadow-sm">
-                        <h6>CHIFFRE D'AFFAIRES TOTAL</h6>
-                        <h2 class="fw-bold"><?= number_format($totalCA, 2, ',', ' ') ?> €</h2>
-                        <p class="small mb-0">Volume : <?= array_sum($menuStats) ?> ventes</p>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="card p-3 shadow-sm border-0">
-                        <canvas id="salesChart" height="150"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
-<div class="modal fade" id="addEmployeeModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form action="index.php?page=create_employee" method="POST" class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nouvel Employé</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <input type="text" name="firstname" class="form-control" placeholder="Prénom" required>
-                </div>
-                <div class="mb-3">
-                    <input type="text" name="lastname" class="form-control" placeholder="Nom" required>
-                </div>
-                <div class="mb-3">
-                    <input type="email" name="email" class="form-control" placeholder="Email (Username)" required>
-                </div>
-                <div class="mb-3">
-                    <input type="password" name="password" class="form-control" placeholder="Mot de passe" required>
-                </div>
-                <p class="small text-muted">L'employé recevra un mail de notification sans le mot de passe.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-target="#employees-pane" data-bs-dismiss="modal">Annuler</button>
-                <button type="submit" class="btn btn-primary">Créer le compte</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('salesChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode(array_keys($menuStats)) ?>,
-            datasets: [{
-                label: 'Nombre de ventes par menu',
-                data: <?= json_encode(array_values($menuStats)) ?>,
-                backgroundColor: 'rgba(13, 110, 253, 0.8)',
-                borderColor: '#0d6efd',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } }
-            }
-        }
-    });
-</script>
-
-<?php require_once ROOT . 'includes/footer.php'; ?>
+<?php require_once ROOT .  'includes/footer.php'; ?>
