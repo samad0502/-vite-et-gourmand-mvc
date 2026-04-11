@@ -13,6 +13,8 @@ class AdminController {
 
         $orders = $adminModel->getPendingOrders();
         $totalEmployees = $adminModel->countEmployees();
+
+        $totalOrders = $adminModel->countTotalOrders();
        
         require_once ROOT . 'app/Views/admin/dashboard.php';
     }
@@ -65,13 +67,12 @@ class AdminController {
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $db =(new Database())->getConnection();
                 $adminModel = new Admin($db);
+
                 try {
                 
                 //delegation de l'insertion sql au modele
                 $success = $adminModel->addEmployee($_POST);
               
-
-
                 //envoi du mail d'inscription employé (sans mdp)
                 if($success) {
                 $this->sendEmployeeNotification ($_POST['email'], $_POST['firstname']);
@@ -94,10 +95,8 @@ class AdminController {
 
             if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
                 $db = (new Database())->getConnection();
-                $userId = (int)$_POST['user_id'];
-
-                $stmt = $db->prepare("UPDATE users SET is_active = NOT is_active WHERE id = ?");
-                $stmt->execute([$userId]);
+                $adminModel = new Admin($db); 
+                $adminModel->toggleUserStatus((int)$_POST['user_id']);
 
                 header('Location: index.php?page=admin_users&success=status_updated');
                 exit;

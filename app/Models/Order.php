@@ -120,5 +120,16 @@ class Order {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$orderId, $userId]);
     }
+
+
+    public function getOrderDetailForNotification($orderId) {
+        $sql = "SELECT o.order_number, u.email, u.firstname 
+            FROM orders o 
+            JOIN users u ON o.user_id = u.id 
+            WHERE o.id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$orderId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 

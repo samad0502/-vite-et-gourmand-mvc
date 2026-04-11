@@ -74,8 +74,7 @@ class Admin {
                 FROM orders o 
                 JOIN users u ON o.user_id = u.id 
                 JOIN menus m ON o.menu_id = m.id 
-                WHERE o.order_status NOT IN ('finished', 'cancelled')
-                ORDER BY o.created_at DESC";
+                WHERE o.order_status NOT IN ('finished', 'cancelled')";
 
                 return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
@@ -86,4 +85,9 @@ class Admin {
     public function countEmployees() {
         return $this->db->query("SELECT COUNT(*) FROM users WHERE role_id = 2")->fetchColumn(); 
     }
+
+    //compter touted les lignes de la table orders
+    public function countTotalOrders() {
+    return $this->db->query("SELECT COUNT(*) FROM orders")->fetchColumn();
+}
 }

@@ -10,25 +10,26 @@ public function dashboard() {
     }
     
   
-    
+    $db = (new Database())->getConnection();
     //gestion des commandes
-    $orderModel = new Order();
+    $orderModel = new Order($db);
     $statusFilter = $_GET['status'] ?? '';
     $searchClient = $_GET['client'] ?? '';
     $orders = $orderModel->getOrdersForEmployee($statusFilter, $searchClient);
 
 
     //gestion des menus(onglets Menu et Plats)
-    $menuModel = new Menu();
+    $menuModel = new Menu($db);
     $menus = $menuModel->findAll();
 
     //gestion des horaires (onglet Horaires)
-    $db = (new Database())->getConnection();
-    $hours = $db->query("SELECT * FROM opening_hours ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
+    $hourModel = new OpeningHours($db);
+    $opening_hours = $hourModel->getAll();
 
 
     //gestion des avis (onglet Avis)
-    $reviews = $db->query("SELECT r.*, u.firstname FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.is_published = 0")->fetchAll(PDO::FETCH_ASSOC);
+    $reviewModel = new Review($db);
+    $reviews = $reviewModel->getPendingReviews();
 
     
   
@@ -88,16 +89,15 @@ $userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role'] ?? '';
 
    if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = (new Database())->getConnection();
-    
+    $hourModel = new OpeningHours($db);
 
     foreach($_POST['open'] as $id => $openTime) {
         $closeTime = $_POST['close'][$id];
         $isClosed = isset($_POST['closed'][$id]) ? 1 : 0;
 
-        $stmt = $db->prepare("UPDATE opening_hours SET open_time = ?, close_time = ?, is_closed = ? WHERE id = ?");
-                $stmt->execute([$openTime, $closeTime, $isClosed, $id]);
+       
+        $hourModel->update($openTime, $closeTime, $isClosed, $id);
     }
-
 
    }
 
@@ -124,13 +124,8 @@ public function manageReviews() {
 
 
 public function notifyOrderFinished($orderId) {
-    $db = (new Database())->getConnection();
-    $stmt = $db->prepare("SELECT o.order_number, u.email, u.firstname
-                          FROM orders o
-                          JOIN users u ON o.user_id = u.id
-                          WHERE o.id = ?");
-    $stmt->execute([$orderId]);
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);  
+    $orderModel = new Order();
+    $data = $orderModel->getOrderDetailForNotification($orderId); 
     
     if($data) {
         $mail = new PHPMailer(true);
