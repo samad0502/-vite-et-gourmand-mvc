@@ -1,10 +1,10 @@
 <div class="card-body p-4">
     <form action="index.php?page=update_menu" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="menu_id" value="<?= $menu['id'] ?>">
+        <input type="hidden" name="menu_id" value="<?= $menu[0]['id'] ?>">
 
         <div class="mb-3">
             <label class="form-label fw-bold">Nom du menu</label>
-            <input type="text" name="title" class="form-control" value="<?= htmlspecialchars($menu['title']) ?>" required>
+            <input type="text" name="title" value="<?= htmlspecialchars($menu[0]['title']) ?>" required>
         </div>
 
         <div class="mb-3">

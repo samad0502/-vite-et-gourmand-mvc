@@ -139,9 +139,9 @@ class Menu {
       
 
    public function create($data) {
-    $sql = "INSERT INTO menus (title,price,description, image, min_people) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO menus (title,price,description, image, min_people, remaining_quantity, theme_id, diet_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     return $this->pdo->prepare($sql)->execute([
-        $data['title'], $data['price'], $data['description'], $data['image'], $data['min_people']
+        $data['title'], $data['price'], $data['description'], $data['image'] ?? '', $data['min_people'] ?? 1, $data['remaining_quantity'], $data['theme_id'], $data['diet_id']
     ]);
   }
 
@@ -150,7 +150,7 @@ class Menu {
     $sql = "UPDATE menus SET title = ?, price = ?, description = ?, image = ?, min_people = ?
             WHERE id = ?";
     return $this->pdo->prepare($sql)->execute([
-        $data['title'], $data['price'], $data['description'], $data['image'], $data['min_people'], $id
+        $data['title'], $data['price'], $data['description'], $data['image'] ?? '', $data['min_people'] ?? 1, (int)$id
     ]);        
   }
 

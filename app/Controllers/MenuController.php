@@ -46,11 +46,14 @@ class MenuController {
             $imageName = $this->handleUpload();
 
             $data = [
-                'title'       => $_POST['title'],
-                'price'       => $_POST['price'],
-                'min_people'  => $_POST['min_people'],
-                'description' => $_POST['description'],
-                'image'       => $imageName
+                'title'              => $_POST['title'],
+                'price'              => $_POST['price'],
+                'min_people'         => $_POST['min_people'],
+                'description'        => $_POST['description'],
+                'image'              => $imageName,
+                'remaining_quantity' => $_POST['remaining_quantity'],
+                'theme_id'           => $_POST['theme_id'],
+                'diet_id'            => $_POST['diet_id']
             ];
 
             $menuModel = new Menu();
@@ -105,7 +108,9 @@ class MenuController {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)$_POST['menu_id'];
             $menuModel = new Menu();
-            $oldMenu = $menuModel->findById($id);
+            
+            $result = $menuModel->findById($id);
+            $oldMenu = $result[0];
 
             // gestion de l'image , si elle est chargée on l'utilise sinon on garde l'ancienne
             $imageName = $oldMenu['image'];
@@ -126,6 +131,7 @@ class MenuController {
             } else {
                 header('Location: index.php?page=edit_menu&id=$id&error=update_failed');
             }
+            exit;
         }
     }
 
