@@ -27,4 +27,22 @@ class Stat {
         }
 
     }
+
+    //enregistre une vente dans MongoDB
+    public function logOrder($orderData) {
+        try {
+            $document = [
+                'order_number'  => $orderData['order_number'],
+                'menu_name'     => $orderData['title'],
+                'price'         => (float)$orderData['price'],
+                'customer'      => $orderData['firstname'] . ' ' . $orderData['lastname'],
+                'executed_at'   => new UTCDateTime(time() * 1000)
+            ];
+
+            return $this->collection->insertOne($document);
+        } catch(Exception $e) {
+            error_log("Erreur d'écriture NoSQL : " . $e->getMessage());
+            return false;
+        }
+    }
 }
