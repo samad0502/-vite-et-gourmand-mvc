@@ -80,7 +80,7 @@ public function moderateReview() {
 
 public function updateHours() {
 
-$userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role'] ?? '';
+$userRole = $_SESSION['user']['role'] ?? '';
 
     if(!isset($_SESSION['user']) || ($userRole !== 'employee' && $userRole !== 'admin')) {
         header('Location: index.php?page=login');
@@ -96,7 +96,7 @@ $userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role'] ?? '';
         $isClosed = isset($_POST['closed'][$id]) ? 1 : 0;
 
        
-        $hourModel->update($openTime, $closeTime, $isClosed, $id);
+        $hourModel->update($id, $openTime, $closeTime, $isClosed);
     }
 
    }

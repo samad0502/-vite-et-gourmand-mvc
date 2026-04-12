@@ -192,7 +192,7 @@ function getStatusColor($status)
                 <div class="card-body">
                     <form action="index.php?page=update_hours" method="POST">
                         <table class="table align-middle">
-                            <?php foreach ($hours as $h): ?>
+                            <?php foreach ($opening_hours as $h): ?>
                                 <tr>
                                     <td width="150"><strong><?= $h['day_name'] ?></strong></td>
                                     <td><input type="time" name="open[<?= $h['id'] ?>]" value="<?= $h['open_time'] ?>" class="form-control"></td>
