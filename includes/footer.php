@@ -4,16 +4,26 @@
     <div class="text-center py-3">
         <h5><i class="bi bi-clock me-2"></i>Nos horaires</h5>
         <div class="d-flex flex-wrap justify-content-center gap-3 small">
-            <?php foreach ($opening_hours as $hour): ?>
-                <span>
-                    <strong><?= $hour['day_name'] ?> :</strong>
-                    <?php if ($hour['is_closed']): ?>
-                        <span class="text-danger">Fermé</span>
-                    <?php else: ?>
-                        <?= date('H\hi', strtotime($hour['open_time'])) ?> - <?= date('H\hi', strtotime($hour['close_time'])) ?>
-                    <?php endif; ?>
-                </span>
-            <?php endforeach; ?>
+            <?php 
+$hours_to_display = $opening_hours ?? $GLOBALS['opening_hours'] ?? []; 
+?>
+
+<div class="d-flex flex-wrap justify-content-center gap-3 small">
+    <?php if (!empty($hours_to_display)): ?>
+        <?php foreach ($hours_to_display as $hour): ?>
+            <span>
+                <strong><?= htmlspecialchars($hour['day_name']) ?> :</strong>
+                <?php if ($hour['is_closed']): ?>
+                    <span class="text-danger">Fermé</span>
+                <?php else: ?>
+                    <?= date('H\hi', strtotime($hour['open_time'])) ?> - <?= date('H\hi', strtotime($hour['close_time'])) ?>
+                <?php endif; ?>
+            </span>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <span>Horaires non disponibles</span>
+    <?php endif; ?>
+</div>
         </div>
     </div>
 <!--

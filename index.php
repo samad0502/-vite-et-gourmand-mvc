@@ -1,7 +1,5 @@
 <?php
 session_start();
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -17,6 +15,10 @@ require_once ROOT . 'app/Models/Order.php';
 require_once ROOT . 'app/Models/Review.php';
 require_once ROOT . 'app/Models/Admin.php';
 require_once ROOT . 'app/Models/OpeningHours.php';
+
+$db = (new Database())->getConnection();
+$hoursModel = new OpeningHours($db);
+$GLOBALS['opening_hours'] = $hoursModel->getAll();
 
 
 
