@@ -45,4 +45,15 @@ class Stat {
             return false;
         }
     }
+
+
+    //recupere les statistiques pour le dashboard admin
+    public function getStats($menuFilter = '') {
+        $filter = [];
+        if($menuFilter) {
+            $filter['menu_name'] = $menuFilter;
+        }
+
+        return $this->collection->find($filter, ['sort' => ['executed_at' => -1]]);
+    }
 }
