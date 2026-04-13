@@ -15,6 +15,8 @@ require_once ROOT . 'app/Models/Order.php';
 require_once ROOT . 'app/Models/Review.php';
 require_once ROOT . 'app/Models/Admin.php';
 require_once ROOT . 'app/Models/OpeningHours.php';
+require_once ROOT . 'app/Helpers/functions.php';
+
 
 $db = (new Database())->getConnection();
 $hoursModel = new OpeningHours($db);

@@ -3,23 +3,6 @@
 require_once ROOT . 'includes/header.php';
 require_once ROOT . 'includes/navbar.php';
 
-
-
-// Fonction couleur por les statuts des commandes(je laisse la temporairement sera deplacé plutard)
-function getStatusColor($status) 
-{
-    return match ($status) {
-        'pending'          => 'warning text-dark',
-        'accepted'         => 'info text-white',
-        'preparing'        => 'primary',
-        'shipping'         => 'info text-white',
-        'delivered'        => 'success text-white',
-        'waiting_material' => 'danger text-white',
-        'finished'         => 'secondary text-white',
-        'cancelled'        => 'dark text-white',
-        default            => 'light text-dark',
-    };
-}
 ?>
 
 <div class="container-fluid my-5">
@@ -284,24 +267,6 @@ function getStatusColor($status)
     </div>
 </div>
 
-<script>
-    //remis temporairement pour test
-    function openCancelModal(id, num) {
-        document.getElementById('cancelOrderId').value = id;
-        document.getElementById('cancelOrderNum').innerText = num;
-        new bootstrap.Modal(document.getElementById('cancelModal')).show();
-    }
-
-    // Gestion de l'onglet actif via l'URL (hash)
-    document.addEventListener("DOMContentLoaded", function() {
-        var hash = window.location.hash;
-        if (hash) {
-            var triggerEl = document.querySelector('button[data-bs-target="' + hash + '"]');
-            if (triggerEl) {
-                bootstrap.Tab.getInstance(triggerEl) || new bootstrap.Tab(triggerEl).show();
-            }
-        }
-    });
-</script>
+<script src="/public/assets/js/employee.js"></script>
 
 <?php require_once ROOT . 'includes/footer.php'; ?>
