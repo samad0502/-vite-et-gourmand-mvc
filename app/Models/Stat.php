@@ -56,4 +56,26 @@ class Stat {
 
         return $this->collection->find($filter, ['sort' => ['executed_at' => -1]]);
     }
+
+
+    
+   //recupere les statistiques avec filtres (lecture)
+public function getFilteredStats($menuFilter = '', $dateStart = '', $dateEnd = '') {
+    $filter = [];
+    
+    // Filtre par nom de menu
+    if ($menuFilter) {
+        $filter['menu_name'] = $menuFilter;
+    }
+
+    // Filtre par date
+    if ($dateStart && $dateEnd) {
+        $start = new \MongoDB\BSON\UTCDateTime(strtotime($dateStart) * 1000);
+        $end = new \MongoDB\BSON\UTCDateTime(strtotime($dateEnd . ' +1 day') * 1000);
+        $filter['executed_at'] = ['$gte' => $start, '$lte' => $end];
+    }
+
+    return $this->collection->find($filter, ['sort' => ['executed_at' => -1]]);
+}
+
 }

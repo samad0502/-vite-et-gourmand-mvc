@@ -1,6 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Models\Stat;
 class AdminController {
     public function dashboard() {
         if($_SESSION['user']['role'] !== 'admin') {
@@ -42,9 +43,9 @@ class AdminController {
         }
 
         $db = (new Database())->getConnection();
-        $adminModel = new Admin($db);
+        $statModel = new Stat();
         //données pour les stats
-        $statsData = $adminModel->getMongoStats($_GET['menu'] ?? '', $_GET['start'] ?? '', $_GET['end'] ?? '');
+        $statsData = $statModel->getFilteredStats($_GET['menu'] ?? '', $_GET['start'] ?? '', $_GET['end'] ?? '');
 
         // traitement des données pour Chart.js
         $menuStats = [];
