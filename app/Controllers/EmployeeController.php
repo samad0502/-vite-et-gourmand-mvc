@@ -71,7 +71,7 @@ public function cancelOrder(){
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orderId = (int)$_POST['order_id'];
         $reason = htmlspecialchars($_POST['reason']);
-        $contactMode = $_POST['contact_mode'];
+        $contactMode = $_POST['contact_method'];
 
         $orderModel = new Order();
 
@@ -79,8 +79,13 @@ public function cancelOrder(){
 
         $statModel = new Stat();
         $statModel->logCancellation($orderId, $reason, $contactMode);
+        
+        //envoi du mail que si le mode de contact choisi est 'mail'
+        if($contactMode === 'Email'){
+            $this->sendCancellationEmail($orderId, $reason);
+        }
 
-        header('Location : index.php?page=employee_dashboard&success=cancelled');
+        header('Location: index.php?page=employee_dashboard&success=cancelled');
         } else {
             header('Location: index.php?page=employee_dashboars&error=cancel_failed');
         }
@@ -200,4 +205,44 @@ public function notifyOrderFinished($orderId) {
 
         }
     }
+
+
+    // Fonction dédiée à l'envoi du mail d'annulation
+private function sendCancellationEmail($orderId, $reason) {
+    $orderModel = new Order();
+    $data = $orderModel->getOrderDetailForNotification($orderId);
+
+    if (!$data) return;
+
+    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+
+    try {
+        $mail->isSMTP();
+        $mail->Host       = $_ENV['MAIL_HOST'];
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $_ENV['MAIL_USER'];
+        $mail->Password   = $_ENV['MAIL_PASS'];
+        $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = $_ENV['MAIL_PORT'];
+        $mail->CharSet    = 'UTF-8';
+
+        $mail->setFrom('service-client@vitegourmand.fr', 'Vite & Gourmand');
+        $mail->addAddress($data['email'], $data['firstname']);
+
+        $mail->isHTML(true);
+        $mail->Subject = "Annulation de votre commande " . $data['order_number'];
+
+        $mail->Body = "
+            <h2>Bonjour {$data['firstname']},</h2>
+            <p>Nous vous informons que votre commande <strong>#{$data['order_number']}</strong> a dû être annulée.</p>
+            <p><strong>Motif de l'annulation :</strong><br><em>{$reason}</em></p>
+            <p>Si vous avez des questions, n'hésitez pas à nous recontacter.</p>
+            <p>Cordialement,<br>L'équipe Vite & Gourmand</p>
+        ";
+
+        $mail->send();
+    } catch (\Exception $e) {
+        error_log("Le mail d'annulation n'a pas pu être envoyé. Erreur: {$mail->ErrorInfo}");
+    }
+}
 }

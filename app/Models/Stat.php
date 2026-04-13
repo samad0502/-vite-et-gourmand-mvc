@@ -87,7 +87,7 @@ public function logCancellation($orderId, $reason, $contactMode) {
         return $this->collection->insertOne([
             'event'          => 'order_cancelled',
             'order_id'       => $orderId,
-            'reason'         => $reason,
+            'cancellation_reason'         => $reason,
             'contact_method' => $contactMode,
             'cancelled_at'   => new \MongoDB\BSON\UTCDateTime(time() * 1000)
         ]);

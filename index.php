@@ -160,7 +160,7 @@ switch ($page){
            $controller->updateOrderStatus();
            break;    
 
-        case 'cancel_order':
+        case 'cancel_order_employee':
            require_once ROOT . 'app/Controllers/EmployeeController.php';
            $controller = new EmployeeController();
            $controller->cancelOrder();

@@ -134,10 +134,10 @@ class Order {
     }
 
     public function cancelOrders($orderId, $reason, $contactMode) {
-        $sql = "UPDATE orders SET order_status = 'cancelled', cancellation_reason = ?, contact_method = ?,
-                WHERE id = ? ";
+        $sql = "UPDATE orders SET order_status = 'cancelled', cancellation_reason = ?, contact_method = ?
+                WHERE id = ?";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$orderId, $reason, $contactMode]);        
+        return $stmt->execute([$reason, $contactMode, $orderId]);        
     }
 }
 
