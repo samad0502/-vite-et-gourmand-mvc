@@ -67,6 +67,28 @@ public function updateOrderStatus() {
 }
 
 
+public function cancelOrder(){
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $orderId = (int)$_POST['order_id'];
+        $reason = htmlspecialchars($_POST['reason']);
+        $contactMode = $_POST['contact_mode'];
+
+        $orderModel = new Order();
+
+        if($orderModel->cancelOrders($orderId, $reason, $contactMode)) {
+
+        $statModel = new Stat();
+        $statModel->logCancellation($orderId, $reason, $contactMode);
+
+        header('Location : index.php?page=employee_dashboard&success=cancelled');
+        } else {
+            header('Location: index.php?page=employee_dashboars&error=cancel_failed');
+        }
+        exit;
+    }
+}
+
+
 public function moderateReview() {
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $reviewId = (int)$_POST['review_id'];
