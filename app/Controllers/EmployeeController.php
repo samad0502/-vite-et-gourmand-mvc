@@ -1,6 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Models\Stat;
 class EmployeeController {
 
 public function dashboard() {
@@ -48,6 +49,17 @@ public function updateOrderStatus() {
         if($newStatus === 'finished') {
             $this->notifyOrderFinished($orderId);
         }
+
+    
+        if ($newStatus === 'finished') {
+        $orderInfo = $orderModel->getOrderDetailForNotification($orderId);
+    
+        if ($orderInfo) {
+        $statModel = new Stat(); 
+        $statModel->logOrder($orderInfo);
+    }
+}
+        
             header('Location: index.php?page=employee_dashboard&success=status_updated');
         } else {
             header('Location: index.php?page=employee_dashboard&error=update_failed');
