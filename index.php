@@ -251,6 +251,22 @@ switch ($page){
            $controller->toggleUser();
            break;  
 
+        case 'profile':
+           require_once ROOT . 'app/Views/user/profile.php'; 
+           break;
+
+        case 'contact':
+           require_once ROOT . 'app/Views/public/contact.php';
+           break;
+
+        case 'cgv':
+           require_once ROOT . 'app/Views/public/cgv.php';
+           break;
+
+        case 'mentions-legales':
+           require_once ROOT . 'app/Views/public/mentions-legales.php';
+           break;   
+
         default:
         header("HTTP/1.0 404 Not Found");
         echo "Page non trouvée";
