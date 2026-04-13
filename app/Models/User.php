@@ -52,4 +52,23 @@ class User {
     $stmt->execute([$id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
+    public function update($id, $data) {
+        $sql = "UPDATE users SET
+                firstname = ?,
+                lastname = ?,
+                phone = ?,
+                address = ?
+                WHERE id = ?";
+
+       $stmt = $this->db->prepare($sql);
+       return $stmt->execute([
+        $data['firstname'],
+        $data['lastname'],
+        $data['phone'],
+        $data['address'],
+        $id
+       ]);         
+    }
 }
