@@ -31,15 +31,18 @@ class Stat {
     //enregistre une vente dans MongoDB
     public function logOrder($orderData) {
         try {
-            $document = [
-                'order_number'  => $orderData['order_number'],
-                'menu_name'     => $orderData['title'],
-                'price'         => (float)$orderData['price'],
-                'customer'      => $orderData['firstname'] . ' ' . $orderData['lastname'],
-                'executed_at'   => new UTCDateTime(time() * 1000)
-            ];
+            $quantity = (int)($orderData['number_people'] ?? 1);
+            $unitPrice = (float)($orderData['price'] ?? 0);
 
-            return $this->collection->insertOne($document);
+           return $this->collection->insertOne([
+            'order_number' => $orderData['order_number'],
+            'menu_name'    => $orderData['title'] ?? 'Menu inconnu',
+            'unit_price'   => $unitPrice,
+            'quantity'     => $quantity,
+            'price'        => $unitPrice * $quantity, 
+            'customer'     => ($orderData['firstname'] ?? '') . ' ' . ($orderData['lastname'] ?? ''),
+            'executed_at'  => new \MongoDB\BSON\UTCDateTime(time() * 1000)
+        ]);
         } catch(Exception $e) {
             error_log("Erreur d'écriture NoSQL : " . $e->getMessage());
             return false;

@@ -123,8 +123,9 @@ class Order {
 
 
     public function getOrderDetailForNotification($orderId) {
-        $sql = "SELECT o.order_number, u.email, u.firstname 
+        $sql = "SELECT o.order_number, o.number_people, m.title, m.price,  u.email, u.firstname, u.lastname 
             FROM orders o 
+            JOIN menus m ON o.menu_id = m.id 
             JOIN users u ON o.user_id = u.id 
             WHERE o.id = ?";
     $stmt = $this->db->prepare($sql);

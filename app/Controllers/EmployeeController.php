@@ -46,20 +46,17 @@ public function updateOrderStatus() {
         $orderModel = new Order();
         if($orderModel->updateStatus($orderId, $newStatus)) {
 
-        if($newStatus === 'finished') {
-            $this->notifyOrderFinished($orderId);
-        }
-
-    
+            
         if ($newStatus === 'finished') {
         $orderInfo = $orderModel->getOrderDetailForNotification($orderId);
     
         if ($orderInfo) {
         $statModel = new Stat(); 
         $statModel->logOrder($orderInfo);
+
+        $this->notifyOrderFinished($orderId);
     }
 }
-        
             header('Location: index.php?page=employee_dashboard&success=status_updated');
         } else {
             header('Location: index.php?page=employee_dashboard&error=update_failed');
