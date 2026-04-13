@@ -81,4 +81,19 @@ public function getFilteredStats($menuFilter = '', $dateStart = '', $dateEnd = '
     return $this->collection->find($filter, ['sort' => ['executed_at' => -1]]);
 }
 
+
+public function logCancellation($orderId, $reason, $contactMode) {
+    try {
+        return $this->collection->insertOne([
+            'event'          => 'order_cancelled',
+            'order_id'       => $orderId,
+            'reason'         => $reason,
+            'contact_method' => $contactMode,
+            'cancelled_at'   => new \MongoDB\BSON\UTCDateTime(time() * 1000)
+        ]);
+    } catch(Exception $e) {
+        return false;
+    }
+}
+
 }
