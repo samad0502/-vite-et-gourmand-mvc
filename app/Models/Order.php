@@ -132,5 +132,12 @@ class Order {
     $stmt->execute([$orderId]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function cancelOrders($orderId, $reason, $contactMode) {
+        $sql = "UPDATE orders SET order_status = 'cancelled', cancel_reason = ?, conract_mode = ?,
+                WHERE id = ? ";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$orderId, $reason, $contactMode]);        
+    }
 }
 
