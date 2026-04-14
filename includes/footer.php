@@ -65,10 +65,10 @@ $hours_to_display = $opening_hours ?? $GLOBALS['opening_hours'] ?? [];
         </div>
 
         <div class="text-end py-2 mt-3">
-            <a href="/" class="text-light me-2">Accueil</a>
-            <a href="/contact.php" class="text-light me-2">Contact</a>
-            <a href="/mentions-legales.php" class="text-light me-2">Mentions légales</a>
-            <a href="/cgv.php" class="text-light">CGV</a>
+            <a href="index.php?page=home" class="text-light me-2">Accueil</a>
+            <a href="index.php?page=contact" class="text-light me-2">Contact</a>
+            <a href="index.php?page=mentions-legales" class="text-light me-2">Mentions légales</a>
+            <a href="index.php?page=cgv" class="text-light">CGV</a>
         </div>
     </div>
 

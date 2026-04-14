@@ -42,4 +42,6 @@ require_once ROOT . 'includes/navbar.php';
                 <button type="submit" class="btn btn-primary w-100">Envoyer le message</button>
             </form>
         </div>
+    </div>
+</div>
        <?php require_once ROOT . 'includes/footer.php'; ?>

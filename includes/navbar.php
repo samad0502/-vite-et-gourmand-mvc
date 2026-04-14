@@ -53,7 +53,7 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact.php"><i class="bi bi-envelope-fill text-light"></i> Contact</a>
+                    <a class="nav-link" href="index.php?page=contact"><i class="bi bi-envelope-fill text-light"></i> Contact</a>
                 </li>
 
                 <?php if (isset($_SESSION['user'])) : ?>
@@ -66,7 +66,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link " href="/profile.php">
+                        <a class="nav-link " href="index.php?page=profile">
                             <i class="bi bi-person-gear me-2 text-light"></i>Mon Profil
                         </a>
                     </li>

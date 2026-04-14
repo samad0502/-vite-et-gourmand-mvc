@@ -11,7 +11,7 @@
 <body>
 
     <div class="legal-container">
-        <a href="index.php" class="back-link">← Retour à l'accueil</a>
+        <a href="index.php?page=home" class="back-link">← Retour à l'accueil</a>
 
         <div class="legal-box">
             <h1>Mentions Légales</h1>

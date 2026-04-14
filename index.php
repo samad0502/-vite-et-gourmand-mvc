@@ -252,10 +252,10 @@ switch ($page){
            break;  
 
         case 'update_profile':
-        require_once ROOT . 'app/Controllers/UserController.php';
-        $controller = new UserController();
-        $controller->updateProfile();
-        break;   
+           require_once ROOT . 'app/Controllers/UserController.php';
+           $controller = new UserController();
+           $controller->updateProfile();
+           break;   
 
         case 'profile':
            require_once ROOT . 'app/Views/user/profile.php'; 
