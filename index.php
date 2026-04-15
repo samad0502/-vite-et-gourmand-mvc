@@ -257,6 +257,12 @@ switch ($page){
            $controller->updateProfile();
            break;   
 
+        case 'process_contact':
+          require_once ROOT . 'app/Controllers/UserController.php';
+          $controller = new UserController();
+          $controller->sendContactMessage();
+          break;   
+
         case 'profile':
            require_once ROOT . 'app/Views/user/profile.php'; 
            break;

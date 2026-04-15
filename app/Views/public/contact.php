@@ -22,7 +22,7 @@ require_once ROOT . 'includes/navbar.php';
             <?php endif; ?>
 
 
-            <form action="ajax/process_contact.php" method="POST" class="p-4 shadow-sm rounded bg-light">
+            <form action="index.php?page=process_contact" method="POST" class="p-4 shadow-sm rounded bg-light">
                 <div class="mb-3">
                     <label class="form-label">Nom complet</label>
                     <input type="text" name="name" class="form-control" required>
