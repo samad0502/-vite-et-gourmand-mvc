@@ -1,5 +1,6 @@
 <?php
-
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 class UserController {
     public function updateProfile() {
         if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
@@ -43,7 +44,8 @@ class UserController {
             }
 
          //envoi du mail pour la demande de contact
-          $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+          $mail = new PHPMailer(true);
+          $mail->SMTPDebug = 2;
           
           try {
             $mail->isSMTP();
@@ -58,7 +60,7 @@ class UserController {
             
             $mail->setFrom('contact@vitegourmand.fr', 'Formulaire Contact ViteGourmand');
         
-            $mail->addAddress($_ENV['MAIL_USER'], 'Admin Vite & Gourmand');
+            $mail->addAddress('admin@vitegourmand.fr', 'Admin Vite & Gourmand');
             $mail->addReplyTo($email, $name);
 
             $mail->isHTML(true);
