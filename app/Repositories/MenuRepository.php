@@ -1,0 +1,60 @@
+<?php
+class MenuRepository {
+    private $db;
+
+    public function __construct($db) {
+        $this->db = $db;
+    }
+
+    // Récupérer tous les menus avec leurs thèmes et régimes
+    public function findAll() {
+        $sql = "SELECT m.*, t.name as theme_name, d.name as diet_name 
+                FROM menus m
+                LEFT JOIN themes t ON m.theme_id = t.id
+                LEFT JOIN diets d ON m.diet_id = d.id
+                ORDER BY m.created_at DESC";
+        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Récupérer un menu par son ID
+    public function findById($id) {
+        $sql = "SELECT m.*, t.name as theme_name, d.name as diet_name
+                FROM menus m
+                LEFT JOIN themes t ON m.theme_id = t.id
+                LEFT JOIN diets d ON m.diet_id = d.id
+                WHERE m.id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // La logique des filtres des menus
+    public function findWithFilters($filters) {
+        $sql = "SELECT m.*, t.name as theme_name, d.name as diet_name
+                FROM menus m
+                LEFT JOIN themes t ON m.theme_id = t.id
+                LEFT JOIN diets d ON m.diet_id = d.id
+                WHERE 1=1";
+        $params = [];
+
+        if (!empty($filters['priceMin'])) { $sql .= " AND m.price >= ?"; $params[] = $filters['priceMin']; }
+        if (!empty($filters['priceMax'])) { $sql .= " AND m.price <= ?"; $params[] = $filters['priceMax']; }
+        if (!empty($filters['theme']))    { $sql .= " AND t.name = ?"; $params[] = $filters['theme']; }
+        if (!empty($filters['diet']))     { $sql .= " AND d.name = ?"; $params[] = $filters['diet']; }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Récupérer les valeurs uniques pour les filtres (thèmes/régimes)
+    public function getUniqueAttributes($type) {
+        $table = ($type === 'theme') ? 'themes' : 'diets';
+        $column = ($type === 'theme') ? 'theme_id' : 'diet_id';
+        
+        $sql = "SELECT DISTINCT t.name FROM $table t 
+                JOIN menus m ON t.id = m.$column 
+                WHERE t.name IS NOT NULL AND t.name != ''";
+        return $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+    }
+}
