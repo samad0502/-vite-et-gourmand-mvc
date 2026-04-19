@@ -39,8 +39,38 @@ class OrderRepository {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
+         public function findByIdAndUser($orderId, $userId) {
+        $sql = "SELECT o.*, m.title, m.price, m.min_people
+                FROM orders o
+                JOIN menus m ON o.menu_id = m.id
+                WHERE o.id = ? AND o.user_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$orderId, $userId]);
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+      public function updateOrder($orderId, $data) {
+        $sql = "UPDATE orders SET
+                number_people = ?,
+                delivery_address = ?,
+                delivery_date = ?,
+                delivery_time = ?,
+                total_price = ?
+                WHERE id = ? AND order_status = 'pending'";
+
+       $stmt = $this->db->prepare($sql);
+       return $stmt->execute([
+        $data['number_people'],
+        $data['delivery_address'],
+        $data['delivery_date'],
+        $data['delivery_time'],
+        $data['total_price'],
+        $orderId
+       ]);         
+    }
+
       // supprimer une commande si elle est encore en attente
-        public function deleteIfPending($orderId, $userId) {
+        public function deleteOrder($orderId, $userId) {
             $sql = "DELETE FROM orders WHERE id = ? AND user_id = ? AND order_status = 'pending'";
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([$orderId, $userId]);
