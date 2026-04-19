@@ -27,5 +27,18 @@ class OrderRepository {
         
         }
 
-     
+        //recuperer les commandes d'un client avec les titres des menus
+        public function findByUserId($userId){
+            $sql = "SELECT o.*, m.title as menu_title
+                FROM orders o
+                JOIN menus m ON o.menu_id = m.id
+                WHERE o.user_id = ?
+                ORDER BY o.order_date DESC";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$userId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+      
+   
 }
