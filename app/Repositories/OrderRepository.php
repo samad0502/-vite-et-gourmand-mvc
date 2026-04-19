@@ -39,6 +39,11 @@ class OrderRepository {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-      
+      // supprimer une commande si elle est encore en attente
+        public function deleteIfPending($orderId, $userId) {
+            $sql = "DELETE FROM orders WHERE id = ? AND user_id = ? AND order_status = 'pending'";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$orderId, $userId]);
+}
    
 }
