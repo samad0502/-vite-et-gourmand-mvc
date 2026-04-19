@@ -50,7 +50,8 @@ public function process() {
     $db = (new Database())->getConnection();
     try {
         $db->beginTransaction();
-        $orderModel = new Order();
+        
+        $orderRepo = new OrderRepository($db);
        
 
         foreach($_SESSION['cart'] as $item){
@@ -68,8 +69,7 @@ public function process() {
                 'total_price' => $price
             ];
 
-            $orderModel->createOrder($orderData);
-            $orderModel->updateStock($item['menu_id']);
+           $orderRepo->createAndDecrementStock($orderData);
         }
 
         $db->commit();
@@ -111,13 +111,17 @@ public function list() {
         exit;
     }
 
-    // appel au modele Order
-    $orderModel = new Order();
-    $userModel = $orderModel->getByUser($_SESSION['user']['id']);
-
+    $db = (new Database())->getConnection();
     //recuperation des commandes via le modele order
-    $orderModel = new Order();
-    $userOrders = $orderModel->getByUser($_SESSION['user']['id']);
+    $orderRepo = new OrderRepository($db);
+    $userOrders = $orderRepo->findByUserId($_SESSION['user']['id']);
+
+    // appel au modele Order
+    $orderRepo = new OrderRepository($db);
+    $userModel = $orderRepo->findByUserId($_SESSION['user']['id']);
+
+    
+   
 
     require_once ROOT . 'app/Views/orders/list.php';
 }
@@ -128,9 +132,10 @@ public function edit($id) {
         header('Location: index.php?page=login');
         exit;
     }
-
-    $orderModel = new Order();
-    $order = $orderModel->findByIdAndUser($id, $_SESSION['user']['id']);
+    
+    $db = (new Database())->getConnection();
+    $orderRepo = new OrderRepository($db);
+    $order = $orderRepo->findByIdAndUser($id, $_SESSION['user']['id']);
 
     if(!$order || $order['order_status'] !== 'pending') {
         header('Location: index.php?page=my_orders&error=not_modifiable');
@@ -143,10 +148,12 @@ public function edit($id) {
 public function update() {
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orderId = (int)$_POST['order_id'];
-        $orderModel = new Order();
+        $db = (new Database())->getConnection();
+        $orderRepo = new OrderRepository($db);
+    
 
         //on recalcule le prix total coté serveur par securite(menu*nb_personnes)
-        $orderInfo = $orderModel->findByIdAndUser($orderId, $_SESSION['user']['id']);
+        $orderInfo = $orderRepo->findByIdAndUser($orderId, $_SESSION['user']['id']);
         $totalPrice = $orderInfo['price'] * (int)$_POST['number_people'];
 
     $data = [
@@ -157,7 +164,7 @@ public function update() {
                 'total_price'      => $totalPrice
             ];   
             
-            if($orderModel->updateOrder($orderId, $data)) {
+            if($orderRepo->updateOrder($orderId, $data)) {
                 header('Location: index.php?page=orders&success=order_updated');
             } else {
                 header('Location: index.php?page=edit_order&id=$orderId&error=update_failed');
@@ -174,11 +181,10 @@ public function cancel() {
     }
 
     if(isset($_GET['id'])) {
-        $orderId = (int)$_GET['id'];
-        $userId = $_SESSION['user']['id'];
-        $orderModel = new Order();
+       $db = (new Database())->getConnection();
+        $orderRepo = new OrderRepository($db);
 
-        if($orderModel->deleteOrder($orderId, $userId)){
+        if($orderRepo->deleteOrder((int)$_GET['id'], $_SESSION['user']['id'])){
             header('Location: index.php?page=orders&success=order_cancelled');
         } else {
             header('Location: index.php?page=orders&error=cancel_failed');
