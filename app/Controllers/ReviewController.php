@@ -2,6 +2,11 @@
 
 class ReviewController {
 
+private function getRepo() {
+        $db = (new Database())->getConnection();
+        return new ReviewRepository($db);
+    }
+
 public function add($orderId) {
     if(!isset($_SESSION['user'])) {
         $_SESSION['redirect_url'] = "index.php?page=add-review&id=" .$orderId;
@@ -10,8 +15,9 @@ public function add($orderId) {
     }
 
     //on recupere les infos de la commande pour la vue
-    $orderModel = new Order();
-    $order = $orderModel->findByIdAndUser($orderId, $_SESSION['user']['id']);
+    $db = (new Database())->getConnection();
+        $orderRepo = new OrderRepository($db);
+        $order = $orderRepo->findByIdAndUser($orderId, $_SESSION['user']['id']);
 
     if(!$order || $order['order_status'] !== 'finished') {
         header('Location: index.php?page=orders&error=not_allowed');
@@ -24,14 +30,13 @@ public function add($orderId) {
 public function store() {
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         
-        $db = (new Database())->getConnection();
-        $reviewModel = new Review($db);
+       $repo = $this->getRepo();
         $orderId = $_POST['order_id'];
         $rating = $_POST['rating'];
         $comment = $_POST['comment'];
         $userId = $_SESSION['user']['id'];
   
-        if($reviewModel->createReview($orderId, $userId, $rating, $comment)){
+        if($repo->createReview($orderId, $userId, $rating, $comment)){
           
             header('Location: index.php?page=orders&success=review_sent');
         } else {
