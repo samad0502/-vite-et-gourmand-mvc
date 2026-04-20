@@ -12,7 +12,7 @@ class OrderRepository {
             $sqlOrder = "INSERT INTO orders (
             order_number, order_status, number_people, equipment_ready,
             user_id, menu_id, delivery_address, delivery_date, 
-            delivery_time, tota_price, order_date)
+            delivery_time, total_price, order_date)
             VALUES(?, 'pending', ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
             $stmtOrder = $this->db->prepare($sqlOrder);

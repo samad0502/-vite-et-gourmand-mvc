@@ -113,7 +113,7 @@ public function list() {
         exit;
     }
     //recuperation des commandes via le modele order
-   $orders = $this->getRepo()->findByUserId($_SESSION['user']['id']);
+   $userOrders = $this->getRepo()->findByUserId($_SESSION['user']['id']);
     
    require_once ROOT . 'app/Views/orders/list.php';
 }
