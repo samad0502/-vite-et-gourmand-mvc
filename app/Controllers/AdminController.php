@@ -3,19 +3,24 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use App\Models\Stat;
 class AdminController {
+
+    private function getRepo() {
+        $db = (new Database())->getConnection();
+        return new AdminRepository($db);
+    }
+
     public function dashboard() {
         if($_SESSION['user']['role'] !== 'admin') {
             header('Location: index.php?page=login');
             exit;
         }
 
-        $db = (new Database())->getConnection();
-        $adminModel = new Admin($db);
+        $adminRepo = $this->getRepo();
 
-        $orders = $adminModel->getPendingOrders();
-        $totalEmployees = $adminModel->countEmployees();
+        $orders = $adminRepo->getPendingOrders();
+        $totalEmployees = $adminRepo->countEmployees();
 
-        $totalOrders = $adminModel->countTotalOrders();
+        $totalOrders = $adminRepo->countTotalOrders();
        
         require_once ROOT . 'app/Views/admin/dashboard.php';
     }
@@ -27,9 +32,8 @@ class AdminController {
             header('Location: index.php?page=login');
             exit;
 }
-        $db = (new Database())->getConnection();
-        $adminModel = new Admin($db);
-        $employees = $adminModel->getAllEmployees();
+        $adminRepo = $this->getRepo();
+        $employees = $adminRepo->getAllEmployees();
         
         require_once ROOT . 'app/Views/admin/users.php';
     }
@@ -66,13 +70,12 @@ class AdminController {
 
             public function createEmployee() {
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $db =(new Database())->getConnection();
-                $adminModel = new Admin($db);
+                $adminRepo = $this->getRepo();
 
                 try {
                 
                 //delegation de l'insertion sql au modele
-                $success = $adminModel->addEmployee($_POST);
+                $success = $adminRepo->addEmployee($_POST);
               
                 //envoi du mail d'inscription employé (sans mdp)
                 if($success) {
@@ -95,9 +98,8 @@ class AdminController {
     }
 
             if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
-                $db = (new Database())->getConnection();
-                $adminModel = new Admin($db); 
-                $adminModel->toggleUserStatus((int)$_POST['user_id']);
+                $adminRepo = $this->getRepo();
+                $adminRepo->toggleUserStatus((int)$_GET['id']);
 
                 header('Location: index.php?page=admin_users&success=status_updated');
                 exit;
