@@ -57,4 +57,24 @@ class MenuRepository {
                 WHERE t.name IS NOT NULL AND t.name != ''";
         return $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    //  créer un menu (store() du contrôleur)
+public function create($data) {
+    $sql = "INSERT INTO menus (title, price, description, image, min_people, remaining_quantity, theme_id, diet_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    return $this->db->prepare($sql)->execute([
+        $data['title'], $data['price'], $data['description'], $data['image'] ?? '', 
+        $data['min_people'] ?? 1, $data['remaining_quantity'], $data['theme_id'], $data['diet_id']
+    ]);
+}
+
+//  mettre à jour un menu (update() du contrôleur)
+public function update($id, $data) {
+    $sql = "UPDATE menus SET title = ?, price = ?, description = ?, image = ?, min_people = ? 
+            WHERE id = ?";
+    return $this->db->prepare($sql)->execute([
+        $data['title'], $data['price'], $data['description'], $data['image'], 
+        $data['min_people'], $id
+    ]);
+}
 }

@@ -2,12 +2,24 @@
 require_once ROOT . 'app/Models/Menu.php';
 
 class MenuController {
-    public function index(){
-       $menuModel = new Menu();
 
-       $menus = $menuModel->getAllMenus();
-        $themes = $menuModel->getUniqueValues('theme');
-        $diets = $menuModel->getUniqueValues('diet');
+private function getRepo() {
+        $db = (new Database())->getConnection();
+        return new MenuRepository($db);
+    }
+
+    public function index(){
+       $menuRepo = $this->getRepo();
+
+       $menus = $menuRepo->findAll();
+        $themes = $menuRepo->getUniqueAttributes('theme');
+        $diets = $menuRepo->getUniqueAttributes('diet');
+
+        // Préparation des images pour l'affichage (Logique de vue)
+        foreach ($menus as &$menu) {
+            $images = explode(',', $menu['image'] ?? '');
+            $menu['main_image'] = trim($images[0]);
+        }
 
         require_once ROOT . 'app/Views/menus.php';
 
@@ -15,17 +27,21 @@ class MenuController {
 
     public function detail() {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-
-        $menuModel = new Menu();
-        $menu = $menuModel->getMenuById($id);
+        $menuRepo = $this->getRepo();
+        
+        $menu = $menuRepo->findById($id);
  
         // si le menus n'existe pas  on retourne a la liste
         if(!$menu){
             header('Location: index.php?page=menus');
             exit;
         }
-     // on definit si l'utilisateur est connecter pour lz bouton panier
-     $isLogges = isset($_SESSION['user']);
+
+        // Préparation des images pour le carousel
+        $menu['all_images'] = !empty($menu['image']) ? explode(',', $menu['image']) : [];
+
+     // on definit si l'utilisateur est connecté pour les bouton panier
+     $isLogged = isset($_SESSION['user']);
 
      require_once ROOT . 'app/Views/menu_detail.php';
 
@@ -44,6 +60,7 @@ class MenuController {
 
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $imageName = $this->handleUpload();
+            $menuRepo = $this->getRepo();
 
             $data = [
                 'title'              => $_POST['title'],
@@ -56,8 +73,8 @@ class MenuController {
                 'diet_id'            => $_POST['diet_id']
             ];
 
-            $menuModel = new Menu();
-            if($menuModel->create($data)){
+            
+            if($menuRepo->create($data)){
                 header('Location: index.php?page=employee_dashboard&success=menu_added#menus-pane');
             } else {
                 header('Location: index.php?page=add_menu&error=save_failed');
@@ -89,9 +106,9 @@ class MenuController {
 
     public function edit($id) {
         $this->checkAccess();
+        $menuRepo = $this->getRepo();
         
-        $menuModel = new Menu();
-        $menu = $menuModel->findById($id);
+        $menu = $menuRepo->findById($id);
 
         if(!$menu) {
             header('Location: index.php?page=employee_dashboard&error=not_found');
@@ -107,10 +124,8 @@ class MenuController {
         
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)$_POST['menu_id'];
-            $menuModel = new Menu();
-            
-            $result = $menuModel->findById($id);
-            $oldMenu = $result[0];
+            $menuRepo = $this->getRepo();
+            $oldMenu = $menuRepo->findById($id);
 
             // gestion de l'image , si elle est chargée on l'utilise sinon on garde l'ancienne
             $imageName = $oldMenu['image'];
@@ -126,7 +141,7 @@ class MenuController {
             'image'       => $imageName  
             ];
 
-            if($menuModel->update($id, $data)) {
+            if($menuRepo->update($id, $data)) {
                 header('Location: index.php?page=employee_dashboard&#menus-pane');
             } else {
                 header('Location: index.php?page=edit_menu&id=$id&error=update_failed');
