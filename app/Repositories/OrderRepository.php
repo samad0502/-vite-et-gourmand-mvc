@@ -75,5 +75,16 @@ class OrderRepository {
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([$orderId, $userId]);
 }
+
+        public function getDetailsForNotification($orderId) {
+            $sql = "SELECT o.order_number, o.number_people, m.title, m.price, u.email, u.firstname, u.lastname 
+                    FROM orders o 
+                    JOIN menus m ON o.menu_id = m.id 
+                    JOIN users u ON o.user_id = u.id 
+                    WHERE o.id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$orderId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
    
 }

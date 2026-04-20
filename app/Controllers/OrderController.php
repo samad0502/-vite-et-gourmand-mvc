@@ -17,12 +17,14 @@ public function checkout() {
     $u = $userModel->findById($_SESSION['user']['id']);
 
     //preparation des données du panier pour la vue
-    $menuModel = new Menu();
+    $db = (new Database())->getConnection();
+    $menuRepo = new MenuRepository($db);
+    
     $cartDetails= [];
     $totalMenus = 0;
 
     foreach($_SESSION['cart'] as $item) {
-        $menuInfo = $menuModel->getMenuById($item['menu_id']);
+        $menuInfo = $menuRepo->findById($item['menu_id']);
 
         //calcul de la promo 
         $isPromo = ($item['number_people'] >= ($menuInfo['min_people'] + 5));
