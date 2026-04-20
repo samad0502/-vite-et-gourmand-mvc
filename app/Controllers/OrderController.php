@@ -2,6 +2,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Repositories\StatRepository;
 
 class OrderController {
 
@@ -18,8 +19,9 @@ public function checkout() {
     }
 
     // recup des infos de l'utilisateur pré remplis
-    $userModel = new User();
-    $u = $userModel->findById($_SESSION['user']['id']);
+    $db = (new Database())->getConnection();
+    $userRepo = new UserRepository($db);
+    $u = $userRepo->findById($_SESSION['user']['id']);
 
     //preparation des données du panier pour la vue
     $db = (new Database())->getConnection();
@@ -171,8 +173,20 @@ public function cancel() {
     }
 
     if(isset($_GET['id'])) {
+        $orderId = (int)$_GET['id'];
+        $userId = $_SESSION['user']['id'];
+        $orderRepo = $this->getRepo();
 
-        if($this->getRepo()->deleteOrder((int)$_GET['id'], $_SESSION['user']['id'])){
+        if($orderRepo->deleteOrder($orderId, $userId)){
+        
+        // Si SQL a réussi on log l'événement dans MongoDB
+            $statRepo = new StatRepository();
+            $statRepo->logCancellation(
+                $orderId, 
+                $_POST['reason'] ?? 'Annulation client', 
+                'Interface Web'
+            );
+
             header('Location: index.php?page=orders&success=order_cancelled');
         } else {
             header('Location: index.php?page=orders&error=cancel_failed');

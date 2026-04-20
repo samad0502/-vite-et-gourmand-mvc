@@ -1,7 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use App\Models\Stat;
+use App\Repositories\StatRepository;
 class AdminController {
 
     private function getRepo() {
@@ -47,9 +47,9 @@ class AdminController {
         }
 
         $db = (new Database())->getConnection();
-        $statModel = new Stat();
+        $statRepo = new StatRepository();
         //données pour les stats
-        $statsData = $statModel->getFilteredStats($_GET['menu'] ?? '', $_GET['start'] ?? '', $_GET['end'] ?? '');
+        $statsData = $statRepo->getFilteredStats($_GET['menu'] ?? '', $_GET['start'] ?? '', $_GET['end'] ?? '');
 
         // traitement des données pour Chart.js
         $menuStats = [];
