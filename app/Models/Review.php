@@ -34,11 +34,3 @@ return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-public function createReview($orderId, $userId, $rating, $comment) {
-    $sql = "INSERT INTO reviews (order_id, user_id, rating, comment, created_at)
-            VALUES(?, ?, ?, ?, NOW() )";
-            $stmt = $this->db->prepare($sql);
-            return $stmt->execute([$orderId, $userId, $rating, $comment]);
-}
-
-}
