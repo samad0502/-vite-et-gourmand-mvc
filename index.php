@@ -19,8 +19,8 @@ require_once ROOT . 'app/Helpers/functions.php';
 
 
 $db = (new Database())->getConnection();
-$hoursModel = new OpeningHours($db);
-$GLOBALS['opening_hours'] = $hoursModel->getAll();
+$hourRepo = new OpeningHoursRepository($db);
+$GLOBALS['opening_hours'] = $hourRepo->findAll();
 
 
 

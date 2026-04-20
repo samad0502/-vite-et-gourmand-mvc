@@ -4,16 +4,15 @@ require_once ROOT . 'app/Models/OpeningHours.php';
 
 class HomeController {
     public function index(){
-        $database = new Database();
-        $db = $database->getConnection();
+        $db = (new Database())->getConnection();
 
         // recup des avis via le modèle
-        $reviewModel = new Review($db);
-        $reviews = $reviewModel->getLatestPublished(3);
+        $reviewRepo = new ReviewRepository($db);
+        $reviews = $reviewRepo->getLatestPublished(3);
 
         // recup des horaires pour le footer
-        $hourModel = new OpeningHours($db);
-        $opening_hours = $hourModel->getAll();
+        $hourRepo = new OpeningHoursRepository($db);
+        $opening_hours = $hourRepo->findAll();
 
 require_once ROOT . 'app/Views/home.php';
     }
