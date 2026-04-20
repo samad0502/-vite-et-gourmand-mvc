@@ -5,6 +5,11 @@ use PHPMailer\PHPMailer\Exception;
 
 class OrderController {
 
+private function getRepo() {
+        $db = (new Database())->getConnection();
+        return new OrderRepository($db);
+    }
+
 //affichage de  la page de confirmation avant paiement
 public function checkout() {
     if(!isset($_SESSION['user']) || empty($_SESSION['cart'])){
@@ -47,34 +52,30 @@ public function checkout() {
 
 //traitement final de la commande
 public function process() {
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
- $groupOrderNumber = 'ORD-' . strtoupper(uniqid());
-    $db = (new Database())->getConnection();
-    try {
-        $db->beginTransaction();
-        
-        $orderRepo = new OrderRepository($db);
-       
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $db = (new Database())->getConnection();
+            $orderRepo = new OrderRepository($db);
+            $groupOrderNumber = 'ORD-' . strtoupper(uniqid());
 
-        foreach($_SESSION['cart'] as $item){
-           $price = !empty($_POST['final_total_price']) ? (float)$_POST['final_total_price'] : 0.00;
+            try {
+                $db->beginTransaction();
+                foreach($_SESSION['cart'] as $item) {
+                    // On récupère le prix final envoyé par le formulaire
+                    $price = (float)$_POST['final_total_price'];
 //Logique de calcul prix/promo/livraison
-            $orderData = [
-                'order_number' => $groupOrderNumber,
-                'user_id' => $_SESSION['user']['id'],
-                'menu_id' => $item['menu_id'],
-                'number_people' => $item['number_people'],
-                'equipment_ready' => $item['equipment_ready'],
-                'delivery_address' => $_POST['address'],
-                'delivery_date' => $_POST['delivery_date'],
-                'delivery_time' => $_POST['delivery_time'],
-                'total_price' => $price
-            ];
-
-           $orderRepo->createAndDecrementStock($orderData);
-        }
-
-        $db->commit();
+                    $orderRepo->createAndDecrementStock([
+                        'order_number' => $groupOrderNumber,
+                        'user_id' => $_SESSION['user']['id'],
+                        'menu_id' => $item['menu_id'],
+                        'number_people' => $item['number_people'],
+                        'equipment_ready' => $item['equipment_ready'],
+                        'delivery_address' => $_POST['address'],
+                        'delivery_date' => $_POST['delivery_date'],
+                        'delivery_time' => $_POST['delivery_time'],
+                        'total_price' => $price
+                    ]);
+                }
+                $db->commit();
 
         $userEmail = $_SESSION['user']['email'];
         $this->sendConfirmationEmail($userEmail, $groupOrderNumber, $price);
@@ -82,14 +83,11 @@ public function process() {
         unset($_SESSION['cart']);
         header('Location: index.php?page=order_success&order_ref=' . $groupOrderNumber);
         exit;
-
-        
-    
-
     } catch(Exception $e){
         $db->rollBack();
         die("Erreur : " . $e->getMessage());
     }
+}
 }
 
 public function remove() {
@@ -112,20 +110,10 @@ public function list() {
         header('Location: index.php?page=login');
         exit;
     }
-
-    $db = (new Database())->getConnection();
     //recuperation des commandes via le modele order
-    $orderRepo = new OrderRepository($db);
-    $userOrders = $orderRepo->findByUserId($_SESSION['user']['id']);
-
-    // appel au modele Order
-    $orderRepo = new OrderRepository($db);
-    $userModel = $orderRepo->findByUserId($_SESSION['user']['id']);
-
+   $orders = $this->getRepo()->findByUserId($_SESSION['user']['id']);
     
-   
-
-    require_once ROOT . 'app/Views/orders/list.php';
+   require_once ROOT . 'app/Views/orders/list.php';
 }
 
 
@@ -183,10 +171,8 @@ public function cancel() {
     }
 
     if(isset($_GET['id'])) {
-       $db = (new Database())->getConnection();
-        $orderRepo = new OrderRepository($db);
 
-        if($orderRepo->deleteOrder((int)$_GET['id'], $_SESSION['user']['id'])){
+        if($this->getRepo()->deleteOrder((int)$_GET['id'], $_SESSION['user']['id'])){
             header('Location: index.php?page=orders&success=order_cancelled');
         } else {
             header('Location: index.php?page=orders&error=cancel_failed');
@@ -194,9 +180,6 @@ public function cancel() {
         exit;
     }
 }
-
-
-
 
 
 private function sendConfirmationEmail($userEmail, $orderRef, $total) {
