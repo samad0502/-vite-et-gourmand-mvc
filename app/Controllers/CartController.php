@@ -16,8 +16,9 @@ public function add() {
             }
 
             // On récupère les infos du menu pour vérifier le seuil de promo
-            $menuModel = new Menu();
-            $menu = $menuModel->getMenuById((int)$menuId);
+            $db = (new Database())->getConnection();
+            $menuRepo = new MenuRepository($db);
+            $menu = $menuRepo->findById((int)$menuId);
 
             if ($menu) {
                 // Initialisation ou cumul de la quantité
@@ -55,12 +56,13 @@ public function add() {
     $cart = $_SESSION['cart'] ?? [];
     $cartItems = [];
     $totalGeneral = 0;
-    $menuModel = new Menu();
+     $db = (new Database())->getConnection();
+     $menuRepo = new MenuRepository($db);
 
     foreach ($cart as $index => $item) {
         // Vérification de sécurité : l'item doit être un tableau et contenir 'menu_id'
         if (is_array($item) && isset($item['menu_id'])) {
-            $menu = $menuModel->getMenuById((int)$item['menu_id']);
+            $menu = $menuRepo->findById((int)$item['menu_id']);
             
             if ($menu) {
                 $nbPers = (int)$item['number_people'];
