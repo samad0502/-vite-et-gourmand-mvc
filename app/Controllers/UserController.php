@@ -2,9 +2,16 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 class UserController {
+
+    private function getRepo() {
+        $db = (new Database())->getConnection();
+        return new UserRepository($db);
+    }
+
     public function updateProfile() {
         if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
             $userId = $_SESSION['user']['id'];
+            $repo = $this->getRepo();
 
           $data = [
                 'firstname' => htmlspecialchars($_POST['firstname']),
@@ -12,10 +19,8 @@ class UserController {
                 'phone'     => htmlspecialchars($_POST['phone']),
                 'address'   => htmlspecialchars($_POST['address'])
             ];
-            
-            $userModel =new User();
 
-            if($userModel->update($userId, $data)) {
+            if($repo->update($userId, $data)) {
                
             $_SESSION['user']['firstname'] = $data['firstname'];
                 $_SESSION['user']['lastname']  = $data['lastname'];
