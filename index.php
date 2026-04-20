@@ -9,8 +9,8 @@ $dotenv->load();
 
 define('ROOT', __DIR__ . DIRECTORY_SEPARATOR);
 require_once ROOT . 'Config/Database.php';
-require_once ROOT . 'app/Models/Menu.php';
-require_once ROOT . 'app/Models/User.php';
+require_once ROOT . 'app/Repositories/MenuRepository.php';
+require_once ROOT . 'app/Repositories/UserRepository.php';
 require_once ROOT . 'app/Repositories/OrderRepository.php';
 require_once ROOT . 'app/Models/Review.php';
 require_once ROOT . 'app/Models/Admin.php';

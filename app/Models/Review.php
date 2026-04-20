@@ -28,28 +28,10 @@ return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 }
 
-//recupere les avis en attente
-public function getPendingReviews() {
-    $query = "SELECT r.*, u.firstname
-              FROM reviews r
-              JOIN users u ON r.user_id = u.id
-              WHERE r.is_published = 0
-              ORDER BY r.created_at DESC";
-              return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
-}
 
 
-//valider ou supprimer un avis
-public function updateStatus($reviewId, $action) {
-    if($action === 'validate'){
-        $stmt = $this->db->prepare("UPDATE reviews SET is_published = 1 WHERE id = ?");
-        return $stmt->execute([$reviewId]);
-    } elseif($action === 'refuse') {
-        $stmt = $this->db->prepare("DELETE FROM reviews WHERE id = ?");
-        return $stmt->execute([$reviewId]); 
-    }
-    return false;
-}
+
+
 
 
 public function createReview($orderId, $userId, $rating, $comment) {

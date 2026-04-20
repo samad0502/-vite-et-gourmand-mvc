@@ -9,15 +9,7 @@ class Admin {
         $this->db = $database;
     }
 
-    //gestion des employés
-    public function getAllEmployees() {
-        $query = "SELECT u.id, u.firstname, u.lastname, u.email, u.is_active
-                  FROM users u
-                  JOIN roles r ON u.role_id = r.id
-                  WHERE r.name = 'employee'";
-         
-     return $this->db->query($query)->fetchALL(PDO::FETCH_ASSOC);    
-    }
+  
 
 
     // basculer le status de l'utilisateur
@@ -28,21 +20,7 @@ class Admin {
 
 
 
-    public function addEmployee($data) {
-        $password = password_hash($data['password'], PASSWORD_DEFAULT);
-
-        //preparation de la requete avec tous les champs nécessaires pour éviter les érreurs
-        $sql = "INSERT INTO users (firstname, lastname, email, password, role_id, is_active, address, city, phone, zip_code)
-         VALUES (?, ?, ?, ?, 2, 1, '', '', '', '')";
-
-         $stmt = $this->db->prepare($sql);
-         return $stmt->execute([
-            $data['firstname'],
-            $data['lastname'],
-            $data['email'],
-            $password
-         ]);
-    }
+    
 
     // recuperation des commande en cours
     public function getPendingOrders() {
