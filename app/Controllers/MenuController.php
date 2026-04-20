@@ -1,5 +1,5 @@
 <?php
-require_once ROOT . 'app/Models/Menu.php';
+require_once ROOT . 'app/Repositories/MenuRepository.php';
 
 class MenuController {
 
@@ -15,15 +15,29 @@ private function getRepo() {
         $themes = $menuRepo->getUniqueAttributes('theme');
         $diets = $menuRepo->getUniqueAttributes('diet');
 
-        // Préparation des images pour l'affichage (Logique de vue)
-        foreach ($menus as &$menu) {
-            $images = explode(',', $menu['image'] ?? '');
-            $menu['main_image'] = trim($images[0]);
-        }
-
         require_once ROOT . 'app/Views/menus.php';
 
         }
+
+        public function apiMenus() {
+    $repo = $this->getRepo();
+    
+    if (!empty($_GET['theme']) || !empty($_GET['diet']) || !empty($_GET['priceMax'])) {
+        $menus = $repo->findWithFilters($_GET);
+    } else {
+        $menus = $repo->findAll();
+    }
+
+    // Préparation des images pour l'affichage (Logique de vue)
+    foreach ($menus as &$menu) {
+        $images = explode(',', $menu['image'] ?? '');
+        $menu['main_image'] = !empty($images[0]) ? trim($images[0]) : 'default.jpg';
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($menus);
+    exit;
+}
 
     public function detail() {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

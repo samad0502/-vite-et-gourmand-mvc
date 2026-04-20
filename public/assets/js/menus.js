@@ -22,7 +22,7 @@ function renderMenus(menus) {
         container.innerHTML += `
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm border-0">
-                    <img src="/public/assets/img/menus/${menu.main_image}" 
+                    <img src="public/assets/img/menus/${menu.main_image}" 
                          class="card-img-top" 
                          alt="${menu.title}">
                     

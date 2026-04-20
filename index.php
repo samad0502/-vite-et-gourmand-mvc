@@ -45,9 +45,9 @@ switch ($page){
             break;
 
         case 'api_menus' :
-            require_once ROOT . 'app/Controllers/ApiController.php';
-            $api = new ApiController();
-            $api->getFiltredMenus();
+            require_once ROOT . 'app/Controllers/MenuController.php';
+            $controller = new MenuController();
+            $controller->apiMenus();
             break;    
 
         case 'menu_detail' :
