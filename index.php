@@ -12,9 +12,9 @@ require_once ROOT . 'Config/Database.php';
 require_once ROOT . 'app/Repositories/MenuRepository.php';
 require_once ROOT . 'app/Repositories/UserRepository.php';
 require_once ROOT . 'app/Repositories/OrderRepository.php';
-require_once ROOT . 'app/Models/Review.php';
+require_once ROOT . 'app/Repositories/ReviewRepository.php';
 require_once ROOT . 'app/Repositories/AdminRepository.php';
-require_once ROOT . 'app/Models/OpeningHours.php';
+require_once ROOT . 'app/Repositories/OpeningHoursRepository.php';
 require_once ROOT . 'app/Helpers/functions.php';
 
 

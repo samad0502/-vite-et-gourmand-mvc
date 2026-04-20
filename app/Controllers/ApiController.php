@@ -1,11 +1,10 @@
 <?php
-require_once ROOT . 'app/Models/Menu.php';
+require_once ROOT . 'app/Repositories/MenuRepository.php';
 
 class ApiController {
     public function getFiltredMenus() {
-        $database = new Database();
-        $db = $database->getConnection();
-        $menuModel = new Menu($db);
+        $db = (new Database())->getConnection();
+        $menuRepo = new MenuRepository($db);
 
         //recup des filtres envoyés par le JS (GET)
         $filters = [
@@ -16,7 +15,7 @@ class ApiController {
             'diet' => $_GET['diet'] ?? null
         ];
 
-        $result = $menuModel->getFiltredMenus($filters);
+        $result = $menuRepo->findWithFilters($filters);
 
         //reponse en json
         header('Content-type: application/json');

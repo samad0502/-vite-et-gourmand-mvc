@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../Config/Database.php';
 class MenuRepository {
     private $db;
 
@@ -37,10 +38,11 @@ class MenuRepository {
                 WHERE 1=1";
         $params = [];
 
-        if (!empty($filters['priceMin'])) { $sql .= " AND m.price >= ?"; $params[] = $filters['priceMin']; }
-        if (!empty($filters['priceMax'])) { $sql .= " AND m.price <= ?"; $params[] = $filters['priceMax']; }
-        if (!empty($filters['theme']))    { $sql .= " AND t.name = ?"; $params[] = $filters['theme']; }
-        if (!empty($filters['diet']))     { $sql .= " AND d.name = ?"; $params[] = $filters['diet']; }
+        if (!empty($filters['priceMin']))      { $sql .= " AND m.price >= ?"; $params[] = $filters['priceMin']; }
+        if (!empty($filters['priceMax']))      { $sql .= " AND m.price <= ?"; $params[] = $filters['priceMax']; }
+        if (!empty($filters['theme']))         { $sql .= " AND t.name = ?"; $params[] = $filters['theme']; }
+        if (!empty($filters['diet']))          { $sql .= " AND d.name = ?"; $params[] = $filters['diet']; }
+        if (!empty($filters['minPeople']))     { $sql .= " AND m.minPeople >= ?"; $params[] = $filters['diet']; }
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);

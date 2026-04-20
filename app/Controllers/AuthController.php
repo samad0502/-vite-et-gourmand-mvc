@@ -15,8 +15,9 @@ public function login() {
         $email = trim($_POST['email']);
         $password = $_POST['password'];
 
-        $userModel = new User();
-        $user = $userModel->login($email, $password);
+        $db = (new Database())->getConnection();
+        $userRepo = new UserRepository($db);
+        $user = $userRepo->login($email, $password);
 
         if($user) {
             $_SESSION['user'] =[
@@ -78,7 +79,8 @@ public function showRegister() {
 
 public function register() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $userModel = new User();
+        $db = (new Database())->getConnection();
+        $userRepo = new UserRepository($db);
         $errors = [];
 
         // validation regex mot de passe
@@ -97,7 +99,7 @@ public function register() {
 
     if (empty($errors)) {
         try {
-        if ($userModel->register($_POST)) {
+        if ($userRepo->register($_POST)) {
 
         // ENVOI DU MAIL 
                     $this->sendWelcomeEmail($_POST['email'], $_POST['firstname']);
