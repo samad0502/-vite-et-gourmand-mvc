@@ -18,8 +18,8 @@
 
             <section>
                 <h2>1. Éditeur du site</h2>
-                <p><strong>Responsable de publication :</strong> [Ton Prénom et Nom]</p>
-                <p><strong>Contact :</strong> <?php echo htmlspecialchars($_ENV['MAIL_USER']); ?></p>
+                <p><strong>Responsable de publication :</strong>  JOSE ET JULIE </p>
+                <p><strong>Contact :</strong> contact@vite-gourmand.fr </p>
             </section>
 
             <section>

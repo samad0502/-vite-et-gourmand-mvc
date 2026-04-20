@@ -30,12 +30,12 @@
                 <h2>Article 3 : Commande</h2>
                 <p>La confirmation de la commande entraîne acceptation des présentes CGV, la reconnaissance d'en avoir parfaite connaissance et la renonciation à se prévaloir de ses propres conditions d'achat. Un mail de confirmation récapitulant la commande sera envoyé via notre système de notification.</p>
                 <p>Toute personne non authentifié ne pourra éffectuer de commande que après avoir crée un compte </p>
-                <p>L’annulation de commande est possible, tant que la commande est au statut "en attente", la modification est également possible tout est modifiable, sauf le choix du menu.Attention une fois la commande passée au statut "accepté", aucune annulation ni remboursement seront possibles.</p>
+                <p>L’annulation de commande est possible, tant que la commande est au statut "en attente", la modification est également possible tout est modifiable, sauf le choix du menu.Attention une fois la commande passée au statut "accepté", aucune annulation ni remboursements seront possibles.</p>
             </section>
 
             <section>
                 <h2>Article 4 : Prix et Paiement</h2>
-                <p>Les prix sont indiqués en Euros (€) TTC. Le paiement est exigible immédiatement au moment de la commande [ou lors du retrait selon votre configuration].</p>
+                <p>Les prix sont indiqués en Euros (€) TTC. Le paiement est exigible immédiatement au moment de la commande .</p>
             </section>
 
             <section>

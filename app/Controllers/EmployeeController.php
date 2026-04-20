@@ -1,7 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use App\Models\Stat;
+use App\Repositories\StatRepository;
 class EmployeeController {
 
 public function dashboard() {
@@ -10,27 +10,29 @@ public function dashboard() {
         exit;
     }
     
-  
-    $db = (new Database())->getConnection();
     //gestion des commandes
-    $orderModel = new Order($db);
+    $db = (new Database())->getConnection();
+    $orderRepo = new OrderRepository($db);
     $statusFilter = $_GET['status'] ?? '';
     $searchClient = $_GET['client'] ?? '';
-    $orders = $orderModel->getOrdersForEmployee($statusFilter, $searchClient);
+    $orders = $orderRepo->getOrdersForEmployee($statusFilter, $searchClient);
 
 
     //gestion des menus(onglets Menu et Plats)
-    $menuModel = new Menu($db);
-    $menus = $menuModel->findAll();
+    $db = (new Database())->getConnection();
+    $menuRepo = new MenuRepository($db);
+    $menus = $menuRepo->findAll();
 
     //gestion des horaires (onglet Horaires)
-    $hourModel = new OpeningHours($db);
-    $opening_hours = $hourModel->getAll();
+    $db = (new Database())->getConnection();
+    $hourRepo = new OpeningHoursRepository($db);
+    $opening_hours = $hourRepo->findAll();
 
 
     //gestion des avis (onglet Avis)
-    $reviewModel = new Review($db);
-    $reviews = $reviewModel->getPendingReviews();
+    $db = (new Database())->getConnection();
+    $reviewRepo = new ReviewRepository($db);
+    $reviews = $reviewRepo->getPending();
 
     
   
@@ -43,16 +45,18 @@ public function updateOrderStatus() {
         $orderId = (int)$_POST['order_id'];
         $newStatus = $_POST['new_status'];
 
-        $orderModel = new Order();
-        if($orderModel->updateStatus($orderId, $newStatus)) {
+        $db = (new Database())->getConnection();
+        $orderRepo = new OrderRepository($db);
+        if($orderRepo->updateStatus($orderId, $newStatus)) {
 
             
         if ($newStatus === 'finished') {
-        $orderInfo = $orderModel->getOrderDetailForNotification($orderId);
+        $orderInfo = $orderRepo->getDetailsForNotification($orderId);
     
         if ($orderInfo) {
-        $statModel = new Stat(); 
-        $statModel->logOrder($orderInfo);
+
+        $statRepo = new StatRepository();
+        $statRepo->logOrder($orderInfo);
 
         $this->notifyOrderFinished($orderId);
     }
@@ -73,12 +77,13 @@ public function cancelOrder(){
         $reason = htmlspecialchars($_POST['reason']);
         $contactMode = $_POST['contact_method'];
 
-        $orderModel = new Order();
+        $db = (new Database())->getConnection();
+        $orderRepo = new OrderRepository($db);
 
-        if($orderModel->cancelOrders($orderId, $reason, $contactMode)) {
+        if($orderRepo->cancelOrders($orderId, $reason, $contactMode)) {
 
-        $statModel = new Stat();
-        $statModel->logCancellation($orderId, $reason, $contactMode);
+        $statRepo = new StatRepository();
+        $statRepo->logCancellation($orderId, $reason, $contactMode);
         
         //envoi du mail que si le mode de contact choisi est 'mail'
         if($contactMode === 'Email'){
@@ -100,10 +105,10 @@ public function moderateReview() {
         $action = $_POST['action'];
 
         //onutilise la connexion existante pour le modele
-        $database = (new Database())->getConnection();
-        $reviewModel = new Review($database);
+        $db = (new Database())->getConnection();
+        $reviewRepo = new ReviewRepository($db);
 
-        if($reviewModel->updateStatus($reviewId, $action)) {
+        if($reviewRepo->updateStatus($reviewId, $action)) {
             header('Location: index.php?page=employee_dashboard&succes=review_updated#reviews-pane');
 
         } else {
@@ -125,14 +130,14 @@ $userRole = $_SESSION['user']['role'] ?? '';
 
    if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = (new Database())->getConnection();
-    $hourModel = new OpeningHours($db);
+    $hourRepo = new OpeningHoursRepository($db);
 
     foreach($_POST['open'] as $id => $openTime) {
         $closeTime = $_POST['close'][$id];
         $isClosed = isset($_POST['closed'][$id]) ? 1 : 0;
 
        
-        $hourModel->update($id, $openTime, $closeTime, $isClosed);
+        $hourRepo->update($id, $openTime, $closeTime, $isClosed);
     }
 
    }
@@ -145,23 +150,24 @@ exit;
 
 public function manageReviews() {
     $db = (new Database())->getConnection();
-    $reviewModel = new Review($db);
+    $reviewRepo = new ReviewRepository($db);
 
     if(isset($_GET['action']) && isset($_GET['id'])) {
-        $reviewModel->updateStatus($_GET['id'], $_GET['action']);
+        $reviewRepo->updateStatus($_GET['id'], $_GET['action']);
         header('Location: index.php?page=manage_reviews');
         exit;
     }
 
-    $pendingreviews = $reviewModel->getPendingReviews();
+    $pendingreviews = $reviewRepo->getPending();
     require_once ROOT . 'app/Views/employee/reviews.php';
 }
 
 
 
 public function notifyOrderFinished($orderId) {
-    $orderModel = new Order();
-    $data = $orderModel->getOrderDetailForNotification($orderId); 
+    $db = (new Database())->getConnection();
+    $orderRepo = new OrderRepository($db);
+    $data = $orderRepo->getDetailsForNotification($orderId); 
     
     if($data) {
         $mail = new PHPMailer(true);
@@ -209,8 +215,9 @@ public function notifyOrderFinished($orderId) {
 
     // Fonction dédiée à l'envoi du mail d'annulation
 private function sendCancellationEmail($orderId, $reason) {
-    $orderModel = new Order();
-    $data = $orderModel->getOrderDetailForNotification($orderId);
+    $db = (new Database())->getConnection();
+    $orderRepo = new OrderRepository($db);
+    $data = $orderRepo->getDetailsForNotification($orderId);
 
     if (!$data) return;
 
