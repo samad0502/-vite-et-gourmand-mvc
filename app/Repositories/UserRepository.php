@@ -15,7 +15,8 @@ class UserRepository {
 
     $stmt = $this->db->prepare($sql);
     $stmt->execute([$id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+    return $stmt->fetch();
     }
 
 
@@ -27,9 +28,10 @@ class UserRepository {
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['email' => $email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+        $user = $stmt->fetch();
 
-        if($user && password_verify($password, $user['password'])){
+        if($user && password_verify($password, $user->getPassword())){
             return $user;
         }
         return false;
