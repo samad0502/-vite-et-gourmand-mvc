@@ -1,6 +1,6 @@
 <?php
 
-class Menu {
+class Menu implements JsonSerializable {
     private $id;
     private $title;
     private $price;

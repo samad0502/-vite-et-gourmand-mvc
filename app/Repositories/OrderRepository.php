@@ -36,7 +36,7 @@ class OrderRepository {
                 ORDER BY o.order_date DESC";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$userId]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_CLASS, 'Order');
         }
 
          public function findByIdAndUser($orderId, $userId) {
@@ -123,7 +123,7 @@ class OrderRepository {
 
         $stmt = $this->db->prepare($query);
         $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'Order');
     }
    
 }
