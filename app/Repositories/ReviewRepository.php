@@ -23,7 +23,7 @@ class ReviewRepository {
               JOIN users u ON r.user_id = u.id
               WHERE r.is_published = 0
               ORDER BY r.created_at DESC";
-              return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+              return $this->db->query($query)->fetchAll(PDO::FETCH_CLASS, 'Review');
 }
 
 
@@ -56,7 +56,7 @@ $stmt = $this->db->prepare($query);
 $stmt->bindValue(':limit' , (int)$limit, PDO::PARAM_INT);
 $stmt->execute();
 
-return $stmt->fetchAll(PDO::FETCH_ASSOC);
+return $stmt->fetchAll(PDO::FETCH_CLASS, 'Review');
 
 }
 
