@@ -14,7 +14,9 @@ class MenuRepository {
                 LEFT JOIN themes t ON m.theme_id = t.id
                 LEFT JOIN diets d ON m.diet_id = d.id
                 ORDER BY m.created_at DESC";
-        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+                $stmt = $this->db->query($sql);
+                return $stmt->fetchAll(PDO::FETCH_CLASS, 'Menu');
     }
 
     // Récupérer un menu par son ID
@@ -26,7 +28,8 @@ class MenuRepository {
                 WHERE m.id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Menu');
+        return $stmt->fetch();
     }
 
     // La logique des filtres des menus
@@ -46,7 +49,8 @@ class MenuRepository {
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'Menu');
+       
     }
 
     // Récupérer les valeurs uniques pour les filtres (thèmes/régimes)

@@ -69,13 +69,13 @@ require_once ROOT . 'includes/navbar.php';
             <?php foreach ($menus as $menu): ?>
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
-                        <img src="assets/img/<?= htmlspecialchars($menu['main_image']) ?>" 
+                        <img src="assets/img/<?= htmlspecialchars($menu->getMainImage()) ?>" 
                              class="card-img-top" 
                              alt="<?= htmlspecialchars($menu['title']) ?>"
                              style="height: 200px; object-fit: cover;">
                         
                         <div class="card-body">
-                            <h5 class="card-title"><?= htmlspecialchars($menu['title']) ?></h5>
+                            <h5 class="card-title"><?= htmlspecialchars($menu->getTitle()) ?></h5>
                             <p class="card-text text-muted small">
                               <?= (strlen($menu['description']) > 80) ? htmlspecialchars(substr($menu['description'], 0, 80)) . '...' : htmlspecialchars($menu['description']) ?>
                             </p>
