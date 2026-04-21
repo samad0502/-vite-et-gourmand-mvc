@@ -134,11 +134,11 @@ require_once ROOT . 'includes/navbar.php';
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
                         <div class="text-warning mb-2">
-                            <?= str_repeat('★', $rev['rating']) ?><?= str_repeat('☆', 5 - $rev['rating']) ?>
+                            <?= str_repeat('★', $rev->getRating()) ?><?= str_repeat('☆', 5 - $rev->getRating()) ?>
                         </div>
-                        <p class="card-text italic">"<?= htmlspecialchars($rev['comment']) ?>"</p>
-                        <p class="small text-muted mb-0"><strong><?= htmlspecialchars($rev['firstname']) ?></strong></p>
-                        <small class="text-info">Menu : <?= htmlspecialchars($rev['menu_title']) ?></small>
+                        <p class="card-text italic">"<?= htmlspecialchars($rev->getRating()) ?>"</p>
+                        <p class="small text-muted mb-0"><strong><?= htmlspecialchars($rev->getAuthorName() ) ?></strong></p>
+                        <small class="text-info">Menu : <?= htmlspecialchars($rev->getMenuTitle()) ?></small>
                     </div>
                 </div>
             </div>

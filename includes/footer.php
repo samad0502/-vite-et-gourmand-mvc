@@ -12,11 +12,11 @@ $hours_to_display = $opening_hours ?? $GLOBALS['opening_hours'] ?? [];
     <?php if (!empty($hours_to_display)): ?>
         <?php foreach ($hours_to_display as $hour): ?>
             <span>
-                <strong><?= htmlspecialchars($hour['day_name']) ?> :</strong>
-                <?php if ($hour['is_closed']): ?>
+                <strong><?= htmlspecialchars($hour->getDayName()) ?> :</strong>
+                <?php if ($hour->isClosed()): ?>
                     <span class="text-danger">Fermé</span>
                 <?php else: ?>
-                    <?= date('H\hi', strtotime($hour['open_time'])) ?> - <?= date('H\hi', strtotime($hour['close_time'])) ?>
+                    <?= date('H\hi', strtotime($hour->getOpenTime())) ?> - <?= date('H\hi', strtotime($hour->getCloseTime())) ?>
                 <?php endif; ?>
             </span>
         <?php endforeach; ?>
