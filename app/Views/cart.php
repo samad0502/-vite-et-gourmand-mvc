@@ -23,7 +23,7 @@ require_once ROOT . 'includes/navbar.php';
                         <?php foreach ($cartItems as $item): ?>
                         <tr>
                             <td>
-                                <strong><?= htmlspecialchars($item['menu']['title']) ?></strong><br>
+                                <strong><?= htmlspecialchars($item['menu']->getTitle()) ?></strong><br>
                                 <small class="text-muted"><?= $item['equipment'] ? 'Avec matériel' : 'Livraison seule' ?></small>
                             </td>
                             <td>
@@ -31,7 +31,7 @@ require_once ROOT . 'includes/navbar.php';
                                     <input type="hidden" name="index" value="<?= $item['index'] ?>">
                                     <input type="number" name="quantity" class="form-control" 
                                            value="<?= $item['quantity'] ?>" 
-                                           min="<?= $item['menu']['min_people'] ?>" 
+                                           min="<?= $item['menu']->getMinPeople() ?>" 
                                            style="width: 80px;" onchange="this.form.submit()">
                                 </form>
                             </td>

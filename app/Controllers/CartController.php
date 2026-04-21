@@ -30,7 +30,7 @@ public function add() {
 
                
                 // Promo si convives >= (minimum + 5)
-                $isPromo = ($totalQty >= ($menu['min_people'] + 5));
+                $isPromo = ($totalQty >= ($menu->getMinPeople() + 5));
 
                 // Stockage en session
                 $_SESSION['cart'][$menuId] = [
@@ -66,11 +66,11 @@ public function add() {
             
             if ($menu) {
                 $nbPers = (int)$item['number_people'];
-                $price = (float)$menu['price'];
+                $price = (float)$menu->getPrice();
                 $subtotal = $price * $nbPers;
 
          //calcul du sous total avec la promo si +5 convives
-                $isPromo = ($nbPers >= ($menu['min_people'] + 5));
+                $isPromo = ($nbPers >= ($menu->getMinPeople()+ 5));
                 if ($isPromo) $subtotal *= 0.9;
 
                 $totalGeneral += $subtotal;

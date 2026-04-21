@@ -34,15 +34,15 @@ public function checkout() {
         $menuInfo = $menuRepo->findById($item['menu_id']);
 
         //calcul de la promo 
-        $isPromo = ($item['number_people'] >= ($menuInfo['min_people'] + 5));
-        $prixLigne = $menuInfo['price'] * $item['number_people'];
+        $isPromo = ($item['number_people'] >= ($menuInfo->getMinPeople() + 5));
+        $prixLigne = $menuInfo->getPrice() * $item['number_people'];
         if($isPromo) $prixLigne *= 0.9;
 
         $totalMenus += $prixLigne;
 
         $cartDetails[] = [
-           'title' => $menuInfo['title'],
-            'price_unit' => $menuInfo['price'],
+           'title' => $menuInfo->getTitle(),
+            'price_unit' => $menuInfo->getPrice(),
             'total_line' => $prixLigne,
             'nb_pers' => $item['number_people'],
             'is_promo' => $isPromo 
