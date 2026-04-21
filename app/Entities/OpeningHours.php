@@ -1,6 +1,6 @@
 <?php
 
-class OpeningHour {
+class OpeningHours {
     private $id;
     private $day_name;
     private $open_time;

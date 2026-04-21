@@ -69,23 +69,23 @@ require_once ROOT . 'includes/navbar.php';
             <?php foreach ($menus as $menu): ?>
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
-                        <img src="assets/img/<?= htmlspecialchars($menu->getMainImage()) ?>" 
+                        <img src="/public/assets/img/menus/<?= htmlspecialchars($menu->getMainImage()) ?>" 
                              class="card-img-top" 
-                             alt="<?= htmlspecialchars($menu['title']) ?>"
+                             alt="<?= htmlspecialchars($menu->getTitle()) ?>"
                              style="height: 200px; object-fit: cover;">
                         
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($menu->getTitle()) ?></h5>
                             <p class="card-text text-muted small">
-                              <?= (strlen($menu['description']) > 80) ? htmlspecialchars(substr($menu['description'], 0, 80)) . '...' : htmlspecialchars($menu['description']) ?>
+                              <?= (strlen($menu->getDescription()) > 80) ? htmlspecialchars(substr($menu->getDescription(), 0, 80)) . '...' : htmlspecialchars($menu->getDescription()) ?>
                             </p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-light text-dark border"><?= htmlspecialchars($menu['theme_name']) ?></span>
-                                <span class="fw-bold text-primary"><?= number_format($menu['price'], 2) ?> €</span>
+                                <span class="badge bg-light text-dark border"><?= htmlspecialchars($menu->getThemeName()) ?></span>
+                                <span class="fw-bold text-primary"><?= number_format($menu->getPrice(), 2) ?> €</span>
                             </div>
                         </div>
                         <div class="card-footer bg-white border-top-0">
-                            <a href="index.php?page=menu_detail&id=<?= $menu['id'] ?>" class="btn btn-outline-dark btn-sm w-100">Voir détails</a>
+                            <a href="index.php?page=menu_detail&id=<?= $menu->getId() ?>" class="btn btn-info btn-sm w-100">Voir détails</a>
                         </div>
                     </div>
                 </div>

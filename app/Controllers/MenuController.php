@@ -26,13 +26,7 @@ private function getRepo() {
         $menus = $repo->findWithFilters($_GET);
     } else {
         $menus = $repo->findAll();
-    }
-
-    // Préparation des images pour l'affichage (Logique de vue)
-    foreach ($menus as &$menu) {
-        $images = explode(',', $menu['image'] ?? '');
-        $menu['main_image'] = !empty($images[0]) ? trim($images[0]) : 'default.jpg';
-    }
+    }  
 
     header('Content-Type: application/json');
     echo json_encode($menus);

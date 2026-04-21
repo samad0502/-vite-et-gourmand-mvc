@@ -13,7 +13,7 @@ class OpeningHoursRepository {
     public function findAll() {
         $query = "SELECT * FROM opening_hours ORDER BY id ASC";
         $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'OpeningHour');
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'OpeningHours');
     }
 
 

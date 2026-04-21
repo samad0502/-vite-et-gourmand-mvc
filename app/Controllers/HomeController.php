@@ -1,6 +1,6 @@
 <?php
-require_once ROOT . 'app/Models/Review.php';
-require_once ROOT . 'app/Models/OpeningHours.php';
+require_once ROOT . 'app/Repositories/ReviewRepository.php';
+require_once ROOT . 'app/Repositories/OpeningHoursRepository.php';
 
 class HomeController {
     public function index(){
