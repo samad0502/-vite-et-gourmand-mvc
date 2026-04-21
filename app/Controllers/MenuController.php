@@ -133,15 +133,15 @@ private function getRepo() {
             $oldMenu = $menuRepo->findById($id);
 
             // gestion de l'image , si elle est chargée on l'utilise sinon on garde l'ancienne
-            $imageName = $oldMenu['image'];
+            $imageName = $oldMenu->getImage();
             if(isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
                 $imageName = $this->handleUpload();
             }
 
             $data = [
-              'title'       => $_POST['title'],
+            'title'       => $_POST['title'],
             'price'       => $_POST['price'],
-            'min_people'  => $_POST['min_people'] ?? $oldMenu['min_people'],
+            'min_people'  => $_POST['min_people'] ?? $oldMenu->getMinPeople(),
             'description' => $_POST['description'],
             'image'       => $imageName  
             ];

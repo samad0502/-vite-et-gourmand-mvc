@@ -21,11 +21,11 @@ public function login() {
 
         if($user) {
             $_SESSION['user'] =[
-                'id' => $user['id'],
-                'firstname' => $user['firstname'],
-                'lastname'  => $user['lastname'],
-                'email'     => $user['email'],
-                'role'      => $user['role_name']
+                'id' => $user->getId(),
+                'firstname' => $user->getFirstname(),
+                'lastname'  => $user->getLastname(),
+                'email'     => $user->getEmail(),
+                'role'      => $user->getRoleName()
             ];
 
 // ajout pour ajax (Si c'est la modale qui appelle)
@@ -43,9 +43,10 @@ public function login() {
             }
 
             // redirection selon le role
-            if($user['role-name'] === 'admin') {
+            $role = $user->getRoleName();
+            if($role === 'admin') {
                 header('Location: index.php?page=admin_dashboard');
-            } elseif ($user['role_name'] === 'employee') {
+            } elseif ($role === 'employee') {
                 header('Location: index.php?page=employee_dashboard');
             } else {
                 header('Location: index.php?page=menus');
