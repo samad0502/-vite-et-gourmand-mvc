@@ -12,6 +12,9 @@ class Menu implements JsonSerializable {
     private $diet_id;
     private $theme_name;
     private $diet_name;
+    private $starter;
+    private $main_course;
+    private $dessert;
 
   
     public function getId() { return $this->id; }
@@ -23,13 +26,25 @@ class Menu implements JsonSerializable {
     public function getRemainingQuantity() { return $this->remaining_quantity; }
     public function getThemeName() { return $this->theme_name ?? 'Classique'; }
     public function getDietName() { return $this->diet_name ?? 'Standard'; }
+    public function getStarter() { return $this->starter; }
+    public function getMainCourse() { return $this->main_course; }
+    public function getDessert() { return $this->dessert; }
 
     // on extrait la première image
     public function getMainImage() {
-        if (empty($this->image)) return 'default.jpg';
+        if (empty($this->image))return 'default.jpg';
         $images = explode(',', $this->image);
         return trim($images[0]);
+        
     }
+
+    public function getAllImages() {
+    if (empty($this->image)) {
+        return ['default.jpg'];
+    }
+    // transforme "image1.jpg,image2.jpg" en ["image1.jpg", "image2.jpg"]
+    return array_map('trim', explode(',', $this->image));
+}
 
    
     public function setId($id) { $this->id = (int)$id; }
@@ -41,6 +56,11 @@ class Menu implements JsonSerializable {
     public function setRemainingQuantity($qty) { $this->remaining_quantity = (int)$qty; }
     public function setThemeName($name) { $this->theme_name = $name; }
     public function setDietName($name) { $this->diet_name = $name; }
+    public function setStarter($starter) { return $this->starter = $starter; }
+    public function setMainCourse( $main_course) { return $this->main_course = $main_course; }
+    public function setDessert($dessert) { return $this->dessert = $dessert; }
+
+    
 
     /**
      * Permet à json_encode() de voir les propriétés privées

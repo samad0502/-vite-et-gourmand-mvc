@@ -45,9 +45,6 @@ private function getRepo() {
             exit;
         }
 
-        // Préparation des images pour le carousel
-        $menu['all_images'] = !empty($menu['image']) ? explode(',', $menu['image']) : [];
-
      // on definit si l'utilisateur est connecté pour les bouton panier
      $isLogged = isset($_SESSION['user']);
 

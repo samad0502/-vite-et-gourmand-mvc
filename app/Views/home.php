@@ -136,7 +136,7 @@ require_once ROOT . 'includes/navbar.php';
                         <div class="text-warning mb-2">
                             <?= str_repeat('★', $rev->getRating()) ?><?= str_repeat('☆', 5 - $rev->getRating()) ?>
                         </div>
-                        <p class="card-text italic">"<?= htmlspecialchars($rev->getRating()) ?>"</p>
+                        <p class="card-text italic">"<?= htmlspecialchars($rev->getComment()) ?>"</p>
                         <p class="small text-muted mb-0"><strong><?= htmlspecialchars($rev->getAuthorName() ) ?></strong></p>
                         <small class="text-info">Menu : <?= htmlspecialchars($rev->getMenuTitle()) ?></small>
                     </div>
