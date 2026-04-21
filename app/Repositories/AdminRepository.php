@@ -16,7 +16,7 @@ class AdminRepository {
                 JOIN menus m ON o.menu_id = m.id 
                 WHERE o.order_status NOT IN ('finished', 'cancelled')";
 
-                return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+                return $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS, 'Order');
 
     }
 
@@ -43,7 +43,7 @@ class AdminRepository {
                   JOIN roles r ON u.role_id = r.id
                   WHERE r.name = 'employee'";
          
-     return $this->db->query($query)->fetchALL(PDO::FETCH_ASSOC);    
+     return $this->db->query($query)->fetchALL(PDO::FETCH_CLASS, 'Employee');    
 
     }
 

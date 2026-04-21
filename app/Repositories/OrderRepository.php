@@ -46,7 +46,8 @@ class OrderRepository {
                 WHERE o.id = ? AND o.user_id = ?";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([$orderId, $userId]);
-                return $stmt->fetch(PDO::FETCH_ASSOC);
+                $stmt->setFetchMode(PDO::FETCH_CLASS, 'Order');
+                return $stmt->fetch();
     }
 
       public function updateOrder($orderId, $data) {
@@ -91,7 +92,8 @@ class OrderRepository {
                     WHERE o.id = ?";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$orderId]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Order');
+            return $stmt->fetch();
     }
 
 
