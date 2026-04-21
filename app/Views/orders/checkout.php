@@ -16,26 +16,26 @@ require_once ROOT . 'includes/navbar.php';
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Client</label>
-                                <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($u['firstname'] . ' ' . $u['lastname']) ?>" readonly>
+                                <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($u->getFirstname() . ' ' . $u->getLastname()) ?>" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Email</label>
-                                <input type="email" class="form-control bg-light" value="<?= htmlspecialchars($u['email']) ?>" readonly>
+                                <input type="email" class="form-control bg-light" value="<?= htmlspecialchars($u->getEmail()) ?>" readonly>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Téléphone</label>
-                            <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($u['phone']) ?>" readonly>
+                            <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($u->getPhone()) ?>" readonly>
                         </div>
 
                         <hr>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Lieu de la prestation (Adresse complète)</label>
-                            <textarea name="address" class="form-control mb-2" required><?= htmlspecialchars($u['address']) ?></textarea>
+                            <textarea name="address" class="form-control mb-2" required><?= htmlspecialchars($u->getAddress()) ?></textarea>
                             <div class="row">
                                 <div class="col-md-8">
-                                    <input type="text" id="cityInput" name="city" class="form-control" placeholder="Ville" value="<?= htmlspecialchars($u['city']) ?>" required>
+                                    <input type="text" id="cityInput" name="city" class="form-control" placeholder="Ville" value="<?= htmlspecialchars($u->getCity()) ?>" required>
                                 </div>
                                 <div class="col-md-4">
                                     <input type="number" name="distance" id="distanceInput" class="form-control" placeholder="KM de Bordeaux" value="0">

@@ -26,6 +26,7 @@ class Order implements JsonSerializable {
     public function getNumberPeople() { return $this->number_people; }
     public function getTotalPrice() { return $this->total_price; }
     public function getDeliveryDate() { return $this->delivery_date; }
+    public function getOrderDate() { return $this->order_date; }
     public function getMenuTitle() { return $this->menu_title; }
 
     // libellé du statut en français

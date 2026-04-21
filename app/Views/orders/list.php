@@ -25,29 +25,29 @@
     <tbody>
         <?php foreach ($userOrders as $order): ?>
             <tr>
-                <td class="fw-bold text-primary"><?= htmlspecialchars($order['order_number']) ?></td>
-                <td><?= date('d/m/Y H:i', strtotime($order['order_date'])) ?></td>
-                <td><?= htmlspecialchars($order['menu_title']) ?></td>
-                <td><?= $order['number_people'] ?></td>
-                <td class="fw-bold"><?= number_format($order['total_price'], 2) ?> €</td>
+                <td class="fw-bold text-primary"><?= htmlspecialchars($order->getOrderNumber()) ?></td>
+                <td><?= date('d/m/Y H:i', strtotime($order->getOrderDate())) ?></td>
+                <td><?= htmlspecialchars($order->getMenuTitle()) ?></td>
+                <td><?= $order->getNumberPeople() ?></td>
+                <td class="fw-bold"><?= number_format($order->getTotalPrice(), 2) ?> €</td>
                 <td>
-                    <span class="badge bg-<?= $order['order_status'] === 'pending' ? 'warning' : 'success' ?>">
-                        <?= $order['order_status'] ?>
+                    <span class="badge bg-<?= $order->getStatus() === 'pending' ? 'warning' : 'success' ?>">
+                        <?= $order->getStatus()  ?>
                     </span>
                 </td>
                 <td>
-                    <?php if ($order['order_status'] === 'finished'): ?>
-                       <a href="index.php?page=add_review&id=<?= $order['id'] ?>" class="btn btn-sm btn-info">
+                    <?php if ($order->getStatus() === 'finished'): ?>
+                       <a href="index.php?page=add_review&id=<?= $order->getId() ?>" class="btn btn-sm btn-info">
                             Laisser un avis
                        </a>
                    <?php endif; ?>
 
-                    <?php if ($order['order_status'] === 'pending'): ?>
-                        <a href="index.php?page=edit_order&id=<?= $order['id'] ?>" class="btn btn-sm btn-outline-warning">
+                    <?php if ($order->getStatus()  === 'pending'): ?>
+                        <a href="index.php?page=edit_order&id=<?= $order->getId() ?>" class="btn btn-sm btn-outline-warning">
                             <i class="bi bi-pencil"></i> Modifier
                         </a>
 
-                        <a href="index.php?page=cancel_order&id=<?= $order['id'] ?>" 
+                        <a href="index.php?page=cancel_order&id=<?= $order->getId() ?>" 
            class="btn btn-sm btn-outline-danger" 
            onclick="return confirm('Êtes-vous sûr de vouloir annuler cette commande ?');">
             <i class="bi bi-trash"></i> Annuler
