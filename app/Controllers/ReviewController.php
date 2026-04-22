@@ -19,7 +19,7 @@ public function add($orderId) {
         $orderRepo = new OrderRepository($db);
         $order = $orderRepo->findByIdAndUser($orderId, $_SESSION['user']['id']);
 
-    if(!$order || $order['order_status'] !== 'finished') {
+    if(!$order || $order->getStatus() !== 'finished') {
         header('Location: index.php?page=orders&error=not_allowed');
         exit;
     }

@@ -1,7 +1,7 @@
 <div class="container my-5">
-    <h2>Donner mon avis sur la commande <?= htmlspecialchars($order['order_number']) ?></h2>
+    <h2>Donner mon avis sur la commande <?= htmlspecialchars($order->getOrderNumber()) ?></h2>
     <form action="index.php?page=store_review" method="POST" class="shadow p-4 bg-white rounded">
-        <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+        <input type="hidden" name="order_id" value="<?= $order->getId() ?>">
         
         <div class="mb-3">
             <label class="form-label">Note (sur 5)</label>

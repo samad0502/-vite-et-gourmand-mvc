@@ -31,6 +31,8 @@ class Order implements JsonSerializable {
     public function getNumberPeople() { return $this->number_people; }
     public function getTotalPrice() { return $this->total_price; }
     public function getDeliveryDate() { return $this->delivery_date; }
+     public function getDeliveryTime() { return $this->delivery_time; }
+     public function getDeliveryAddress() { return $this->delivery_address; }
     public function getOrderDate() { return $this->order_date; }
     public function getMenuTitle() { return $this->menu_title; }
     public function getClientFirstname() { return $this->client_firstname; }
