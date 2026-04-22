@@ -19,17 +19,17 @@
                 <tbody>
                     <?php foreach ($pendingReviews as $review): ?>
                         <tr>
-                            <td><strong><?= htmlspecialchars($review['firstname']) ?></strong></td>
+                            <td><strong><?= htmlspecialchars($review->getAuthorName()) ?></strong></td>
                             <td>
                                 <?php for($i=1; $i<=5; $i++): ?>
-                                    <i class="bi bi-star<?= $i <= $review['rating'] ? '-fill text-warning' : '' ?>"></i>
+                                    <i class="bi bi-star<?= $i <= $review->getRating() ? '-fill text-warning' : '' ?>"></i>
                                 <?php endfor; ?>
                             </td>
-                            <td><em>"<?= htmlspecialchars($review['comment']) ?>"</em></td>
+                            <td><em>"<?= htmlspecialchars($review->getComment()) ?>"</em></td>
                             <td>
-                                <a href="index.php?page=manage_reviews&action=validate&id=<?= $review['id'] ?>" 
+                                <a href="index.php?page=manage_reviews&action=validate&id=<?= $review->getId() ?>" 
                                    class="btn btn-sm btn-success">Valider</a>
-                                <a href="index.php?page=manage_reviews&action=refuse&id=<?= $review['id'] ?>" 
+                                <a href="index.php?page=manage_reviews&action=refuse&id=<?= $review->getId() ?>" 
                                    class="btn btn-sm btn-danger" 
                                    onclick="return confirm('Refuser cet avis ?');">Refuser</a>
                             </td>

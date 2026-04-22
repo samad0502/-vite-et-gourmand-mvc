@@ -84,22 +84,22 @@ require_once ROOT . 'includes/navbar.php';
                                 <?php foreach ($orders as $o): ?>
                                     <tr>
                                         <td>
-                                            <strong>#<?= $o['order_number'] ?></strong>
+                                            <strong>#<?= $o->getOrderNumber() ?></strong>
                                         </td>
                                         <td>
-                                            <?= htmlspecialchars($o['firstname'] . ' ' . strtoupper($o['lastname'])) ?><br>
-                                            <small class="text-muted"><i class="bi bi-telephone"></i> <?= $o['phone'] ?></small>
+                                            <?= htmlspecialchars($o->getClientFirstname() ?? '' . ' ' . strtoupper($o->getClientLastname() ?? '')) ?><br>
+                                            <small class="text-muted"><i class="bi bi-telephone"></i> <?= $o->getPhone() ?></small>
                                         </td>
-                                        <td><?= htmlspecialchars($o['title']) ?></td>
+                                        <td><?= htmlspecialchars($o->getMenuTitle() ?? '') ?></td>
                                         <td>
-                                            <span class="badge bg-<?= getStatusColor($o['order_status']) ?>">
-                                                <?= strtoupper($o['order_status']) ?>
+                                            <span class="badge bg-<?= getStatusColor($o->getStatus()) ?>">
+                                                <?= strtoupper($o->getStatus()) ?>
                                             </span>
                                         </td>
                                         <td>
                                             <div class="d-flex gap-2">
                                                 <form action="index.php?page=update_order_status" method="POST" class="d-flex gap-1">
-                                                    <input type="hidden" name="order_id" value="<?= $o['id'] ?>">
+                                                    <input type="hidden" name="order_id" value="<?= $o->getId() ?>">
                                                     <select name="new_status" class="form-select form-select-sm" style="width: auto;">
                                                         <option value="accepted">Accepter</option>
                                                         <option value="preparing">En cuisine</option>
@@ -109,7 +109,7 @@ require_once ROOT . 'includes/navbar.php';
                                                     </select>
                                                     <button type="submit" class="btn btn-sm btn-success">OK</button>
                                                 </form>
-                                                <button class="btn btn-sm btn-outline-danger" onclick="openCancelModal(<?= $o['id'] ?>, '<?= $o['order_number'] ?>')">Annuler</button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="openCancelModal(<?= $o->getId() ?>, '<?= $o->getOrderNumber() ?>')">Annuler</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -141,20 +141,20 @@ require_once ROOT . 'includes/navbar.php';
                             <?php foreach ($menus as $m): ?>
                                 <tr>
                                     <td>
-                                        <?php if (!empty($m['image'])): ?>
-                                            <img src="assets/img/menus/<?= htmlspecialchars($m['image']) ?>" 
+                                        <?php if (!empty($m->getMainImage())): ?>
+                                            <img src="public/assets/img/menus/<?= htmlspecialchars($m->getMainImage()) ?>" 
                                                  style="width: 50px; height: 50px; object-fit: cover;" class="rounded shadow-sm">
                                         <?php else: ?>
                                             <div class="bg-light rounded text-center" style="width: 50px; height: 50px; line-height: 50px;"><i class="bi bi-image"></i></div>
                                         <?php endif; ?>
                                     </td>
-                                    <td><strong><?= htmlspecialchars($m['title']) ?></strong></td>
-                                    <td><?= number_format($m['price'], 2) ?> €</td>
+                                    <td><strong><?= htmlspecialchars($m->getTitle()) ?></strong></td>
+                                    <td><?= number_format($m->getPrice(), 2) ?> €</td>
                                     <td>
                                         <div class="d-flex gap-2">
-                                            <a href="index.php?page=edit_menu&id=<?= $m['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                            <a href="index.php?page=edit_menu&id=<?= $m->getId() ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
                                             <form action="index.php?page=delete_menu" method="POST" onsubmit="return confirm('Supprimer ce menu ?');">
-                                                <input type="hidden" name="menu_id" value="<?= $m['id'] ?>">
+                                                <input type="hidden" name="menu_id" value="<?= $m->getId() ?>">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                                             </form>
                                         </div>
@@ -177,13 +177,13 @@ require_once ROOT . 'includes/navbar.php';
                         <table class="table align-middle">
                             <?php foreach ($opening_hours as $h): ?>
                                 <tr>
-                                    <td width="150"><strong><?= $h['day_name'] ?></strong></td>
-                                    <td><input type="time" name="open[<?= $h['id'] ?>]" value="<?= $h['open_time'] ?>" class="form-control"></td>
-                                    <td><input type="time" name="close[<?= $h['id'] ?>]" value="<?= $h['close_time'] ?>" class="form-control"></td>
+                                    <td width="150"><strong><?= $h->getDayName() ?></strong></td>
+                                    <td><input type="time" name="open[<?= $h->getId() ?>]" value="<?= $h->getOpenTime()?>" class="form-control"></td>
+                                    <td><input type="time" name="close[<?= $h->getId() ?>]" value="<?= $h->getCloseTime()?>" class="form-control"></td>
                                     <td class="text-center">
                                         <label class="small d-block text-muted">Fermé</label>
                                         <div class="form-check form-switch d-inline-block">
-                                            <input class="form-check-input" type="checkbox" name="closed[<?= $h['id'] ?>]" value="1" <?= $h['is_closed'] ? 'checked' : '' ?>>
+                                            <input class="form-check-input" type="checkbox" name="closed[<?= $h->getId() ?>]" value="1" <?= $h->isClosed() ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                 </tr>
@@ -216,12 +216,12 @@ require_once ROOT . 'includes/navbar.php';
                         <tbody>
                             <?php foreach ($reviews as $rev): ?>
                                 <tr>
-                                    <td><strong><?= htmlspecialchars($rev['firstname']) ?></strong></td>
-                                    <td><span class="text-warning">★</span> <?= $rev['rating'] ?>/5</td>
-                                    <td style="max-width: 400px;"><?= htmlspecialchars($rev['comment']) ?></td>
+                                    <td><strong><?= htmlspecialchars($rev->getAuthorName() ) ?></strong></td>
+                                    <td><span class="text-warning">★</span> <?= $rev->getRating()  ?>/5</td>
+                                    <td style="max-width: 400px;"><?= htmlspecialchars($rev->getComment()) ?></td>
                                     <td>
                                         <form action="index.php?page=moderate_review" method="POST" class="d-inline">
-                                            <input type="hidden" name="review_id" value="<?= $rev['id'] ?>">
+                                            <input type="hidden" name="review_id" value="<?= $rev->getId() ?>">
                                             <button name="action" value="validate" class="btn btn-success btn-sm">Valider</button>
                                             <button name="action" value="refuse" class="btn btn-danger btn-sm">Refuser</button>
                                         </form>

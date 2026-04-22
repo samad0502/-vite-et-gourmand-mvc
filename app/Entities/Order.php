@@ -18,6 +18,10 @@ class Order implements JsonSerializable {
     private $menu_title;
     private $client_firstname;
     private $client_lastname;
+    private $phone;
+    private $email; 
+
+
 
    
     public function getId() { return $this->id; }
@@ -28,6 +32,10 @@ class Order implements JsonSerializable {
     public function getDeliveryDate() { return $this->delivery_date; }
     public function getOrderDate() { return $this->order_date; }
     public function getMenuTitle() { return $this->menu_title; }
+    public function getClientFirstname() { return $this->client_firstname; }
+    public function getClientLastname() { return $this->client_lastname; }
+    public function getPhone() { return $this->phone; }
+    public function getEmail() { return $this->email; }
 
     // libellé du statut en français
     public function getStatusLabel() {

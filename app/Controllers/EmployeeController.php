@@ -79,23 +79,27 @@ public function cancelOrder(){
 
         $db = (new Database())->getConnection();
         $orderRepo = new OrderRepository($db);
-
-        if($orderRepo->cancelOrders($orderId, $reason, $contactMode)) {
+        $order = $orderRepo->findById($orderId);
+        
+        if($order){
+        
+        if($orderRepo->updateStatus($orderId, 'cancelled')) {
 
         $statRepo = new StatRepository();
-        $statRepo->logCancellation($orderId, $reason, $contactMode);
+        $statRepo->logCancellation($order->getId(), $reason, $contactMode);
         
         //envoi du mail que si le mode de contact choisi est 'mail'
-        if($contactMode === 'Email'){
-            $this->sendCancellationEmail($orderId, $reason);
-        }
+    
+            $this->sendCancellationEmail($order, $reason);
+    
 
         header('Location: index.php?page=employee_dashboard&success=cancelled');
         } else {
             header('Location: index.php?page=employee_dashboars&error=cancel_failed');
-        }
+        } 
         exit;
     }
+}
 }
 
 
@@ -214,12 +218,9 @@ public function notifyOrderFinished($orderId) {
 
 
     // Fonction dédiée à l'envoi du mail d'annulation
-private function sendCancellationEmail($orderId, $reason) {
-    $db = (new Database())->getConnection();
-    $orderRepo = new OrderRepository($db);
-    $data = $orderRepo->getDetailsForNotification($orderId);
+private function sendCancellationEmail($order, $reason) {
 
-    if (!$data) return;
+   
 
     $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 
@@ -234,14 +235,14 @@ private function sendCancellationEmail($orderId, $reason) {
         $mail->CharSet    = 'UTF-8';
 
         $mail->setFrom('service-client@vitegourmand.fr', 'Vite & Gourmand');
-        $mail->addAddress($data['email'], $data['firstname']);
+        $mail->addAddress($order->getEmail(), $order->getClientFirstname());
 
         $mail->isHTML(true);
-        $mail->Subject = "Annulation de votre commande " . $data['order_number'];
+        $mail->Subject = "Annulation de votre commande " . $order->getOrderNumber();
 
         $mail->Body = "
-            <h2>Bonjour {$data['firstname']},</h2>
-            <p>Nous vous informons que votre commande <strong>#{$data['order_number']}</strong> a dû être annulée.</p>
+            <h2>Bonjour " . $order->getClientFirstname(). "</h2>
+            <p>Nous vous informons que votre commande <strong>#" . $order->getOrderNumber() . "</strong> a dû être annulée.</p>
             <p><strong>Motif de l'annulation :</strong><br><em>{$reason}</em></p>
             <p>Si vous avez des questions, n'hésitez pas à nous recontacter.</p>
             <p>Cordialement,<br>L'équipe Vite & Gourmand</p>

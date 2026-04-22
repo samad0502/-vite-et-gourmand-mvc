@@ -97,6 +97,27 @@ class OrderRepository {
     }
 
 
+       public function findById($orderId) {
+        // récupère la commande avec les infos du client et du menu 
+            $sql = "SELECT o.*, 
+                   m.title as menu_title, 
+                   u.firstname as client_firstname, 
+                   u.lastname as client_lastname, 
+                   u.email, 
+                   u.phone
+            FROM orders o 
+            JOIN menus m ON o.menu_id = m.id 
+            JOIN users u ON o.user_id = u.id 
+            WHERE o.id = ?";
+            
+           $stmt = $this->db->prepare($sql);
+           $stmt->execute([$orderId]);
+    
+           $stmt->setFetchMode(PDO::FETCH_CLASS, 'Order');
+           return $stmt->fetch();
+}
+
+
      public function updateStatus($orderId, $newStatus) {
         $sql = "UPDATE orders SET order_status = ? WHERE id = ?";
         return $this->db->prepare($sql)->execute([$newStatus, $orderId]);
