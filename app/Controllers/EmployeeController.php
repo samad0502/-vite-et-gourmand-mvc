@@ -56,7 +56,7 @@ public function updateOrderStatus() {
         if ($orderInfo) {
 
         $statRepo = new StatRepository();
-        $statRepo->logOrder($orderInfo);
+        $statRepo->logOrder((array)$orderInfo);
 
         $this->notifyOrderFinished($orderId);
     }
@@ -188,16 +188,16 @@ public function notifyOrderFinished($orderId) {
         $mail->CharSet    = 'UTF-8';
         // Destinataires
         $mail->setFrom('no-reply@vitegourmand.fr', 'ViteGourmand');
-        $mail->addAddress($data['email'], $data['firstname']);
+        $mail->addAddress($data->getEmail(), $data->getClientFirstname());
 
         // Contenu du mail
         $mail->isHTML(true);
-        $mail->Subject = "Votre commande " . $data['order_number'] . " est prete !";
+        $mail->Subject = "Votre commande " . $data->getOrderNumber() . " est prete !";
 
         $reviewLink = "http://localhost:3000/index.php?page=add_review&id=" . $orderId;
        
         $mail->Body    = "
-                <h1>Bonne nouvelle {$data['firstname']} !</h1>
+                <h1>Bonne nouvelle " . $data->getClientFirstname() . " !</h1>
                 <p>Votre commande est désormais terminée. Nous espérons que vous avez apprécié votre expérience.</p>
                 <p>Votre avis est précieux pour nous. Pourriez-vous nous laisser une note ?</p>
                 <a href='{$reviewLink}' style='padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;'>
