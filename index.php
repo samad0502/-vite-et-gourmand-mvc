@@ -219,6 +219,11 @@ switch ($page){
           $controller->sendContactMessage();
           break;   
 
+        case 'set_cookie':
+          $controller = new CookieController();
+          $controller->setConsent();
+          break;  
+
         case 'profile':
            require_once ROOT . 'app/Views/user/profile.php'; 
            break;

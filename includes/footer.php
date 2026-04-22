@@ -26,26 +26,26 @@ $hours_to_display = $opening_hours ?? $GLOBALS['opening_hours'] ?? [];
 </div>
         </div>
     </div>
-<!--
-    <?php //if (!isset($_COOKIE['cookie_consent'])): ?>
+
+    <?php if (!isset($_COOKIE['cookie_consent'])): ?>
         <div id="cookie-banner" class="fixed-bottom bg-dark text-white p-4 shadow-lg border-top border-primary" style="z-index: 9999;">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-8">
-                        <h5 class="mb-1">Respect de votre vie priv&eacute;e 🍪</h5>
+                        <h5 class="mb-1">Respect de votre vie privée 🍪</h5>
                         <p class="small mb-0 text-secondary">
-                            Nous utilisons des cookies pour optimiser votre exp&eacute;rience de commande.
-                            Certains sont essentiels, d'autres nous aident &agrave; am&eacute;liorer nos services.
+                            Nous utilisons des cookies pour optimiser votre experience de commande.
+                            Certains sont essentiels, d'autres nous aident à améliorer nos services.
                         </p>
                     </div>
                     <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                        <a href="../ajax/set_cookie.php?choice=refused" class="btn btn-outline-light btn-sm me-2">Refuser</a>
-                        <a href="../ajax/set_cookie.php?choice=accepted" class="btn btn-primary btn-sm">Tout accepter</a>
+                        <a href="index.php?page=set_cookie&choice=refused" class="btn btn-outline-light btn-sm me-2">Refuser</a>
+                        <a href="index.php?page=set_cookie&choice=accepted" class="btn btn-primary btn-sm">Tout accepter</a>
                     </div>
                 </div>
             </div>
-        </div>  --> 
-    <?php // endif; ?> 
+        </div>  
+    <?php  endif; ?> 
 
 
     <div class="container py-4">
