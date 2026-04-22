@@ -1,8 +1,12 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use App\Services\MailService;
 use App\Repositories\StatRepository;
 class EmployeeController {
+    private $mailService;
+
+public function __construct() {
+        $this->mailService = new MailService();
+    }
 
 public function dashboard() {
     if($_SESSION['user']['role'] !== 'employee'&& $_SESSION['user']['role'] !== 'admin'){
@@ -54,11 +58,19 @@ public function updateOrderStatus() {
         $orderInfo = $orderRepo->getDetailsForNotification($orderId);
     
         if ($orderInfo) {
-
         $statRepo = new StatRepository();
-        $statRepo->logOrder((array)$orderInfo);
 
-        $this->notifyOrderFinished($orderId);
+        $orderDataArray = [
+        'order_number'  => $orderInfo->getOrderNumber(),
+        'number_people' => $orderInfo->getNumberPeople(),
+        'price'         => $orderInfo->getTotalPrice(),
+        'title'         => $orderInfo->getTitle(),
+        'firstname'     => $orderInfo->getClientFirstname(),
+        'lastname'      => $orderInfo->getClientLastname()
+    ];
+        $statRepo->logOrder($orderDataArray);
+
+        $this->mailService->notifyOrderFinished($orderInfo);
     }
 }
             header('Location: index.php?page=employee_dashboard&success=status_updated');
@@ -90,7 +102,7 @@ public function cancelOrder(){
         
         //envoi du mail que si le mode de contact choisi est 'mail'
     
-            $this->sendCancellationEmail($order, $reason);
+            $this->mailService->sendCancellationEmail($order, $reason);
     
 
         header('Location: index.php?page=employee_dashboard&success=cancelled');
@@ -167,90 +179,4 @@ public function manageReviews() {
 }
 
 
-
-public function notifyOrderFinished($orderId) {
-    $db = (new Database())->getConnection();
-    $orderRepo = new OrderRepository($db);
-    $data = $orderRepo->getDetailsForNotification($orderId); 
-    
-    if($data) {
-        $mail = new PHPMailer(true);
-
-        try {
-            
-        $mail->isSMTP();
-        $mail->Host       = $_ENV['MAIL_HOST'];
-        $mail->SMTPAuth   = true;
-        $mail->Username   = $_ENV['MAIL_USER'];
-        $mail->Password   = $_ENV['MAIL_PASS'];
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
-        $mail->Port       = $_ENV['MAIL_PORT'];
-        $mail->CharSet    = 'UTF-8';
-        // Destinataires
-        $mail->setFrom('no-reply@vitegourmand.fr', 'ViteGourmand');
-        $mail->addAddress($data->getEmail(), $data->getClientFirstname());
-
-        // Contenu du mail
-        $mail->isHTML(true);
-        $mail->Subject = "Votre commande " . $data->getOrderNumber() . " est prete !";
-
-        $reviewLink = "http://localhost:3000/index.php?page=add_review&id=" . $orderId;
-       
-        $mail->Body    = "
-                <h1>Bonne nouvelle " . $data->getClientFirstname() . " !</h1>
-                <p>Votre commande est désormais terminée. Nous espérons que vous avez apprécié votre expérience.</p>
-                <p>Votre avis est précieux pour nous. Pourriez-vous nous laisser une note ?</p>
-                <a href='{$reviewLink}' style='padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;'>
-                    Donner mon avis
-                </a>
-                <p>À bientôt chez <strong>Vite & Gourmand</strong> !</p>
-            ";
-
-            $mail->send();
-            return true;
-        } catch (Exception $e) {
-            error_log("Erreur Mailtrap : {$mail->ErrorInfo}");
-            return false;
-        }
-
-        }
-    }
-
-
-    // Fonction dédiée à l'envoi du mail d'annulation
-private function sendCancellationEmail($order, $reason) {
-
-   
-
-    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
-
-    try {
-        $mail->isSMTP();
-        $mail->Host       = $_ENV['MAIL_HOST'];
-        $mail->SMTPAuth   = true;
-        $mail->Username   = $_ENV['MAIL_USER'];
-        $mail->Password   = $_ENV['MAIL_PASS'];
-        $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = $_ENV['MAIL_PORT'];
-        $mail->CharSet    = 'UTF-8';
-
-        $mail->setFrom('service-client@vitegourmand.fr', 'Vite & Gourmand');
-        $mail->addAddress($order->getEmail(), $order->getClientFirstname());
-
-        $mail->isHTML(true);
-        $mail->Subject = "Annulation de votre commande " . $order->getOrderNumber();
-
-        $mail->Body = "
-            <h2>Bonjour " . $order->getClientFirstname(). "</h2>
-            <p>Nous vous informons que votre commande <strong>#" . $order->getOrderNumber() . "</strong> a dû être annulée.</p>
-            <p><strong>Motif de l'annulation :</strong><br><em>{$reason}</em></p>
-            <p>Si vous avez des questions, n'hésitez pas à nous recontacter.</p>
-            <p>Cordialement,<br>L'équipe Vite & Gourmand</p>
-        ";
-
-        $mail->send();
-    } catch (\Exception $e) {
-        error_log("Le mail d'annulation n'a pas pu être envoyé. Erreur: {$mail->ErrorInfo}");
-    }
-}
 }

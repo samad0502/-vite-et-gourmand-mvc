@@ -6,7 +6,8 @@ spl_autoload_register(function ($class) {
         'app/Entities/',
         'app/Repositories/',
         'app/Controllers/',
-        'Config/'
+        'Config/',
+        'Services/'
     ];
 
     foreach ($sources as $source) {

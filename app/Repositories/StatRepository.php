@@ -31,6 +31,10 @@ class StatRepository {
     //enregistre une vente dans MongoDB
     public function logOrder($orderData) {
         try {
+
+        if(is_object($orderData)){
+            $orderData = (array) $orderData;
+        }
             $quantity = (int)($orderData['number_people'] ?? 1);
             $unitPrice = (float)($orderData['price'] ?? 0);
 

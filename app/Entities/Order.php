@@ -21,6 +21,7 @@ class Order implements JsonSerializable {
     private $phone;
     private $email; 
     private $menu_name;
+    private $title;
 
 
 
@@ -40,6 +41,7 @@ class Order implements JsonSerializable {
     public function getPhone() { return $this->phone; }
     public function getEmail() { return $this->email; }
     public function getMenuName() { return $this->menu_name; }
+    public function getTitle() {return $this->title;}
 
     // libellé du statut en français
     public function getStatusLabel() {
