@@ -62,17 +62,17 @@ require_once ROOT .  'includes/navbar.php';
                     <?php else: ?>
                         <?php foreach ($orders as $o): ?>
                             <tr>
-                                <td class="fw-bold">#<?= $o['order_number'] ?></td>
-                                <td><?= htmlspecialchars($o['firstname']) ?></td>
-                                <td><?= htmlspecialchars($o['menu_name']) ?></td>
+                                <td class="fw-bold">#<?= $o->getOrderNumber() ?></td>
+                                <td><?= htmlspecialchars($o->getClientFirstname()) ?></td>
+                                <td><?= htmlspecialchars($o->getMenuName()) ?></td>
                                 <td>
-                                    <span class="badge bg-<?= getStatusColor($o['order_status']) ?>">
-                                        <?= htmlspecialchars($o['order_status']) ?>
+                                    <span class="badge bg-<?= getStatusColor($o->getStatus()) ?>">
+                                        <?= htmlspecialchars($o->getStatus()) ?>
                                     </span>
                                 </td>
                                 <td>
                                     <form action="inex.php?page=update_order_status" method="POST" class="d-flex gap-2">
-                                        <input type="hidden" name="order_id" value="<?= $o['id'] ?>">
+                                        <input type="hidden" name="order_id" value="<?= $o->getId() ?>">
                                         <select name="new_status" class="form-select form-select-sm">
                                             <option value="accepted">Accepter</option>
                                             <option value="preparing">En cuisine</option>

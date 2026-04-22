@@ -67,18 +67,18 @@ require_once ROOT .  'includes/navbar.php';
                     <tbody>
                         <?php foreach ($employees as $emp): ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></strong></td>
-                                <td><?= htmlspecialchars($emp['email']) ?></td>
+                                <td><strong><?= htmlspecialchars($emp->getFirstname() . ' ' . $emp->getLastname()) ?></strong></td>
+                                <td><?= htmlspecialchars($emp->getEmail()) ?></td>
                                 <td>
-                                    <span class="badge rounded-pill bg-<?= $emp['is_active'] ? 'success' : 'danger' ?>">
-                                        <?= $emp['is_active'] ? 'Actif' : 'Inactif' ?>
+                                    <span class="badge rounded-pill bg-<?= $emp->isActive() ? 'success' : 'danger' ?>">
+                                        <?= $emp->isActive() ? 'Actif' : 'Inactif' ?>
                                     </span>
                                 </td>
                                 <td class="text-end">
                                     <form action="index.php?page=toggle_user" method="POST" style="display:inline;">
-                                        <input type="hidden" name="user_id" value="<?= $emp['id'] ?>">
-                                        <button type="submit" class="btn btn-sm <?= $emp['is_active'] ? 'btn-outline-danger' : 'btn-outline-success' ?>">
-                                            <?= $emp['is_active'] ? 'Désactiver' : 'Activer' ?>
+                                        <input type="hidden" name="user_id" value="<?= $emp->getId() ?>">
+                                        <button type="submit" class="btn btn-sm <?= $emp->isActive() ? 'btn-outline-danger' : 'btn-outline-success' ?>">
+                                            <?= $emp->isActive() ? 'Désactiver' : 'Activer' ?>
                                         </button>
                                     </form>
                                 </td>
