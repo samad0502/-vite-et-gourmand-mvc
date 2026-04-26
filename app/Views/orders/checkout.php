@@ -12,7 +12,7 @@ require_once ROOT . 'includes/navbar.php';
                 </div>
                 <div class="card-body">
                     <form action="index.php?page=process_checkout" method="POST" id="checkoutForm">
-
+                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Client</label>
