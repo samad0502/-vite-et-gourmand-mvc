@@ -85,6 +85,10 @@ public function showRegister() {
 
 public function register() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+                header('Location: index.php?page=login&error=csrf');
+                exit;
+    }
         $db = (new Database())->getConnection();
         $userRepo = new UserRepository($db);
         $errors = [];

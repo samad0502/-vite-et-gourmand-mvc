@@ -59,6 +59,10 @@ public function checkout() {
 //traitement final de la commande
 public function process() {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
+              if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+                header('Location: index.php?page=login&error=csrf');
+                exit;
+    }
             $db = (new Database())->getConnection();
             $orderRepo = new OrderRepository($db);
             $groupOrderNumber = 'ORD-' . strtoupper(uniqid());
@@ -143,6 +147,10 @@ public function edit($id) {
 
 public function update() {
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
+          if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+                header('Location: index.php?page=login&error=csrf');
+                exit;
+    }
         $orderId = (int)$_POST['order_id'];
         $db = (new Database())->getConnection();
         $orderRepo = new OrderRepository($db);
