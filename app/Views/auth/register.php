@@ -21,6 +21,7 @@
                     <?php endif; ?>
 
                     <form action="index.php?page=auth_register" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Prénom</label>

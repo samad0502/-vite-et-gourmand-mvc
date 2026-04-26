@@ -38,6 +38,11 @@ class UserController {
 
     public function sendContactMessage() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+                header('Location: index.php?page=contact&status=error');
+                exit;
+            
+            }
             $name = htmlspecialchars($_POST['name']);
             $email = htmlspecialchars($_POST['email']);
             $subject = htmlspecialchars($_POST['subject']);

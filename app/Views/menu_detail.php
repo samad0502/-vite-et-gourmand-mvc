@@ -46,6 +46,7 @@ require_once ROOT . 'includes/navbar.php';
             </div>
 
             <form action="index.php?page=add_to_cart" method="POST" id="orderForm" class="card p-4 shadow-sm border-0">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="menu_id" id="menu_id" value="<?= $menu->getId() ?>">
     
     <div class="mb-3">

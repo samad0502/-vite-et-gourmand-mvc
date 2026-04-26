@@ -12,6 +12,11 @@ public function showLogin() {
 
 public function login() {
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+            $error = "Erreur de sécurité : session invalide. ";
+            require_once ROOT . 'Views/auth/login.php';
+            exit;
+        }
         $email = trim($_POST['email']);
         $password = $_POST['password'];
 

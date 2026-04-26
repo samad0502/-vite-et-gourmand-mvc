@@ -28,6 +28,7 @@ require_once ROOT . 'includes/navbar.php';
                     ?>
 
                     <form action="index.php?page=auth_login" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <div class="mb-3">
                             <label class="form-label">Email</label>
                             <input class="form-control" type="email" name="email" placeholder="votre@email.com" required>

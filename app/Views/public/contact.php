@@ -1,6 +1,10 @@
 <?php
 require_once ROOT . 'includes/header.php';
 require_once ROOT . 'includes/navbar.php';
+
+if(empty($_SESSION['csrf_token'])){
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 ?>
 <div class="container my-5">
     <div class="row g-5">
@@ -23,6 +27,7 @@ require_once ROOT . 'includes/navbar.php';
 
 
             <form action="index.php?page=process_contact" method="POST" class="p-4 shadow-sm rounded bg-light">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <div class="mb-3">
                     <label class="form-label">Nom complet</label>
                     <input type="text" name="name" class="form-control" required>
