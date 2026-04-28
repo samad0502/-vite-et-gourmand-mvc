@@ -2,6 +2,9 @@
 
 class Menu implements JsonSerializable {
     public $conditions;
+    public $created_at;
+    public $allergens;
+    public $is_active; 
     private $id;
     private $title;
     private $price;
