@@ -58,21 +58,7 @@ public function updateOrderStatus() {
         $orderInfo = $orderRepo->getDetailsForNotification($orderId);
     
         if ($orderInfo) {
-        try {
-        $statRepo = new StatRepository();
        
-        $orderDataArray = [
-        'order_number'  => $orderInfo->getOrderNumber(),
-        'number_people' => $orderInfo->getNumberPeople(),
-        'price'         => $orderInfo->getTotalPrice(),
-        'title'         => $orderInfo->getTitle(),
-        'firstname'     => $orderInfo->getClientFirstname(),
-        'lastname'      => $orderInfo->getClientLastname()
-    ];
-         $statRepo->logOrder($orderDataArray);
- } catch (\Exception $e) {
-            error_log("Echec de la persistance NoSQL : " . $e->getMessage());
-        }
         $this->mailService->notifyOrderFinished($orderInfo);
     }
 }

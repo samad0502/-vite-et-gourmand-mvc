@@ -87,6 +87,23 @@ public function process() {
                 }
                 $db->commit();
 
+              $statRepo = new StatRepository();
+
+foreach($_SESSION['cart'] as $item) {
+    // Récupération des infos du menu pour le nom et le prix unitaire
+    $menuRepo = new MenuRepository($db);
+    $menuInfo = $menuRepo->findById($item['menu_id']);
+
+    $statRepo->logOrder([
+        'order_number'  => $groupOrderNumber,
+        'title'         => $menuInfo->getTitle(),
+        'price'         => $menuInfo->getPrice(), // Prix unitaire
+        'number_people' => $item['number_people'], // Quantité
+        'firstname'     => $_SESSION['user']['firstname'],
+        'lastname'      => $_SESSION['user']['lastname']
+    ]);
+}
+
         $userEmail = $_SESSION['user']['email'];
         $this->mailService->sendConfirmationEmail($userEmail, $groupOrderNumber, $price);
 
