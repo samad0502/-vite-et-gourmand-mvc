@@ -13,7 +13,10 @@ class User {
     private $city;
     private $role_id;
     private $role_name;
-
+    public $created_at;
+    public $is_active;
+    public $reset_token;
+    public $reset_expires_at;
     
     public function getId() { return $this->id; }
     public function getEmail() { return $this->email; }

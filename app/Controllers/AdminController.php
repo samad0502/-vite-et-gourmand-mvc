@@ -55,9 +55,9 @@ class AdminController {
         $menuStats = [];
         $totalCA = 0;
         foreach($statsData as $doc) {
-            $name = $doc['menu_name'];
+            $name = $doc['menu_name'] ?? 'Non défini';
             $menuStats[$name] = ($menuStats[$name] ?? 0 ) + 1 ;
-            $totalCA += $doc['price'];
+            $totalCA += $doc['price'] ?? 0;
         }
 
         //recupere la liste des menus pour le filtre select

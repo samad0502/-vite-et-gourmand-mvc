@@ -13,7 +13,13 @@ class Order implements JsonSerializable {
     private $order_date;
     private $user_id;
     private $menu_id;
-    
+    public $cancellation_reason;
+    public $contact_method;
+    public $rating;
+    public $comment;
+    public $is_modified_by_client;
+    public $firstname;
+    public $lastname;
     // propriétés venant des jointures SQL
     private $menu_title;
     private $client_firstname;
