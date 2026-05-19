@@ -27,5 +27,7 @@ if(empty($_SESSION['csrf_token'])){
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Gorditas:wght@400;700&display=swap" rel="stylesheet">
    <title>Vite & Gourmand</title>
+   <meta name="description" content="Commandez vos plateaux repas et buffets chez votre traiteur Vite & Gourmand">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
