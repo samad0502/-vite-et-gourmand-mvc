@@ -149,10 +149,35 @@ private function getRepo() {
             if($menuRepo->update($id, $data)) {
                 header('Location: index.php?page=employee_dashboard&#menus-pane');
             } else {
-                header('Location: index.php?page=edit_menu&id=$id&error=update_failed');
+                header("Location: index.php?page=edit_menu&id=$id&error=update_failed");
             }
             exit;
         }
+    }
+
+    public function deleteAddedMenu() {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+            header('Location: index.php?page=employee_dashboard');
+            exit();
+        }
+
+        // 1. On récupère l'ID (on enlève les echo/die de débogage pour que ça fonctionne)
+        $menuId = isset($_POST['menu_id']) ? intval($_POST['menu_id']) : -1;
+
+        // 2. MODIFICATION : On accepte l'ID 0 (supérieur ou égal à 0)
+        if($menuId >= 0){
+            $db = (new Database())->getConnection();
+            $menuRepo = new MenuRepository($db);
+
+            if($menuRepo->deleteById($menuId)){
+                $_SESSION['success_message'] = "Le menu a bien été supprimé.";
+            } else {
+                $_SESSION['error_message'] = "Impossible de supprimer le menu.";
+            }
+        }
+        
+        header('Location: index.php?page=employee_dashboard');
+        exit();
     }
 
      }

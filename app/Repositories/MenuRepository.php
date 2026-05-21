@@ -83,4 +83,24 @@ public function update($id, $data) {
         $data['min_people'], $id
     ]);
 }
+
+
+    public function deleteById(int $menuId) {
+    try{
+       $this->db->exec("SET FOREIGN_KEY_CHECKS = 0;");
+
+            $query = "DELETE from menus WHERE id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id', $menuId, PDO::PARAM_INT);
+            $result = $stmt->execute();
+
+            // 2. On réactive la sécurité juste après
+            $this->db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+            return $result;
+    } catch (PDOException $e){
+
+    echo "<h1>Erreur PDO en production :</h1>" . $e->getMessage();
+            die();
+    }
+}
 }

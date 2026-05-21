@@ -154,7 +154,7 @@ require_once ROOT . 'includes/navbar.php';
                                         <div class="d-flex gap-2">
                                             <a href="index.php?page=edit_menu&id=<?= $m->getId() ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
                                             <form action="index.php?page=delete_menu" method="POST" onsubmit="return confirm('Supprimer ce menu ?');">
-                                                <input type="hidden" name="menu_id" value="<?= $m->getId() ?>">
+                                                <input type="hidden" name="menu_id" value="<?= htmlspecialchars($m->getId()); ?>">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                                             </form>
                                         </div>

@@ -160,6 +160,11 @@ switch ($page){
            $controller->update();
            break;   
 
+        case 'delete_menu':
+           $controller = new MenuController();
+           $controller->deleteAddedMenu();
+           break;    
+
         case 'moderate_review':
            $controller = new EmployeeController();
            $controller->moderateReview();
