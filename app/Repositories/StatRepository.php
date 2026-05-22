@@ -71,17 +71,28 @@ public function getFilteredStats($menuFilter = '', $dateStart = '', $dateEnd = '
     $filter = [];
     
     // Filtre par nom de menu
-    if ($menuFilter) {
+    if (!empty($menuFilter)) {
         $filter['menu_name'] = $menuFilter;
     }
 
-    // Filtre par date
-    if ($dateStart && $dateEnd) {
-        $start = new \MongoDB\BSON\UTCDateTime(strtotime($dateStart) * 1000);
-        $end = new \MongoDB\BSON\UTCDateTime(strtotime($dateEnd . ' +1 day') * 1000);
-        $filter['executed_at'] = ['$gte' => $start, '$lte' => $end];
+    // Filtre par plage date
+    if (!empty($dateStart) || !empty($dateEnd)) {
+        $dateCondition = [];
+        
+        if(!empty($dateStart)){
+        // Debut de journée
+        $start = strtotime($dateStart . '00:00:00') * 1000;
+        $dateCondition['$gte'] = new \MongoDB\BSON\UTCDateTime($start);
     }
-
+    // Fin de journéé pour inclure les ventes du jour
+        if(!empty($dateEnd)){
+        $end = strtotime($dateEnd . '23:59:59') * 1000;
+        $dateCondition['$lte'] = new \MongoDB\BSON\UTCDateTime($end);
+        }
+         $filter['executed_at'] = $dateCondition;
+    }
+    
+    // Extraction et tri par date décroissante
     return $this->collection->find($filter, ['sort' => ['executed_at' => -1]]);
 }
 

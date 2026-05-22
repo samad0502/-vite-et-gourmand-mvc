@@ -53,7 +53,7 @@ $hours_to_display = $opening_hours ?? $GLOBALS['opening_hours'] ?? [];
             <div class="col-lg-6 col-md-8 mx-auto mx-lg-0">
                 <div class="card row g-0 flex-column flex-lg-row overflow-hidden border-secondary">
                     <div class="col-lg-4 bg-white d-flex align-items-center justify-content-center p-2">
-                        <img class="img-fluid" src="/public/assets/img/imgAcc/logo.ico" alt="logo" style="max-height: 120px;" />
+                        <img class="img-fluid" src="/public/assets/img/imgAcc/logo.jpg" alt="logo" width="120" style="max-width: 120px; height: auto; display: inline-block;" />
                     </div>
                     <div class="col-lg-8 card-body bg-dark text-light">
                         <p class="mb-2"><strong>Vite & Gourmand</strong><br> 5 avenue de la liberté <br> 33000 Bordeaux</p>

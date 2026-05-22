@@ -3,7 +3,7 @@
 
     <div class="container">
         <a class="navbar-brand" href="index.php?page=home">
-            <img src="/public/assets/img/imgAcc/logo.ico" alt="logo" width="100">
+            <img src="/public/assets/img/imgAcc/logo.jpg" alt="logo" class="d-inline-block align-top img-fluid" style="width: 100px; height: auto; max-width: 100px; display: inline-block;">
         </a>
 
         <button class=" navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">

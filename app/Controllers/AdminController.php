@@ -48,21 +48,37 @@ class AdminController {
 
         $db = (new Database())->getConnection();
         $statRepo = new StatRepository();
+        
+        //recuperation des filtres
+        $selectMenu = $_GET['menu_filter'] ?? '';
+        $startDate = $_GET['date_start'] ?? '';
+        $endDate = $_GET['date_end'] ?? '';
+        
         //données pour les stats
-        $statsData = $statRepo->getFilteredStats($_GET['menu'] ?? '', $_GET['start'] ?? '', $_GET['end'] ?? '');
+        $statsData = $statRepo->getFilteredStats($selectMenu, $startDate, $endDate);
 
         // traitement des données pour Chart.js
         $menuStats = [];
         $totalCA = 0;
         foreach($statsData as $doc) {
-            $name = $doc['menu_name'] ?? 'Non défini';
+            $name = $doc['menu_name'];
+            //on compte le nb de commande pour le graphique chart.js
             $menuStats[$name] = ($menuStats[$name] ?? 0 ) + 1 ;
+            // cumul du prix total calculé
             $totalCA += $doc['price'] ?? 0;
         }
 
-        //recupere la liste des menus pour le filtre select
-        $allMenus = ["Menu Éco", "Menu Gourmand", "Menu Signature"];
+       // On récupère la liste des menus depuis SQL
+       $menuRepo = new MenuRepository($db);
+       $menusFromSql = $menuRepo->findAll(); 
 
+       $allMenus = [];
+       foreach($menusFromSql as $m) {
+
+        $allMenus[] = $m->getTitle(); 
+    }
+        
+        
         require_once ROOT . 'app/Views/admin/stats.php';
        
         }
