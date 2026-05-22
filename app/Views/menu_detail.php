@@ -39,9 +39,9 @@ require_once ROOT . 'includes/navbar.php';
             <div class="card border-0 shadow-sm bg-light mb-4">
                 <div class="card-body">
                     <h6 class="fw-bold">Composition</h6>
-                    <p class="small mb-1"><strong>Entrée :</strong> <?= htmlspecialchars($menu->getStarter()) ?></p>
-                    <p class="small mb-1"><strong>Plat :</strong> <?= htmlspecialchars($menu->getMainCourse()) ?></p>
-                    <p class="small mb-0"><strong>Dessert :</strong> <?= htmlspecialchars($menu->getDessert()) ?></p>
+                    <p class="small mb-1"><strong>Entrée :</strong> <?= htmlspecialchars($menu->getStarter()) ?? '' ?></p>
+                    <p class="small mb-1"><strong>Plat :</strong> <?= htmlspecialchars($menu->getMainCourse()) ?? '' ?></p>
+                    <p class="small mb-0"><strong>Dessert :</strong> <?= htmlspecialchars($menu->getDessert()) ?? '' ?></p>
                 </div>
             </div>
 

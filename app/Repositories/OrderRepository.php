@@ -21,7 +21,7 @@ class OrderRepository {
                 $data['user_id'], $data['menu_id'], $data['delivery_address'],
                 $data['delivery_date'], $data['delivery_time'], $data['total_price']
             ]);
-            $sqlStock = "UPDATE menus SET remaining_quantity = remaining_quantity -1 WHERE id = ?";
+            $sqlStock = "UPDATE menus SET remaining_quantity = remaining_quantity - min_people WHERE id = ?";
             return $this->db->prepare($sqlStock)->execute([$data['menu_id']]);
 
         

@@ -61,7 +61,7 @@ class AdminController {
         $menuStats = [];
         $totalCA = 0;
         foreach($statsData as $doc) {
-            $name = $doc['menu_name'];
+            $name = $doc['menu_name'] ?? 'Non défini';
             //on compte le nb de commande pour le graphique chart.js
             $menuStats[$name] = ($menuStats[$name] ?? 0 ) + 1 ;
             // cumul du prix total calculé

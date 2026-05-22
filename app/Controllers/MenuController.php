@@ -79,7 +79,7 @@ private function getRepo() {
             ];
 
             
-            if($menuRepo->create($data)){
+            if($menuRepo->create($data) !== false){
                 header('Location: index.php?page=employee_dashboard&success=menu_added#menus-pane');
             } else {
                 header('Location: index.php?page=add_menu&error=save_failed');

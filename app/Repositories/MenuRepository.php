@@ -66,12 +66,34 @@ class MenuRepository {
 
     //  créer un menu (store() du contrôleur)
 public function create($data) {
-    $sql = "INSERT INTO menus (title, price, description, image, min_people, remaining_quantity, theme_id, diet_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    return $this->db->prepare($sql)->execute([
-        $data['title'], $data['price'], $data['description'], $data['image'] ?? '', 
+    
+    // On cherche le plus grand id dans la table menus
+    $queryMaxId = "SELECT MAX(id) AS max_id FROM menus";
+    $stmtMax = $this->db->query($queryMaxId);
+    $resultMax = $stmtMax->fetch();
+
+    // on prend le dernier id dans la table menus et on fait +1
+    $nextId = ($resultMax && $resultMax['max_id'] !== null) ? intval($resultMax['max_id']) + 1 : 1;
+
+    // si le calcul retombe sur 0 on force à 15 
+    if ($nextId <= 0) {
+        $nextId = 15; 
+    }
+    
+    $sql = "INSERT INTO menus (id, title, price, description, image, min_people, remaining_quantity, theme_id, diet_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = $this->db->prepare($sql);
+        
+        $success = $stmt->execute([
+        $nextId, $data['title'], $data['price'], $data['description'], $data['image'] ?? '', 
         $data['min_people'] ?? 1, $data['remaining_quantity'], $data['theme_id'], $data['diet_id']
     ]);
+
+    if($success){
+        return $nextId;
+    }
+    return false;
 }
 
 //  mettre à jour un menu (update() du contrôleur)
