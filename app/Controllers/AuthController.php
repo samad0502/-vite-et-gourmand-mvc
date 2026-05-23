@@ -160,4 +160,43 @@ private function sendWelcomeEmail($email, $firstname) {
         die("Erreur Mailer : " . $mail->ErrorInfo);
     }
 }
+
+public function forgotPassword() {
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+            $error = "Erreur de sécurité : session invalide.";
+            require_once ROOT . 'app/Views/auth/forgot_password.php';
+            exit;
+        }
+
+        $email = trim($_POST['email']);
+        
+        $db = (new Database())->getConnection();
+        $userRepo = new UserRepository($db);
+
+        $user = $userRepo->findByEmail($email);
+
+        if($user){
+            $token = bin2hex(random_bytes(32));
+            $expiresAt = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+
+            $user->setResetToken($token);
+            $user->setResetExpiresAt($expiresAt);
+
+            // enregistre les données du token
+            $userRepo->saveResetToken($user->getEmail(), $token, $expiresAt);
+
+            $resetLink = "https://" . $_SERVER['HTTP_HOST'] . "/index.php?page=reset_password&token=" . $token;
+
+            $mailService = new \app\Services\MailService();
+            $mailService->sendResetEmail($user->getEmail(), $user->getFirstname(), $resetLink);
+        }
+
+        $msg = "Si cette adresse email est enregistrée, un lien de réinitialisation vous a été envoyé. ";
+        require_once ROOT . 'app/Views/auth/forgot_password.php';
+        exit;
+    }
+
+    require_once ROOT . 'app/Views/auth/forgot_password.php';
+}
 }
