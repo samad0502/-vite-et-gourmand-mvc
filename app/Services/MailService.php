@@ -96,4 +96,22 @@ public function sendCancellationEmail($order, $reason) {
        return $this->mailer->send();
    
     }
+
+    // Fonction dédiée à la reception du mail d'oubli MDP
+    public function sendResetEmail($userEmail, $firstname, $resetLink) {
+    $this->mailer->clearAddresses();
+    $this->mailer->addAddress($userEmail, $firstname);
+
+    $this->mailer->isHTML(true);
+    $this->mailer->Subject = "Réinitialisation de votre mot de passe - Vite & Gourmand";
+    $this->mailer->Body    = "
+        <h1>Bonjour " . htmlspecialchars($firstname) . " !</h1>
+        <p>Vous avez demandé la réinitialisation de votre mot de passe pour votre compte Vite & Gourmand.</p>
+        <p>Cliquez sur le lien ci-dessous pour choisir un nouveau mot de passe (ce lien est valable 30 minutes) :</p>
+        <p><a href='" . $resetLink . "' style='color: #198754; font-weight: bold;'>Réinitialiser mon mot de passe</a></p>
+        <p>Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail.</p>
+    ";
+
+    return $this->mailer->send();
+}
 }
