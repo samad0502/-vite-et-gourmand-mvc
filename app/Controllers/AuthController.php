@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Services\MailService;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -186,9 +186,11 @@ public function forgotPassword() {
             // enregistre les données du token
             $userRepo->saveResetToken($user->getEmail(), $token, $expiresAt);
 
-            $resetLink = "https://" . $_SERVER['HTTP_HOST'] . "/index.php?page=reset_password&token=" . $token;
+            // Détection automatique du protocole (HTTP en local, HTTPS en production)
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+            $resetLink = $protocol . $_SERVER['HTTP_HOST'] . "/index.php?page=reset_password&token=" . $token;
 
-            $mailService = new \app\Services\MailService();
+            $mailService = new MailService();
             $mailService->sendResetEmail($user->getEmail(), $user->getFirstname(), $resetLink);
         }
 

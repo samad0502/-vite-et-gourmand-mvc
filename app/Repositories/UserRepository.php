@@ -86,18 +86,18 @@ class UserRepository {
 
     // enregistre le token pour un email donné
     public function saveResetToken($email, $token, $expiresAt) {
-        $query = "UPDATE FROM users SET reset_token = :tokrn, resest_exprires_ar = :expires WHERE email = :email";
+        $query = "UPDATE users SET reset_token = :token, reset_expires_at = :expires WHERE email = :email";
         $stmt = $this->db->prepare($query);
         return $stmt->execute([
             'token' => $token,
-            'expirex' => $expiresAt,
+            'expires' => $expiresAt,
             'email' => $email
         ]);
     }
 
     // verifie si un token est valide et non expiré
     public function getUsersByToken($token) {
-        $query = "SELECT * FROM users WHERE reset_token = :token AND reset_expires > NOW()";
+        $query = "SELECT * FROM users WHERE reset_token = :token AND reset_expires_at > NOW()";
         $stmt = $this->db->prepare($query);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
         $stmt->execute(['token' => $token]);
