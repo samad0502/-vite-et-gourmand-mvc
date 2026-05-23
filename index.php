@@ -91,6 +91,16 @@ switch ($page){
            $controller = new AuthController();
            $controller->register();
            break;    
+
+        case 'forgot_password':
+           $controller = new AuthController();
+           $controller->forgotPassword();
+           break;
+
+        case 'reset_password':
+           $controller = new AuthController();
+           $controller->resetPassword();
+           break;   
           
         case 'checkout':
            $controller = new OrderController();
