@@ -82,4 +82,15 @@ class UserRepository {
             'email' => $email
         ]);
     }
+
+    // verifie si un token est valide et non expiré
+    public function getUsersByToken($token) {
+        $query = "SELECT * FROM users WHERE reset_token = :token AND reset_expires > NOW()";
+        $stmt = $this->db->prepare($query);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+        $stmt->execute(['token' => $token]);
+        return $stmt->fetch();
+        
+
+    }
 }

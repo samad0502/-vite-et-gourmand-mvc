@@ -15,8 +15,8 @@ class User {
     private $role_name;
     public $created_at;
     public $is_active;
-    public $reset_token;
-    public $reset_expires_at;
+    private $reset_token;
+    private $reset_expires_at;
     
     public function getId() { return $this->id; }
     public function getEmail() { return $this->email; }
@@ -27,6 +27,8 @@ class User {
     public function getCity() { return $this->city; }
     public function getRoleId() { return $this->role_id; }
     public function getRoleName() { return $this->role_name; }
+    public function getResetToken() { return $this->reset_token; }
+    public function getResetExpiresAt() { return $this->reset_expires_at; }
     
     public function getFirstname() { 
         return ucfirst($this->firstname); 
@@ -67,4 +69,14 @@ class User {
     public function setAddress($addr) { $this->address = htmlspecialchars($addr); }
     public function setZipCode($zip) { $this->zip_code = htmlspecialchars($zip); }
     public function setCity($city) { $this->city = htmlspecialchars($city); }
+    
+    public function setResetToken($token): self {
+        $this->reset_token = $token;
+        return $this;
+    }
+
+    public function setResetExpiresAt($expires_at): self {
+        $this->reset_expires_at = $expires_at;
+        return $this;
+    }
 }
