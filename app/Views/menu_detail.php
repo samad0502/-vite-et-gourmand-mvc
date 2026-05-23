@@ -39,9 +39,9 @@ require_once ROOT . 'includes/navbar.php';
             <div class="card border-0 shadow-sm bg-light mb-4">
                 <div class="card-body">
                     <h6 class="fw-bold">Composition</h6>
-                    <p class="small mb-1"><strong>Entrée :</strong> <?= htmlspecialchars($menu->getStarter()) ?? '' ?></p>
-                    <p class="small mb-1"><strong>Plat :</strong> <?= htmlspecialchars($menu->getMainCourse()) ?? '' ?></p>
-                    <p class="small mb-0"><strong>Dessert :</strong> <?= htmlspecialchars($menu->getDessert()) ?? '' ?></p>
+                    <p class="small mb-1"><strong>Entrée :</strong> <?= htmlspecialchars($menu->getStarter() ?? '') ?></p>
+                    <p class="small mb-1"><strong>Plat :</strong> <?= htmlspecialchars($menu->getMainCourse() ?? '') ?></p>
+                    <p class="small mb-0"><strong>Dessert :</strong> <?= htmlspecialchars($menu->getDessert() ?? '')  ?></p>
                 </div>
             </div>
 
@@ -89,16 +89,19 @@ require_once ROOT . 'includes/navbar.php';
                 <div id="loginError" class="alert alert-danger d-none"></div>
 
                 <form id="loginForm">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Email</label>
-                        <input type="email" id="loginEmail" class="form-control" placeholder="exemple@mail.com" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Mot de passe</label>
-                        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn btn-success w-100 py-2">Se connecter</button>
-                </form>
+    <input type="hidden" id="loginCsrf" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Email</label>
+        <input type="email" id="loginEmail" name="email" class="form-control" placeholder="exemple@mail.com" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Mot de passe</label>
+        <input type="password" id="loginPassword" name="password" class="form-control" placeholder="••••••••" required>
+    </div>
+    <button type="submit" class="btn btn-success w-100 py-2">Se connecter</button>
+</form>
+                    
 
                 <div class="text-center mt-4">
                     <p class="small text-muted mb-0">Pas encore de compte ?</p>

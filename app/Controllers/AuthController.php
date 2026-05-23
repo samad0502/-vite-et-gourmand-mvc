@@ -12,10 +12,13 @@ public function showLogin() {
 
 public function login() {
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
-            $error = "Erreur de sécurité : session invalide. ";
-            require_once ROOT . 'Views/auth/login.php';
-            exit;
+
+        if (!isset($_GET['ajax'])) {
+            if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+                $error = "Erreur de sécurité : session invalide. ";
+                require_once ROOT . 'app/Views/auth/login.php';
+                exit;
+            }
         }
         $email = trim($_POST['email']);
         $password = $_POST['password'];
@@ -40,7 +43,7 @@ public function login() {
                 exit;
             }
 
-            if(isset($_SESSION['redirect-url'])){
+            if(isset($_SESSION['redirect_url'])){
                 $destination = $_SESSION['redirect_url'];
                 unset($_SESSION['redirect_url']);
                 header("Location: " . $destination);

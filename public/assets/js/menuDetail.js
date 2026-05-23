@@ -57,10 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const errorBox = document.getElementById('loginError');
+            const csrfInput = document.getElementById('loginCsrf');
 
             const loginData = new FormData();
             loginData.append('email', email);
             loginData.append('password', password);
+
+            if(csrfInput){
+                loginData.append('csrf_token', csrfInput.value);
+            }
 
             // Envoi vers script de traitement de connexion
             fetch('index.php?page=auth_login&ajax=1', { 
