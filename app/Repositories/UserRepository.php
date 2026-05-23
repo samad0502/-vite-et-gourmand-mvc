@@ -19,6 +19,18 @@ class UserRepository {
     return $stmt->fetch();
     }
 
+    // fonction chercher par email
+    public function findByEmail($email) {
+        $sql = "SELECT id, firstname, lastname, email 
+                FROM users 
+                WHERE email = :email AND is_active = 1";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+        return $stmt->fetch(); 
+    }
+
 
      public function login($email, $password){
         $sql = "SELECT u.*, r.name as role_name
