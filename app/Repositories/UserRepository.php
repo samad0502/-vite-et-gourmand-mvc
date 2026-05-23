@@ -71,4 +71,15 @@ class UserRepository {
             $data['email'], $passwordHash, $data['role_id'] ?? 3, 1
         ]);
     }
+
+    // enregistre le token pour un email donné
+    public function saveResetToken($email, $token, $expiresAt) {
+        $query = "UPDATE FROM users SET reset_token = :tokrn, resest_exprires_ar = :expires WHERE email = :email";
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute([
+            'token' => $token,
+            'expirex' => $expiresAt,
+            'email' => $email
+        ]);
+    }
 }
