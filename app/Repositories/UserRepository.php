@@ -93,4 +93,14 @@ class UserRepository {
         
 
     }
+
+    // met a jour le MDP et detruit le token utilisé
+    public function updatePassword($userId, $hashedPassword) {
+        $query = "UPDATE users SET password = :password, reset_token = NULL, reset_expires_at = NULL WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute([
+            'password' => $hashedPassword,
+            'id' => $userId
+        ]);
+    }
 }
