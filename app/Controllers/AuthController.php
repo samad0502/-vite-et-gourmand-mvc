@@ -199,4 +199,56 @@ public function forgotPassword() {
 
     require_once ROOT . 'app/Views/auth/forgot_password.php';
 }
+
+
+public function resetPassword() {
+    if (!isset($_GET['token'])) {
+        header('Location: index.php?page=login');
+        exit;
+    }
+
+    $token = $_GET['token'];
+    
+    $db = (new Database())->getConnection();
+    $userRepo = new UserRepository($db);
+    
+    
+    $user = $userRepo->getUsersByToken($token);
+
+    if (!$user) {
+        $error = "Le lien de réinitialisation est invalide ou a expiré.";
+        require_once ROOT . 'app/Views/auth/forgot_password.php';
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $password = $_POST['password'];
+        $errors = [];
+
+        // reprise des regex présentes dans register()
+        if (strlen($password) < 10 || 
+           !preg_match("/[A-Z]/", $password) || 
+           !preg_match("/[a-z]/", $password) || 
+           !preg_match("/[0-9]/", $password) ||
+           !preg_match("/[!@#$%^&*(),.?\":{}|<>]/", $password)) {
+            $errors[] = "Le mot de passe doit contenir 10 caractères, une majuscule et un chiffre.";
+        }
+
+        if ($password !== $_POST['password_confirm']) {
+            $errors[] = "Les mots de passe ne correspondent pas.";
+        }
+
+        if (empty($errors)) {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            
+            
+            $userRepo->updatePassword($user->getId(), $hashedPassword);
+
+            header('Location: index.php?page=login&msg=success_reset');
+            exit;
+        }
+    }
+    
+    require_once ROOT . 'app/Views/auth/reset_password.php';
+}
 }
