@@ -1,7 +1,6 @@
 <?php
 
 use App\Services\MailService;
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 class AuthController {
@@ -116,8 +115,10 @@ public function register() {
         try {
         if ($userRepo->register($_POST)) {
 
-        // ENVOI DU MAIL 
-                    $this->sendWelcomeEmail($_POST['email'], $_POST['firstname']);
+        // ENVOI DU MAIL
+
+        $mailService = new MailService();    
+        $mailService->sendWelcomeEmail($_POST['email'], $_POST['firstname']);
                     
             header('Location: index.php?page=login&msg=success_register');
             exit;
@@ -133,33 +134,6 @@ public function register() {
 }
 
 
-private function sendWelcomeEmail($email, $firstname) {
-    $mail = new PHPMailer(true);
-
-    try {
-                
-        $mail->isSMTP();
-        $mail->Host       = $_ENV['MAIL_HOST'];
-        $mail->SMTPAuth   = true;
-        $mail->Username   = $_ENV['MAIL_USER'];
-        $mail->Password   = $_ENV['MAIL_PASS'];
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
-        $mail->Port       = $_ENV['MAIL_PORT'];
-        $mail->CharSet    = 'UTF-8';
-
-        $mail->setFrom($_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
-        $mail->addAddress($email, $firstname);
-
-        $mail->isHTML(true);
-        $mail->Subject = "Bienvenue chez Vite & Gourmand !";
-        $mail->Body    = "<h1>Bonjour $firstname !</h1><p>Compte créé avec succès.</p>";
-
-        $mail->send();
-    } catch (Exception $e) {
-       
-        die("Erreur Mailer : " . $mail->ErrorInfo);
-    }
-}
 
 public function forgotPassword() {
     if($_SERVER['REQUEST_METHOD'] === 'POST'){

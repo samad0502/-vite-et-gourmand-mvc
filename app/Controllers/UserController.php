@@ -1,6 +1,5 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use App\Services\MailService;
 class UserController {
 
     private function getRepo() {
@@ -22,7 +21,7 @@ class UserController {
 
             if($repo->update($userId, $data)) {
                
-            $_SESSION['user']['firstname'] = $data['firstname'];
+                $_SESSION['user']['firstname'] = $data['firstname'];
                 $_SESSION['user']['lastname']  = $data['lastname'];
                 $_SESSION['user']['phone']     = $data['phone'];
                 $_SESSION['user']['address']   = $data['address'];
@@ -53,40 +52,14 @@ class UserController {
                 exit;
             }
 
-         //envoi du mail pour la demande de contact
-          $mail = new PHPMailer(true);
-          $mail->SMTPDebug = 2;
           
           try {
-            $mail->isSMTP();
-            $mail->Host       = $_ENV['MAIL_HOST'];
-            $mail->SMTPAuth   = true;
-            $mail->Username   = $_ENV['MAIL_USER'];
-            $mail->Password   = $_ENV['MAIL_PASS'];
-            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = $_ENV['MAIL_PORT'];
-            $mail->CharSet    = 'UTF-8';
-
+            $mailService = new MailService();
+            $mailService->sendContactMessage($name, $email, $subject, $message);
             
-            $mail->setFrom('contact@vitegourmand.fr', 'Formulaire Contact ViteGourmand');
-        
-            $mail->addAddress('admin@vitegourmand.fr', 'Admin Vite & Gourmand');
-            $mail->addReplyTo($email, $name);
-
-            $mail->isHTML(true);
-            $mail->Subject = "Nouveau message : " . $subject;
-            $mail->Body    = "
-                <h3>Nouveau message de contact</h3>
-                <p><strong>Nom :</strong> {$name}</p>
-                <p><strong>Email :</strong> {$email}</p>
-                <p><strong>Sujet :</strong> {$subject}</p>
-                <p><strong>Message :</strong><br>{$message}</p>
-            ";
-
-            $mail->send();
             header('Location: index.php?page=contact&status=success');
         } catch (\Exception $e) {
-            error_log("Erreur Contact Mail : " . $mail->ErrorInfo);
+            error_log("Erreur Contact Mail : " . $e->getMessage());
             header('Location: index.php?page=contact&status=error');
         }
         exit;

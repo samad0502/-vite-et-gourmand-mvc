@@ -30,6 +30,41 @@ class MailService {
     }
 
 
+    // Mail de bienvenue
+    public function sendWelcomeEmail($email, $firstname) {
+        $this->mailer->clearAddresses(); 
+        $this->mailer->addAddress($email, $firstname);
+
+        $this->mailer->isHTML(true);
+        $this->mailer->Subject = "Bienvenue chez Vite & Gourmand !";
+        $this->mailer->Body    = "<h1>Bonjour " . htmlspecialchars($firstname) . " !</h1><p>Compte créé avec succès.</p>";
+
+        return $this->mailer->send();
+    }
+
+    // Formulaire de contact admin
+    public function sendContactMessage($name, $email, $subject, $message) {
+        $this->mailer->clearAddresses();
+        $this->mailer->clearReplyTos(); 
+        
+        
+        $this->mailer->addAddress('admin@vitegourmand.fr', 'Admin Vite & Gourmand');
+        $this->mailer->addReplyTo($email, $name);
+
+        $this->mailer->isHTML(true);
+        $this->mailer->Subject = "Nouveau message : " . $subject;
+        $this->mailer->Body    = "
+            <h3>Nouveau message de contact</h3>
+            <p><strong>Nom :</strong> {$name}</p>
+            <p><strong>Email :</strong> {$email}</p>
+            <p><strong>Sujet :</strong> {$subject}</p>
+            <p><strong>Message :</strong><br>" . nl2br($message) . "</p>
+        ";
+
+        return $this->mailer->send();
+    }
+
+
     public function sendConfirmationEmail($userEmail, $orderRef, $total) {
 
        $this->mailer->addAddress($userEmail);
@@ -48,6 +83,26 @@ class MailService {
 
        return $this->mailer->send();
 }
+
+
+// Notification de création de compte employé
+    public function sendEmployeeNotification($email, $firstname) {
+        $this->mailer->clearAddresses(); 
+        $this->mailer->addAddress($email, $firstname);
+
+        $this->mailer->isHTML(true);
+        $this->mailer->Subject = "Bienvenue dans l'équipe, $firstname !";
+        
+        $this->mailer->Body = "
+            <h2>Félicitations $firstname !</h2>
+            <p>Ton compte employé a été créé avec succès sur la plateforme <strong>Vite & Gourmand</strong>.</p>
+            <p>Tu peux désormais te connecter avec ton adresse email : <strong>$email</strong>.</p>
+            <p style='color: red;'><strong>Note importante :</strong> Pour des raisons de sécurité, ton mot de passe ne figure pas dans ce mail. Merci de te rapprocher de l'administrateur pour l'obtenir.</p>
+            <br>
+            <p>À très vite en cuisine !</p>";
+
+        return $this->mailer->send();
+    }
 
 
 
