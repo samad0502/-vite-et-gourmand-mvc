@@ -100,15 +100,22 @@ require_once ROOT . 'includes/navbar.php';
                                             <div class="d-flex gap-2">
                                                 <form action="index.php?page=update_order_status" method="POST" class="d-flex gap-1">
                                                     <input type="hidden" name="order_id" value="<?= $o->getId() ?>">
-                                                    <select name="new_status" class="form-select form-select-sm" style="width: auto;">
-                                                        <option value="accepted">Accepter</option>
-                                                        <option value="preparing">En cuisine</option>
-                                                        <option value="shipping">En livraison</option>
-                                                        <option value="delivered">Livrée</option>
-                                                        <option value="finished">Terminée</option>
-                                                    </select>
-                                                    <button type="submit" class="btn btn-sm btn-success">OK</button>
+                                                    <?php $isFinished = ($o->getStatus() === 'finished'); ?>
+                                            <select name="new_status" class="form-select form-select-sm" style="width: auto;" <?= $isFinished ? 'disabled' : '' ?>>
+                                                 <option value="accepted" <?= $o->getStatus() === 'accepted' ? 'selected' : '' ?>>Accepter</option>
+                                                 <option value="preparing" <?= $o->getStatus() === 'preparing' ? 'selected' : '' ?>>En cuisine</option>
+                                                 <option value="shipping" <?= $o->getStatus() === 'shipping' ? 'selected' : '' ?>>En livraison</option>
+                                                 <option value="delivered" <?= $o->getStatus() === 'delivered' ? 'selected' : '' ?>>Livrée</option>
+                                                 <option value="finished" <?= $o->getStatus() === 'finished' ? 'selected' : '' ?>>Terminée</option>
+                                             </select>
+
+                                             <?php if ($isFinished): ?>
+                                                <span class="badge bg-secondary d-flex align-items-center">Archivée</span>
+                                             <?php else: ?>
+                                                <button type="submit" class="btn btn-sm btn-success">OK</button>
+                                             <?php endif; ?>
                                                 </form>
+                                                    
                                                 <button class="btn btn-sm btn-outline-danger" onclick="openCancelModal(<?= $o->getId() ?>, '<?= $o->getOrderNumber() ?>')">Annuler</button>
                                             </div>
                                         </td>

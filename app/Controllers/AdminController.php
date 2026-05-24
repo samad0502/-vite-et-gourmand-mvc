@@ -115,7 +115,7 @@ class AdminController {
 
             if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
                 $adminRepo = $this->getRepo();
-                $adminRepo->toggleUserStatus((int)$_GET['id']);
+                $adminRepo->toggleUserStatus((int)$_POST['user_id']);
 
                 header('Location: index.php?page=admin_users&success=status_updated');
                 exit;

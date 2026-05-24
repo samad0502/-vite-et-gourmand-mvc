@@ -149,4 +149,17 @@ class OrderRepository {
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'Order');
     }
    
+   
+    // récupère le statut actuel de manière isolée
+   public function getCurrentStatus($orderId) {
+    try {
+        $sql = "SELECT order_status FROM orders WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([(int)$orderId]);
+        return $stmt->fetchColumn(); 
+    } catch (\Exception $e) {
+        return false;
+    }
+}
+   
 }

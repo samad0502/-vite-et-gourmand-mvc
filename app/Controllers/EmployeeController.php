@@ -51,21 +51,45 @@ public function updateOrderStatus() {
 
         $db = (new Database())->getConnection();
         $orderRepo = new OrderRepository($db);
-        if($orderRepo->updateStatus($orderId, $newStatus)) {
 
-            
-        if ($newStatus === 'finished') {
-        $orderInfo = $orderRepo->getDetailsForNotification($orderId);
-    
-        if ($orderInfo) {
-       
-        $this->mailService->notifyOrderFinished($orderInfo);
-    }
-}
+        // on récupère le statut actuel en bdd
+        $currentStatus = $orderRepo->getCurrentStatus($orderId);
+
+        $statusSteps = [
+            'pending'   => 1,
+            'accepted'  => 2,
+            'preparing' => 3,
+            'shipping'  => 4,
+            'delivered' => 5,
+            'finished'  => 6
+        ];
+
+        // si la commande est déjà terminée, on refuse toute modification
+        if ($currentStatus === 'finished') {
+            header('Location: index.php?page=employee_dashboard&error=order_locked');
+            exit;
+        }
+        // on verifie le statut de l'étape et on interdit le retour a l'etape precedente
+        $currenStep = isset($statusSteps[$currentStatus]) ? $statusSteps[$currentStatus] : 0;
+        $statusStep = isset($statusSteps[$newStatus]) ? $statusSteps[$newStatus] : 0;
+           
+            if ($statusStep <= $currenStep) {
+                 header('Location: index.php?page=employee_dashboard&success=status_updated');
+                 exit;
+            }
+            // traitement du changement de statut
+            if($orderRepo->updateStatus($orderId, $newStatus)) {
+                
+                if ($newStatus === 'finished') {
+                $orderInfo = $orderRepo->getDetailsForNotification($orderId);
+                
+                if ($orderInfo) {
+                    $this->mailService->notifyOrderFinished($orderInfo);
+                }
+            }
             header('Location: index.php?page=employee_dashboard&success=status_updated');
         } else {
             header('Location: index.php?page=employee_dashboard&error=update_failed');
-
         }
         exit;
     }

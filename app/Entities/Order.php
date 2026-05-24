@@ -28,6 +28,7 @@ class Order implements JsonSerializable {
     private $email; 
     private $menu_name;
     private $title;
+    public $price;
 
 
 
