@@ -60,9 +60,14 @@ class AdminController {
         $menuStats = [];
         $totalCA = 0;
         foreach($statsData as $doc) {
+        // on ignore les docs d'annulation pour ne pas fausser le CA ou les Qté   
+        if (isset($doc['event']) && $doc['event'] === 'order_cancelled') {
+            continue;
+        }
             $name = $doc['menu_name'] ?? 'Non défini';
+            $quantity = (int)($doc['quantity'] ?? 1);
             //on compte le nb de commande pour le graphique chart.js
-            $menuStats[$name] = ($menuStats[$name] ?? 0 ) + 1 ;
+            $menuStats[$name] = ($menuStats[$name] ?? 0 ) + $quantity ;
             // cumul du prix total calculé
             $totalCA += $doc['price'] ?? 0;
         }
